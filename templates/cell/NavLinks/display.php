@@ -2,7 +2,8 @@
   <?= $this->Html->image("logo.png", [
       "alt" => "logo",
       "class" => "ml-5 pl-5 pr-5 mr-5",
-      'width' => 150                            
+      'width' => 150,
+      'url' => '/'                            
   ]);?>
   <div>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
