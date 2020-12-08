@@ -43,8 +43,8 @@
                     <td><?= h($employee->hire_date) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Function') ?></th>
-                    <td><?= h($employee->fonction) ?></td>
+                    <th><?= __('Current Function') ?></th>
+                    <td><?= h($employee->function) ?></td>
                 </tr>
                 <tr>
                     <td colspan="2">

@@ -47,13 +47,30 @@ class EmployeesTable extends Table
         $this->hasMany('salaries', [
             'foreignKey' => 'emp_no',
         ]);
-        
-        $this->hasMany('titles', [
+
+        $this->hasMany('employeeTitle', [
+            
             'foreignKey' => 'emp_no',
+           
+        ]);
+
+        $this->belongsToMany('titles', [
+            'joinTable' => 'employee_title',
+            'targetForeignKey' => 'title_no',
+            'foreignKey' => 'emp_no',
+            'bindingKey' => 'emp_no',
         ]);
         
-        $this->belongsToMany('Departments',[
+        $this->belongsToMany('departments',[
             'joinTable' => 'dept_emp',
+            'targetForeignKey' => 'dept_no',
+            'foreignKey' => 'emp_no',
+            'bindingKey' => 'emp_no',
+        ]);
+
+        $this->belongsToMany('departments',[
+            'joinTable' => 'dept_manager',
+            'targetForeignKey' => 'dept_no',
             'foreignKey' => 'emp_no',
             'bindingKey' => 'emp_no',
         ]);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\View\CellTrait;
+use \DateTime;
 
 /**
  * Employees Controller
@@ -47,14 +48,13 @@ class EmployeesController extends AppController
         $employee = $this->Employees->get($id, [
             'contain' => ['salaries','titles'],
         ]);
-        
-        $titles = $employee->titles;
-        $today = new \DateTime();
+        $titles =$employee->titles;
+        $today = new DateTime();
         foreach($titles as $title) {
-            $date = new \DateTime($title->to_date->format('Y-m-d'));
+            $date = new DateTime($title['_joinData']->to_date->format('Y-m-d'));
             
             if($date > $today) {
-                $employee->fonction = $title->title;
+                $employee->function = $title->title;
                 break;
             }
         }
