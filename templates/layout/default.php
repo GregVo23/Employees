@@ -14,7 +14,7 @@
  * @var \App\View\AppView $this
  */
 $navLinks = $this->cell('NavLinks');
-$cakeDescription = 'CakePHP: the rapid development php framework';
+$cakeDescription = 'Nestlé';
 ?>
 <!DOCTYPE html>
 <html>
@@ -29,6 +29,9 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!--leaflet-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
 
     <?= $this->Html->css(['normalize.min', 'milligram.min', 'cake', 'bootstrap.min']) ?>
     <?= $this->Html->script(['jquery.min', 'bootstrap.bundle.min']) ?>
@@ -49,6 +52,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </main>
     <footer>
     </footer>
+    
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </body>
