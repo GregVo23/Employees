@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace App\Controller;
+use \DateTime;
 
 /**
  * Departments Controller
@@ -33,9 +34,20 @@ class DepartmentsController extends AppController
     public function view($id = null)
     {
         $department = $this->Departments->get($id, [
-            'contain' => [],
+            'contain' => ['Employees', 'Managers'],
         ]);
-
+        $managers =$department->managers;
+        $today = new DateTime();
+        foreach($managers as $manager) {
+            $date = new DateTime($manager['_joinData']->to_date->format('Y-m-d'));
+            
+            if($date > $today) {
+                $department->manager = $manager->picture;
+                //dd($manager->picture);
+                break;
+            }
+            
+        }
         $this->set(compact('department'));
     }
 

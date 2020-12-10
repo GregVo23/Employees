@@ -19,6 +19,13 @@
             <h3><?= h($department->dept_no) ?></h3>
             <table>
                 <tr>
+                    <td><?= $this->Html->image(h($department->manager), [
+                        "alt" => "manager picture",
+                        'class' => 'img-fluid emp_pict',
+                    ]);?>
+                    </td>
+                </tr>
+                <tr>
                     <th><?= __('Dept No') ?></th>
                     <td><?= h($department->dept_no) ?></td>
                 </tr>

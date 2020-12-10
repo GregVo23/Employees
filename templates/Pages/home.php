@@ -21,8 +21,6 @@ use Cake\Error\Debugger;
 use Cake\Http\Exception\NotFoundException;
 
 
-
-
 use Cake\Filesystem\Folder;
 use Cake\Filesystem\File;
 
@@ -30,8 +28,10 @@ $dir = new Folder('/webroot/assets/articles/');
 $files = $dir->find('.*\.pdf');
 
 
+//$this->disableAutoLayout();
 
-$this->Html->css('style', ['block' => true]);
+
+$this->Html->css('style_home', ['block' => true]);
 $this->Html->script('map.inc', ['block' => true]);
 
 $titleHome = 'A propos de Nestlé';
