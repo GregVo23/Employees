@@ -51,17 +51,19 @@ class DepartmentsController extends AppController
         //     }
         // }
         
+        $result = $this->Departments->find('count', ['id' => $id])->first()->count;
+
         //Récupérer les liens des photos (de la BDD) de chaque manager pour le département correspondant
-        $dep = $this->getTableLocator()->get('Departments');
-        $query = $dep->find();
+        // $dep = $this->getTableLocator()->get('Departments');
+        // $query = $dep->find();
 
-            $query->select([
-                'Employees.emp_no',
-                'count' => $query->func()->count('*')]);
-            $query->innerJoinWith('Employees')
-            ->where(['departments.dept_no =' => $id]);
+        //     $query->select([
+        //         'Employees.emp_no',
+        //         'count' => $query->func()->count('*')]);
+        //     $query->innerJoinWith('Employees')
+        //     ->where(['departments.dept_no =' => $id]);
 
-        $result = $query->first()->count;
+        // $result = $query->first()->count;
         
         
         //Récupérer les RULES de la BDD              ----------------------------->pourquoi pas de foreach ????? pourquoi cela récupère diect le bon fichier ?
