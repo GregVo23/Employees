@@ -47,6 +47,10 @@ class TitlesTable extends Table
             'foreignKey' => 'title_no',
             'bindingKey' => 'title_no',
         ]);
+        
+    /*     $this->hasOne('Vacancies',[
+            'foreignKey' => 'title_no',
+        ]);*/
     }
 
     /**

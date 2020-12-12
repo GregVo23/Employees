@@ -17,15 +17,16 @@ class VacanciesFixture extends TestFixture
      */
     // phpcs:disable
     public $fields = [
+        'vac_no' => ['type' => 'integer', 'length' => null, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
         'dept_no' => ['type' => 'string', 'length' => 4, 'null' => false, 'default' => null, 'collate' => 'utf8mb4_general_ci', 'comment' => '', 'precision' => null],
-        'title' => ['type' => 'string', 'length' => 50, 'null' => false, 'default' => null, 'collate' => 'utf8mb4_general_ci', 'comment' => '', 'precision' => null],
         'title_no' => ['type' => 'integer', 'length' => null, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'quantity' => ['type' => 'integer', 'length' => null, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         '_indexes' => [
             'foreign_key_title' => ['type' => 'index', 'columns' => ['title_no'], 'length' => []],
+            'dept_no' => ['type' => 'index', 'columns' => ['dept_no'], 'length' => []],
         ],
         '_constraints' => [
-            'primary' => ['type' => 'primary', 'columns' => ['dept_no', 'title'], 'length' => []],
+            'primary' => ['type' => 'primary', 'columns' => ['vac_no'], 'length' => []],
             'foreign_key_title' => ['type' => 'foreign', 'columns' => ['title_no'], 'references' => ['titles', 'title_no'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
             'foreign_key_department' => ['type' => 'foreign', 'columns' => ['dept_no'], 'references' => ['departments', 'dept_no'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
         ],
@@ -44,8 +45,8 @@ class VacanciesFixture extends TestFixture
     {
         $this->records = [
             [
-                'dept_no' => 'd5fd9746-265b-46fb-b306-ff46cfcacef7',
-                'title' => 'ab21e521-45f7-467b-b251-b781809e73bf',
+                'vac_no' => 1,
+                'dept_no' => 'Lo',
                 'title_no' => 1,
                 'quantity' => 1,
             ],

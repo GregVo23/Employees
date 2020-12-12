@@ -55,6 +55,8 @@ class DepartmentsTable extends Table
             'foreignKey' => 'dept_no',
             'bindingKey' => 'dept_no',
         ]);
+        
+         
     }
 
     /**

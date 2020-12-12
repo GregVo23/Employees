@@ -39,16 +39,40 @@ class DepartmentsController extends AppController
         $managers =$department->managers;
         $today = new DateTime();
         foreach($managers as $manager) {
-            $date = new DateTime($manager['_joinData']->to_date->format('Y-m-d'));
-            
+           $date = new DateTime($manager['_joinData']->to_date->format('Y-m-d'));
+           // dd($department->manager);
             if($date > $today) {
                 $department->manager = $manager->picture;
                 //dd($manager->picture);
+               // dd( $department->managers);
+
                 break;
             }
             
         }
-        $this->set(compact('department'));
+        
+        //Récupérer les liens des photos (de la BDD) de chaque manager pour le département correspondant
+        $dep = $this->getTableLocator()->get('Departments');
+        $query = $dep->find();
+
+            $query->select([
+                'Employees.emp_no',
+                'count' => $query->func()->count('*')]);
+            $query->innerJoinWith('Employees')
+            ->where(['departments.dept_no =' => $id]);
+
+        $result = $query->first()->count;
+        
+        
+        //Récupérer les RULES de la BDD              ----------------------------->pourquoi pas de foreach ????? pourquoi cela récupère diect le bon fichier ?
+        $rules = $department->rules;
+      
+        
+        //Récupérer la description de la BDD
+        $description = $department->description;
+        
+        //Envoyer à la vue
+        $this->set(compact('department', 'result', 'rules', 'description'));
     }
 
     /**
