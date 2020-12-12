@@ -33,7 +33,6 @@ class VacanciesController extends AppController
      */
     public function view($id = null)
     {
-        dd($id);
         $vacancy = $this->Vacancies->get($id, [
             'contain' => ['titles', 'departments'],
         ]);
