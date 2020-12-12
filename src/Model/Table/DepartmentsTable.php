@@ -96,8 +96,14 @@ class DepartmentsTable extends Table
         return $rules;
     }
 
-    public function findCountEmployees(Query $query, array $options)
+    public function findCount(Query $query, array $options)
     {
-        return $query->find('employees')->group('dept_name')->count('emp_no');
+         $query->select([
+            'Employees.emp_no',
+            'count' => $query->func()->count('*')]);
+        $query->innerJoinWith('Employees')
+        ->where(['departments.dept_no =' => $options['id']]);
+        return $query;
     }
+    
 }
