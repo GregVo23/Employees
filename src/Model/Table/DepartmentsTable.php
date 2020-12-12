@@ -54,8 +54,8 @@ class DepartmentsTable extends Table
             'targetForeignKey' => 'emp_no',
             'foreignKey' => 'dept_no',
             'bindingKey' => 'dept_no',
+            'conditions' => ['DeptManager.to_date' => '9999-01-01']
         ]);
-        
          
     }
 
@@ -94,5 +94,10 @@ class DepartmentsTable extends Table
         $rules->add($rules->isUnique(['dept_name']), ['errorField' => 'dept_name']);
 
         return $rules;
+    }
+
+    public function findCountEmployees(Query $query, array $options)
+    {
+        return $query->find('employees')->group('dept_name')->count('emp_no');
     }
 }
