@@ -8,10 +8,13 @@ use Cake\ORM\Entity;
 /**
  * Vacancy Entity
  *
+ * @property int $vac_no
  * @property string $dept_no
- * @property string $title
  * @property int $title_no
  * @property int $quantity
+ *
+ * @property \App\Model\Entity\Title $title
+ * @property \App\Model\Entity\Department $department
  */
 class Vacancy extends Entity
 {
@@ -25,7 +28,10 @@ class Vacancy extends Entity
      * @var array
      */
     protected $_accessible = [
+        'dept_no' => true,
         'title_no' => true,
         'quantity' => true,
+        'title' => true,
+        'department' => true,
     ];
 }

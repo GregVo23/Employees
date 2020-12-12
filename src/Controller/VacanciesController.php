@@ -18,8 +18,9 @@ class VacanciesController extends AppController
      */
     public function index()
     {
-        $vacancies = $this->paginate($this->Vacancies);
-
+        $vacancies = $this->paginate($this->Vacancies, [
+            'contain' => ['titles', 'departments'],
+        ]);
         $this->set(compact('vacancies'));
     }
 
@@ -32,10 +33,11 @@ class VacanciesController extends AppController
      */
     public function view($id = null)
     {
+        dd($id);
         $vacancy = $this->Vacancies->get($id, [
-            'contain' => [],
+            'contain' => ['titles', 'departments'],
         ]);
-
+        
         $this->set(compact('vacancy'));
     }
 

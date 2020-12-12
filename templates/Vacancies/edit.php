@@ -10,8 +10,8 @@
             <h4 class="heading"><?= __('Actions') ?></h4>
             <?= $this->Form->postLink(
                 __('Delete'),
-                ['action' => 'delete', $vacancy->dept_no],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $vacancy->dept_no), 'class' => 'side-nav-item']
+                ['action' => 'delete', $vacancy->vacancy_no],
+                ['confirm' => __('Are you sure you want to delete # {0}?', $vacancy->vacancy_no), 'class' => 'side-nav-item']
             ) ?>
             <?= $this->Html->link(__('List Vacancies'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
         </div>
@@ -22,6 +22,7 @@
             <fieldset>
                 <legend><?= __('Edit Vacancy') ?></legend>
                 <?php
+                    echo $this->Form->control('dept_no');
                     echo $this->Form->control('title_no');
                     echo $this->Form->control('quantity');
                 ?>

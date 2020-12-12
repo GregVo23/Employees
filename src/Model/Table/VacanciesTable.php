@@ -38,8 +38,16 @@ class VacanciesTable extends Table
         parent::initialize($config);
 
         $this->setTable('vacancies');
-        $this->setDisplayField('title');
-        $this->setPrimaryKey(['dept_no', 'title']);
+        $this->setDisplayField('vac_no');
+        $this->setPrimaryKey('vac_no');
+
+        $this->hasOne('titles', [
+            'foreignKey' => 'title_no'
+        ]);
+        $this->hasOne('departments', [
+            'foreignKey' => 'dept_no',
+            'bindingKey' => 'dept_no'
+        ]);
     }
 
     /**
@@ -51,14 +59,14 @@ class VacanciesTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->scalar('dept_no')
-            ->maxLength('dept_no', 4)
-            ->allowEmptyString('dept_no', null, 'create');
+            ->integer('vac_no')
+            ->allowEmptyString('vac_no', null, 'create');
 
         $validator
-            ->scalar('title')
-            ->maxLength('title', 50)
-            ->allowEmptyString('title', null, 'create');
+            ->scalar('dept_no')
+            ->maxLength('dept_no', 4)
+            ->requirePresence('dept_no', 'create')
+            ->notEmptyString('dept_no');
 
         $validator
             ->integer('title_no')
