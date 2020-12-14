@@ -24,9 +24,9 @@ use Cake\Http\Exception\NotFoundException;
 use Cake\Filesystem\Folder;
 use Cake\Filesystem\File;
 
-$dir = new Folder('/webroot/assets/articles/');
+/*$dir = new Folder('/webroot/assets/articles/');
 $files = $dir->find('.*\.pdf');
-
+*/
 
 //$this->disableAutoLayout();
 

@@ -45,6 +45,12 @@
                     <th><?= __('Internal rules and regulations ') ?></th>
                     <td><?= $this->Html->link(__('CLICK HERE TO READ IT'), $rules ,['target' => '_blank']); ?></td>
                 </tr>
+                <tr>
+                    <th><?= __('Quantity of vacancies') ?></th>
+                    <td>   </td>
+                    
+                    <td><?= $this->Html->link(__('Postuler'),['controller'=>'Vacancies'],['action' => 'view'], ['class' => 'btn btn-secondary']) ?></td>
+                </tr>
             </table>
         </div>
     </div>

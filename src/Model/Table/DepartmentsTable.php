@@ -57,6 +57,9 @@ class DepartmentsTable extends Table
             'conditions' => ['DeptManager.to_date' => '9999-01-01']
         ]);
          
+          $this->hasMany('Vacancies', [
+            'foreignKey' => 'dept_no',
+        ]);
     }
 
     /**

@@ -40,6 +40,11 @@ class VacanciesTable extends Table
         $this->setTable('vacancies');
         $this->setDisplayField('title');
         $this->setPrimaryKey('vac_no');
+        
+        
+        $this->hasMany('Departments', [
+            'foreignKey' => 'dept_name', 
+        ]);
     }
 
     /**

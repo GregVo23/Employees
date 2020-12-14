@@ -34,7 +34,7 @@ class DepartmentsController extends AppController
     public function view($id = null)
     {
         $department = $this->Departments->get($id, [
-            'contain' => [ 'Managers'],
+            'contain' => [ 'Managers', 'Vacancies'],
         ]);
         $managers =$department->managers;
         $department->manager = $managers[0]->picture;
@@ -73,8 +73,35 @@ class DepartmentsController extends AppController
         //Récupérer la description de la BDD
         $description = $department->description;
         
+        //Nombre de postes vacants pour chaque département
+     /*   $vacancies = $department->vacancies; 
+        //dd($vacancies);
+        foreach($vacancies as $vacancie){
+            
+            $department->vacancie = $vacancie->quantity;
+         //dd($vacancie->quantity);
+        }*/
+        
+        $vacancies = $this->getTableLocator()->get('Vacancies');
+        //dd($vacancies);
+   
+        $query = $vacancies->find();
+        $query->select(['quantity' => $query -> func()->sum('quantity'),])
+              ->group('dept_no');
+        
+     
+        $nbVacancies = $query->all();
+                  dd($nbVacancies);
+
+  
+  /*      foreach($nbVacancies as $nbVacancie){ 
+            $vacancie = $nbVacancie->quantity;
+            dd($vacancie);
+        }*/
+       
+       
         //Envoyer à la vue
-        $this->set(compact('department', 'result', 'rules', 'description'));
+        $this->set(compact('department', 'result', 'rules', 'description','nbVacancies'));
     }
 
     /**
