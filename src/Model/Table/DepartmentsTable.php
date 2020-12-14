@@ -109,4 +109,5 @@ class DepartmentsTable extends Table
         return $query;
     }
     
+    
 }

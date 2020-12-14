@@ -47,9 +47,18 @@
                 </tr>
                 <tr>
                     <th><?= __('Quantity of vacancies') ?></th>
-                    <td>   </td>
-                    
-                    <td><?= $this->Html->link(__('Postuler'),['controller'=>'Vacancies'],['action' => 'view'], ['class' => 'btn btn-secondary']) ?></td>
+                     
+                     <?php  if(!empty($nbVacancies->quantity)){ ?>
+                              <td><?php  foreach($nbVacancies as $nbVacancie):
+                                            echo $nbVacancie->quantity;
+                                            endforeach;
+                                   ?>
+                              </td>
+        
+                            <td><?= $this->Html->link(__('Postuler'),['controller'=>'Vacancies'],['action' => 'view'], ['class' => 'btn btn-secondary']) ?></td>
+                        <?php } else{ ?>
+                            <td><?= "No vacancies at the moment" ?></td>
+                        <?php } ?>
                 </tr>
             </table>
         </div>
