@@ -42,7 +42,7 @@ class VacanciesTable extends Table
         $this->setDisplayField('vac_no');
         $this->setPrimaryKey('vac_no');
 
-        $this->hasOne('Titles', [
+      $this->hasOne('Titles', [
             'foreignKey' => 'title_no',
             'bindingKey' => 'title_no'
         ]);
@@ -56,6 +56,7 @@ class VacanciesTable extends Table
             'targetForeignKey' => 'cand_no',
             'foreignKey' => 'vac_no',
             'bindingKey' => 'vac_no',
+
         ]);
     }
 

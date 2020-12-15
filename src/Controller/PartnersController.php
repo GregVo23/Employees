@@ -35,6 +35,7 @@ class PartnersController extends AppController
             'contain' => [],
         ]);
 
+                
         $this->set(compact('partner'));
     }
 
