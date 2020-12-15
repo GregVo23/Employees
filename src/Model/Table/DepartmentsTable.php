@@ -54,7 +54,9 @@ class DepartmentsTable extends Table
             'targetForeignKey' => 'emp_no',
             'foreignKey' => 'dept_no',
             'bindingKey' => 'dept_no',
+            'conditions' => ['DeptManager.to_date' => '9999-01-01']
         ]);
+         
     }
 
     /**
@@ -93,4 +95,15 @@ class DepartmentsTable extends Table
 
         return $rules;
     }
+
+    public function findCount(Query $query, array $options)
+    {
+         $query->select([
+            'Employees.emp_no',
+            'count' => $query->func()->count('*')]);
+        $query->innerJoinWith('Employees')
+        ->where(['departments.dept_no =' => $options['id']]);
+        return $query;
+    }
+    
 }

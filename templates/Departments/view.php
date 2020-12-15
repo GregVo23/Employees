@@ -19,7 +19,7 @@
             <h3><?= h($department->dept_no) ?></h3>
             <table>
                 <tr>
-                    <td><?= $this->Html->image(h($department->manager), [
+                    <td><?= $this->Html->image(h("/img".$department->manager), [
                         "alt" => "manager picture",
                         'class' => 'img-fluid emp_pict',
                     ]);?>
@@ -32,6 +32,18 @@
                 <tr>
                     <th><?= __('Dept Name') ?></th>
                     <td><?= h($department->dept_name) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Number of employees') ?></th>
+                    <td><?= h($result) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Description') ?></th>
+                    <td><?= $this->Text->autoParagraph($description); ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Internal rules and regulations ') ?></th>
+                    <td><?= $this->Html->link(__('CLICK HERE TO READ IT'), $rules ,['target' => '_blank']); ?></td>
                 </tr>
             </table>
         </div>

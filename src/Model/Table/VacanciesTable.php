@@ -38,6 +38,7 @@ class VacanciesTable extends Table
         parent::initialize($config);
 
         $this->setTable('vacancies');
+
         $this->setDisplayField('vac_no');
         $this->setPrimaryKey('vac_no');
 

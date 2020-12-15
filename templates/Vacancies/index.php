@@ -11,8 +11,10 @@
         <table>
             <thead>
                 <tr>
+
                     <th><?= $this->Paginator->sort('department') ?></th>
                     <th><?= $this->Paginator->sort('title') ?></th>
+
                     <th><?= $this->Paginator->sort('quantity') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
                 </tr>

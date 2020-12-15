@@ -74,6 +74,8 @@ class EmployeesTable extends Table
             'foreignKey' => 'emp_no',
             'bindingKey' => 'emp_no',
         ]);
+        
+        
     }
 
     /**

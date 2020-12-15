@@ -8,8 +8,9 @@
     <aside class="column">
         <div class="side-nav">
             <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('Edit Vacancy'), ['action' => 'edit', $vacancy->vacancy_no], ['class' => 'side-nav-item']) ?>
-            <?= $this->Form->postLink(__('Delete Vacancy'), ['action' => 'delete', $vacancy->vacancy_no], ['confirm' => __('Are you sure you want to delete # {0}?', $vacancy->vacancy_no), 'class' => 'side-nav-item']) ?>
+
+            <?= $this->Html->link(__('Edit Vacancy'), ['action' => 'edit', $vacancy->vac_no], ['class' => 'side-nav-item']) ?>
+            <?= $this->Form->postLink(__('Delete Vacancy'), ['action' => 'delete', $vacancy->vac_no], ['confirm' => __('Are you sure you want to delete # {0}?', $vacancy->vac_no), 'class' => 'side-nav-item']) ?>
             <?= $this->Html->link(__('List Vacancies'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
             <?= $this->Html->link(__('New Vacancy'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
         </div>
@@ -19,12 +20,12 @@
             <h3><?= h($vacancy->vacancy_no) ?></h3>
             <table>
                 <tr>
-                    <th><?= __('Dept No') ?></th>
-                    <td><?= h($vacancy->dept_no) ?></td>
+                    <th><?= __('Department') ?></th>
+                    <td><?= $vacancy->has('department') ? $this->Html->link($vacancy->department->dept_no, ['controller' => 'Departments', 'action' => 'view', $vacancy->department->dept_no]) : '' ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Vacancy No') ?></th>
-                    <td><?= $this->Number->format($vacancy->vacancy_no) ?></td>
+                    <th><?= __('Vac No') ?></th>
+                    <td><?= $this->Number->format($vacancy->vac_no) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Title No') ?></th>

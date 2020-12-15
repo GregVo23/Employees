@@ -18,9 +18,11 @@ class VacanciesController extends AppController
      */
     public function index()
     {
+
         $vacancies = $this->paginate($this->Vacancies, [
             'contain' => ['Titles', 'Departments'],
         ]);
+
         $this->set(compact('vacancies'));
     }
 
@@ -35,6 +37,7 @@ class VacanciesController extends AppController
     {
         $vacancy = $this->Vacancies->get($id, [
             'contain' => ['Titles', 'Departments'],
+
         ]);
         
         $this->set(compact('vacancy'));
@@ -57,7 +60,8 @@ class VacanciesController extends AppController
             }
             $this->Flash->error(__('The vacancy could not be saved. Please, try again.'));
         }
-        $this->set(compact('vacancy'));
+        $departments = $this->Vacancies->Departments->find('list', ['limit' => 200]);
+        $this->set(compact('vacancy', 'departments'));
     }
 
     /**
@@ -81,7 +85,8 @@ class VacanciesController extends AppController
             }
             $this->Flash->error(__('The vacancy could not be saved. Please, try again.'));
         }
-        $this->set(compact('vacancy'));
+        $departments = $this->Vacancies->Departments->find('list', ['limit' => 200]);
+        $this->set(compact('vacancy', 'departments'));
     }
 
     /**

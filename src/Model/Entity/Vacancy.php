@@ -31,7 +31,5 @@ class Vacancy extends Entity
         'dept_no' => true,
         'title_no' => true,
         'quantity' => true,
-        'title' => true,
-        'department' => true,
     ];
 }
