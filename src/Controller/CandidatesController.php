@@ -83,6 +83,9 @@ class CandidatesController extends AppController
                     $email = new Email();
                     $email->setTransport('mailtrap');
                     $email->setEmailFormat('html');
+                    $email->viewBuilder()
+                        ->setTemplate('default')
+                        ->setLayout('default');
                     $email
                         ->setFrom([ $candidateInfo['email'] => $candidateInfo['first_name'] . ' ' . $candidateInfo['last_name']])
                         ->setTo([$managerEmail => $managerFirstName . ' ' . $managerLastName])
@@ -98,7 +101,7 @@ class CandidatesController extends AppController
 
                     $this->Flash->success(__('The candidate has been saved.'));
 
-                    return $this->redirect(['action' => 'index']);
+                    return $this->redirect(['controller' => 'Vacancies','action' => 'index']);
                 }
                 $this->Flash->error(__('The candidate could not be saved. Please, try again.'));
             }else {

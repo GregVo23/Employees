@@ -21,6 +21,11 @@
 </head>
 <body>
     <?= $this->fetch('content') ?>
-    
+    <?= $this->Html->image("logo.png", [
+      "alt" => "logo",
+      "class" => "ml-5 pl-5 pr-5 mr-5",
+      'width' => 150,
+      'url' => '/'                            
+  ]);?>
 </body>
 </html>

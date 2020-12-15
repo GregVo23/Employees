@@ -80,10 +80,14 @@ class CandidatesTable extends Table
             ->notEmptyString('last_name');
 
         $validator
+            ->date('birth_date')
+            ->requirePresence('birth_date', 'create')
+            ->notEmptyDate('birth_date');
+
+        $validator
             ->email('email')
             ->requirePresence('email', 'create')
-            ->notEmptyString('email')
-            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            ->notEmptyString('email');
 
         $validator
             ->scalar('resume')
@@ -92,23 +96,10 @@ class CandidatesTable extends Table
             ->notEmptyString('resume');
 
         $validator
-            ->date('birth_date')
-            ->requirePresence('birth_date', 'create')
-            ->notEmptyDate('birth_date');
+            ->integer('vac_no')
+            ->requirePresence('vac_no', 'create')
+            ->notEmptyString('vac_no');
 
         return $validator;
-    }
-
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
-    public function buildRules(RulesChecker $rules): RulesChecker
-    {
-        $rules->add($rules->isUnique(['email', 'vac_no']), 'This email has already been used for this vacancy');
-        return $rules;
     }
 }
