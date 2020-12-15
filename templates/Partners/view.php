@@ -14,27 +14,22 @@
             <?= $this->Html->link(__('New Partner'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
         </div>
     </aside>
-    <div class="column-responsive column-80">
-        <div class="partners view content">
-            <h3><?= h($partner->title) ?></h3>
-            <table>
-                <tr>
-                    <th><?= __('Title') ?></th>
-                    <td><?= h($partner->title) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Url') ?></th>
-                    <td><?= h($partner->url) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Logo') ?></th>
-                    <td><?= h($partner->logo) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Partner No') ?></th>
-                    <td><?= $this->Number->format($partner->partner_no) ?></td>
-                </tr>
-            </table>
+
+        <div class="column-responsive column-80 ">
+          <div class="partners view content">
+            <h3 class="text-center"><?= h($partner->title) ?></h3>
+
+                <div class="card mx-auto" style="width: 18rem;">
+                     <?= $this->Html->image(h($partner->logo), [
+                                 'url' => $partner->url,
+                                 'alt' => 'logo du partenaire',
+                                 'width'=> '50px',
+                                 'class' => 'card-img-top',
+                     ]);?>
+                     <div class="card-body">
+                       <h5 class="card-title text-center"><?= __('Partner No')  ." : ". $this->Number->format($partner->partner_no) ?></h5>
+                     </div>
+                </div>
+          </div>
         </div>
-    </div>
 </div>

@@ -12,8 +12,7 @@
             <thead>
                 <tr>
                     <th><?= $this->Paginator->sort('title') ?></th>
-                    <th><?= $this->Paginator->sort('url') ?></th>
-                    <th><?= $this->Paginator->sort('logo') ?></th>
+                   
                     <th><?= $this->Paginator->sort('partner_no') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
                 </tr>
@@ -22,8 +21,8 @@
                 <?php foreach ($partners as $partner): ?>
                 <tr>
                     <td><?= h($partner->title) ?></td>
-                    <td><?= h($partner->url) ?></td>
-                    <td><?= h($partner->logo) ?></td>
+                  
+                   
                     <td><?= $this->Number->format($partner->partner_no) ?></td>
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $partner->partner_no]) ?>

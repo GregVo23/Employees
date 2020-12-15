@@ -57,6 +57,9 @@ class DepartmentsTable extends Table
             'conditions' => ['DeptManager.to_date' => '9999-01-01']
         ]);
          
+          $this->hasMany('Vacancies', [
+            'foreignKey' => 'dept_no',
+        ]);
     }
 
     /**
@@ -105,5 +108,6 @@ class DepartmentsTable extends Table
         ->where(['departments.dept_no =' => $options['id']]);
         return $query;
     }
+    
     
 }
