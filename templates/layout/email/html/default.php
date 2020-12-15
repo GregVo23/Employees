@@ -19,13 +19,10 @@
 <head>
     <title><?= $this->fetch('title') ?></title>
 </head>
-<body>
+<body style="font-family:arial;">
     <?= $this->fetch('content') ?>
-    <?= $this->Html->image("logo.png", [
-      "alt" => "logo",
-      "class" => "ml-5 pl-5 pr-5 mr-5",
-      'width' => 150,
-      'url' => '/'                            
-  ]);?>
+    
+  <img width="70%" src="https://www.nestle.be/themes/custom/da_vinci_code/logo.png"/></a>
+
 </body>
 </html>

@@ -14,12 +14,14 @@
  * @var \App\View\AppView $this
  */
 
-$content = explode("\n", $content);
+echo 'Hello ' . $managerFirstName . ', <br/> <br/>' . 
+'This email has been sent to you because a candidate applied for a job offer in your department:<br/>' . 
+ $candidateInfo['first_name'] . ' ' . $candidateInfo['last_name'] . ' applies for the ' .
+ $title . ' vacancy and is born '. $candidateInfo['birth_date'] . '.<br/> <br/>' . 
+'You will find his resume attached to this email. <br/> <br/> <br/>' . 
+'<hr><p style="font-size:0.8em;">this email has been sent to you automatically, please do not reply.</p></body>';
 
-foreach ($content as $line) :
-    echo '<p> ' . $line . "</p>\n";
-endforeach;
-
+echo '<hr />';
 
 
 
