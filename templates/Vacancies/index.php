@@ -24,7 +24,7 @@
                     <td><?= h($vacancy->title->title) ?></td>
                     <td><?= $this->Number->format($vacancy->quantity) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $vacancy->vac_no]) ?>
+                        <?= $this->Html->link(__('Postuler'), ['controller'=>'candidates', 'action' => 'add', $vacancy->vac_no]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $vacancy->vac_no]) ?>
                         <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $vacancy->vac_no], ['confirm' => __('Are you sure you want to delete # {0}?', $vacancy->vacancy_no)]) ?>
                     </td>

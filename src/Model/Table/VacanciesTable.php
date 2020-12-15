@@ -41,12 +41,20 @@ class VacanciesTable extends Table
         $this->setDisplayField('vac_no');
         $this->setPrimaryKey('vac_no');
 
-        $this->hasOne('titles', [
-            'foreignKey' => 'title_no'
+        $this->hasOne('Titles', [
+            'foreignKey' => 'title_no',
+            'bindingKey' => 'title_no'
         ]);
-        $this->hasOne('departments', [
+        $this->hasOne('Departments', [
             'foreignKey' => 'dept_no',
             'bindingKey' => 'dept_no'
+        ]);
+
+        $this->belongsToMany('Candidates',[
+            'joinTable' => 'vac_cand',
+            'targetForeignKey' => 'cand_no',
+            'foreignKey' => 'vac_no',
+            'bindingKey' => 'vac_no',
         ]);
     }
 
