@@ -6,17 +6,17 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Vacancy Entity
+ * Candidate Entity
  *
- * @property int $vac_no
- * @property string $dept_no
- * @property int $title_no
- * @property int $quantity
+ * @property int $cand_no
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $email
+ * @property string $resume
  *
- * @property \App\Model\Entity\Title $title
- * @property \App\Model\Entity\Department $department
+ * @property \App\Model\Entity\Vacancy[] $vacancies
  */
-class Vacancy extends Entity
+class Candidate extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -28,8 +28,12 @@ class Vacancy extends Entity
      * @var array
      */
     protected $_accessible = [
-        'dept_no' => true,
-        'title_no' => true,
-        'quantity' => true,
+        'first_name' => true,
+        'last_name' => true,
+        'birth_date' => true,
+        'email' => true,
+        'resume' => true,
+        'vac_no' => true,
+        'vacancies' => true,
     ];
 }

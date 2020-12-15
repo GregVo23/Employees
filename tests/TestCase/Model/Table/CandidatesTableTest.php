@@ -3,20 +3,20 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\VacanciesTable;
+use App\Model\Table\CandidatesTable;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\VacanciesTable Test Case
+ * App\Model\Table\CandidatesTable Test Case
  */
-class VacanciesTableTest extends TestCase
+class CandidatesTableTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Model\Table\VacanciesTable
+     * @var \App\Model\Table\CandidatesTable
      */
-    protected $Vacancies;
+    protected $Candidates;
 
     /**
      * Fixtures
@@ -24,9 +24,8 @@ class VacanciesTableTest extends TestCase
      * @var array
      */
     protected $fixtures = [
+        'app.Candidates',
         'app.Vacancies',
-        'app.Titles',
-        'app.Departments',
     ];
 
     /**
@@ -37,8 +36,8 @@ class VacanciesTableTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('Vacancies') ? [] : ['className' => VacanciesTable::class];
-        $this->Vacancies = $this->getTableLocator()->get('Vacancies', $config);
+        $config = $this->getTableLocator()->exists('Candidates') ? [] : ['className' => CandidatesTable::class];
+        $this->Candidates = $this->getTableLocator()->get('Candidates', $config);
     }
 
     /**
@@ -48,7 +47,7 @@ class VacanciesTableTest extends TestCase
      */
     public function tearDown(): void
     {
-        unset($this->Vacancies);
+        unset($this->Candidates);
 
         parent::tearDown();
     }
@@ -59,6 +58,16 @@ class VacanciesTableTest extends TestCase
      * @return void
      */
     public function testValidationDefault(): void
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test buildRules method
+     *
+     * @return void
+     */
+    public function testBuildRules(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

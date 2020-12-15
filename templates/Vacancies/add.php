@@ -17,7 +17,6 @@
             <fieldset>
                 <legend><?= __('Add Vacancy') ?></legend>
                 <?php
-                    echo $this->Form->control('dept_no', ['options' => $departments]);
                     echo $this->Form->control('title_no');
                     echo $this->Form->control('quantity');
                 ?>
