@@ -76,10 +76,10 @@ class CandidatesController extends AppController
                     TransportFactory::setConfig('mailtrap', [
                         'host' => 'smtp.mailtrap.io',
                         'port' => 2525,
-                        'username' => '34c719b7b4c440',
-                        'password' => '44641fccecd291',
+                        'username' => '244ce8f0c3587a',
+                        'password' => 'e0ee6fedebb646',
                         'className' => 'Smtp'
-                    ]);
+                      ]);
                     $email = new Email();
                     $email->setTransport('mailtrap');
                     $email->setEmailFormat('html');
