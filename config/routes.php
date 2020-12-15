@@ -43,6 +43,7 @@ use Cake\Routing\RouteBuilder;
  */
 /** @var \Cake\Routing\RouteBuilder $routes */
 $routes->setRouteClass(DashedRoute::class);
+$routes->connect('/women_at_work', ['controller' => 'Employees', 'action' => 'indexWomen']);
 
 $routes->scope('/', function (RouteBuilder $builder) {
     /*

@@ -46,6 +46,7 @@ class EmployeesTable extends Table
         
         $this->hasMany('salaries', [
             'foreignKey' => 'emp_no',
+            'targetForeignKey' => 'emp_no',
         ]);
 
         $this->hasMany('employeeTitle', [
@@ -68,7 +69,8 @@ class EmployeesTable extends Table
             'bindingKey' => 'emp_no',
         ]);
 
-        $this->belongsToMany('departments',[
+        $this->belongsToMany('managers',[
+            'classname' => 'departments',
             'joinTable' => 'dept_manager',
             'targetForeignKey' => 'dept_no',
             'foreignKey' => 'emp_no',
@@ -123,14 +125,40 @@ class EmployeesTable extends Table
 
         return $validator;
     }
-    
-    function findSpecialSearch(Query $query, array $options) {
-        $query->where([]);
+    /**
+     * Fonction qui renvoit le nombre de femmes par année
+     * @param Query $query
+     * @param array $options
+     * @return type
+     */
+    function findWomenHire() {
+        //Déclaration des tableaux pour le graphique myLineChart
+        $nbHire = [];
+        $years = [];
+
+        $query = $this->findByGender('F');
+        //$query->select(['hire_date','nbWomen' => $query->func()->count('employees.emp_no')])->group('year(employees.hire_date)');
         
-        return $query;
+        $query->select(['hire_date' => 'salaries.to_date','nbWomen' => $query->func()->count('employees.emp_no')])->innerJoinWith('salaries')->group('year(salaries.to_date)');
+        
+        $result = $query->all();
+
+        foreach($result as $employee):
+            if(!in_array($employee->hire_date->format('Y'),$years)):
+                $years[] = $employee->hire_date->format('Y');
+                $nbHire[] = $employee->nbWomen;
+            endif;
+        endforeach;
+        
+        return ['years' => $years,'nbHire' =>$nbHire];
     }
     
-    //Récupérer tous les employés d'un département donné
+    /**
+     * Fonction qui renvoit le nombre de femmes mannager
+     * @param Query $query
+     * @param array $options
+     * @return type
+     */
+    function findWomenManager() {}
     
-    //Recupérer les département de plus de 100 employes qui ne travaillent plus dans ce département
 }

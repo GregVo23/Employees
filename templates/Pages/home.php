@@ -117,6 +117,7 @@ $texteHome5 = 'Nos valeurs sont au  cœur de tout ce que nous entreprenons, nous
                             <div id="mapid"></div>
                         </div>
                         <div class="col">
+                            <p>Télécharger notre application pour rester informer des dernières news de la société</p>
                             <?= $this->Html->image("qrcode.png", [
                                     "alt" => "qrcode de Nestlé",
                                     'url' => ['action' => $this->Url->build('/')],

@@ -29,11 +29,11 @@ class EmployeesController extends AppController
         //Préparer, modifier ces données
         $employees = $this->paginate($employees);
         
-        $cellMenWomenRatio = $this->cell('Inbox');
-        
         //Envoyer vers la vue
-        $this->set('employees',$employees);
-        $this->set('cellMenWomenRatio',$cellMenWomenRatio);
+        $this->set('employee',$employees);
+        
+        
+
     }
 
     /**
@@ -150,5 +150,55 @@ class EmployeesController extends AppController
         //Envoyer à la vue
         $this->set('employees',$employees);
         $this->render('index'); //Définit un temlate spécifique
+    }
+
+    
+    //----------------------|*| WOMEN AT WORK PAGE VIEW |*|------------------------//
+
+    
+        public function indexWomen()
+    {
+        //Récupérer les données de la base de données
+        $employees = $this->Employees;
+       
+        //Préparer, modifier ces données
+        $employees = $this->paginate($employees);
+        
+        $women = $this->Employees->findByGender('F')->count();
+        $men = $this->Employees->findByGender('M')->count();
+        
+        //Préparation des Cells
+        $cellMenWomenRatio = $this->cell('Inbox');
+        $cellNbWomen = $this->cell('nbWomen');
+        
+        /**/
+        $yearWomen = [];
+        $nbWomen = [];
+        $result = $this->Employees->findWomenHire();
+        
+        
+        foreach($result['years'] as $year):
+            $yearWomen[] = $year;
+        endforeach;
+        
+        foreach($result['nbHire'] as $nbHire):
+            $nbHireWomen[] = $nbHire;
+        endforeach;
+
+        
+
+        
+        //Envoyer vers la vue
+        $this->set('employee',$employees);
+        $this->set('nbWomen',$women);
+        $this->set('nbMen',$men);
+        $this->set('cellMenWomenRatio',$cellMenWomenRatio);
+        $this->set('cellNbWomen',$cellNbWomen);
+        
+        $this->set('yearWomen',$yearWomen);
+        $this->set('nbHireWomen',$nbHireWomen);
+        
+        //Envoyer vers la vue spécifié
+        $this->render('/women_at_work/index');
     }
 }
