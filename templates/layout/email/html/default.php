@@ -18,9 +18,24 @@
 <html>
 <head>
     <title><?= $this->fetch('title') ?></title>
+    <style type="text/css">
+      @media only screen and (min-width: 600px) { .maxW { width:600px !important; } }
+    </style>
 </head>
-<body>
+<body style="font-family:arial;">
     <?= $this->fetch('content') ?>
-    
+
+   <!--[if (gte mso 9)|(IE)]><table width="600" align="center" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
+   <div class="maxW" style="max-width:600px;">
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+      <tr>
+        <td>
+          <a href="https://www.nestle.be"><img width="80%" src="https://www.nestle.be/themes/custom/da_vinci_code/logo.png"/></a>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <!--[if (gte mso 9)|(IE)]></td></tr></table><![endif]-->
+  
 </body>
 </html>

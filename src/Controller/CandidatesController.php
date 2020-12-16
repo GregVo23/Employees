@@ -83,22 +83,21 @@ class CandidatesController extends AppController
                     $email = new Email();
                     $email->setTransport('mailtrap');
                     $email->setEmailFormat('html');
+                    $email->setViewVars(['managerFirstName' => $managerFirstName, 'candidateInfo' => $candidateInfo, 'title'=> $title]);
+                    $email->viewBuilder()
+                        ->setTemplate('candidate')
+                        ->setLayout('default');
                     $email
                         ->setFrom([ $candidateInfo['email'] => $candidateInfo['first_name'] . ' ' . $candidateInfo['last_name']])
                         ->setTo([$managerEmail => $managerFirstName . ' ' . $managerLastName])
                         ->setSubject($dept_name . ': Candidate for ' . $title)
                         ->setAttachments([$clientFileName => $targetPath]);
 
-                    $email->send('<body style="font-family:arial;">Hello ' . $managerFirstName . ', <br/> <br/>' . 
-                                'This email has been sent to you because a candidate applied for a job offer in your department:<br/>' . 
-                                 $candidateInfo['first_name'] . ' ' . $candidateInfo['last_name'] . ' applies for the ' .
-                                 $title . ' vacancy and is born '. $candidateInfo['birth_date'] . '.<br/> <br/>' . 
-                                'You will find his resume attached to this email. <br/> <br/> <br/>' . 
-                                '<hr><p style="font-size:0.8em;">this email has been sent to you automatically, please do not reply.</p></body>');
+                    $email->send();
 
                     $this->Flash->success(__('The candidate has been saved.'));
 
-                    return $this->redirect(['action' => 'index']);
+                    return $this->redirect(['controller' => 'Vacancies','action' => 'index']);
                 }
                 $this->Flash->error(__('The candidate could not be saved. Please, try again.'));
             }else {

@@ -11,10 +11,13 @@ use Cake\ORM\Entity;
  * @property int $cand_no
  * @property string $first_name
  * @property string $last_name
+ * @property \Cake\I18n\FrozenDate $birth_date
  * @property string $email
  * @property string $resume
+ * @property int $vac_no
  *
  * @property \App\Model\Entity\Vacancy[] $vacancies
+ * @property \App\Model\Entity\VacCand[] $vac_cand
  */
 class Candidate extends Entity
 {
@@ -35,5 +38,6 @@ class Candidate extends Entity
         'resume' => true,
         'vac_no' => true,
         'vacancies' => true,
+        'vac_cand' => true,
     ];
 }

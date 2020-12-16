@@ -4,7 +4,9 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+
     "content-hash": "f8c5475e6319dd354ec3903d37dbf92a",
+
     "packages": [
         {
             "name": "aura/intl",
@@ -58,6 +60,7 @@
         },
         {
             "name": "cakephp/authentication",
+
             "version": "2.3.1",
             "source": {
                 "type": "git",
