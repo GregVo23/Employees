@@ -23,6 +23,7 @@
 
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
+use Cake\Routing\Router;
 
 /*
  * The default class to use for all routes
@@ -44,6 +45,14 @@ use Cake\Routing\RouteBuilder;
 /** @var \Cake\Routing\RouteBuilder $routes */
 $routes->setRouteClass(DashedRoute::class);
 $routes->connect('/women_at_work', ['controller' => 'Employees', 'action' => 'indexWomen']);
+
+$routes->prefix('Admin', function (RouteBuilder $routes) {
+    // Because you are in the admin scope,
+    // you do not need to include the /admin prefix
+    // or the Admin route element.
+    $routes->connect('/', ['prefix' => 'admin', 'controller' => 'Pages', 'action' => 'index']);
+    $routes->fallbacks(DashedRoute::class);
+});
 
 $routes->scope('/', function (RouteBuilder $builder) {
     /*
