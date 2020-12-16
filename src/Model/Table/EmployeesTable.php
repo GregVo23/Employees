@@ -49,10 +49,16 @@ class EmployeesTable extends Table
             'targetForeignKey' => 'emp_no',
         ]);
 
-        $this->hasMany('employeeTitle', [
-            
+        $this->hasMany('employee_title', [
             'foreignKey' => 'emp_no',
-           
+        ]);
+        
+        $this->hasOne('dept_emp', [
+            'foreignKey' => 'dept_no',
+        ]);
+        
+        $this->hasOne('dept_manager', [
+            'foreignKey' => 'emp_no',
         ]);
 
         $this->belongsToMany('titles', [
@@ -75,9 +81,7 @@ class EmployeesTable extends Table
             'targetForeignKey' => 'dept_no',
             'foreignKey' => 'emp_no',
             'bindingKey' => 'emp_no',
-        ]);
-        
-        
+        ]); 
     }
 
     /**
@@ -131,7 +135,7 @@ class EmployeesTable extends Table
      * @param array $options
      * @return type
      */
-    function findWomenHire() {
+    public function findWomenHire() {
         //Déclaration des tableaux pour le graphique myLineChart
         $nbHire = [];
         $years = [];
@@ -159,6 +163,63 @@ class EmployeesTable extends Table
      * @param array $options
      * @return type
      */
-    function findWomenManager() {}
+    public function findWomenManager() {
+    $query = $this->findByGender('F');
+    $query->select(['nbWomenManager' => $query->func()->count('employees.emp_no')])->innerJoinWith('dept_manager');
+    $result = $query->all();
+
+    foreach($result as $womenManager):
+        $nbWomenManager = $womenManager;
+    endforeach;
+    return $nbWomenManager;
+    }
+    
+     /**
+     * Fonction qui renvoit le nombre d'hommes mannager
+     * @param Query $query
+     * @param array $options
+     * @return type
+     */
+    public function findMenManager() {
+    $query = $this->findByGender('M');
+    $query->select(['nbMenManager' => $query->func()->count('employees.emp_no')])->innerJoinWith('dept_manager');
+    $result = $query->all();
+
+    foreach($result as $menManager):
+        $nbMenManager = $menManager;
+    endforeach;
+    return $nbMenManager;
+    }
+    /**
+     * Fonction qui renvoit Les 3 départements présentant le plus de femmes
+     * @param Query $query
+     * @param array $options
+     * @return type
+     * req SQL = SELECT departments.dept_name, COUNT(employees.emp_no)FROM dept_emp,employees,departments WHERE dept_emp.dept_no = departments.dept_no AND dept_emp.emp_no = employees.emp_no AND employees.gender = 'F' GROUP BY departments.dept_no ORDER BY COUNT(employees.emp_no) desc LIMIT 3
+     */
+
+    public function findMoreWomenDep(){
+    $query = $this->findByGender('F');   
+    $query->select(['depName' => 'departments.dept_name','nbWomenDep' => $query->func()->count('employees.emp_no')])->innerJoinWith('departments')->group('departments.dept_no');
+    $query->orderDesc($query->func()->count('employees.emp_no'))->limit(3);
+    $result = $query->all();
+    return $result;
+    }
+    
+     /**
+     * Fonction qui renvoit Les 3 départements présentant le moins de femmes
+     * @param Query $query
+     * @param array $options
+     * @return type
+     * Req SQL = SELECT departments.dept_name, COUNT(employees.emp_no)FROM dept_emp,employees,departments WHERE dept_emp.dept_no = departments.dept_no AND dept_emp.emp_no = employees.emp_no AND employees.gender = 'F' GROUP BY departments.dept_no ORDER BY COUNT(employees.emp_no) ASC LIMIT 3
+     */
+    public function findLessWomenDep(){
+    $query = $this->findByGender('F');
+    $query->select(['depName' => 'departments.dept_name','nbWomenDep' => $query->func()->count('employees.emp_no')])->innerJoinWith('departments')->group('departments.dept_no');
+    $query->orderAsc($query->func()->count('employees.emp_no'))->limit(3);
+    $result = $query->all();
+    return $result;
+    
+    }
     
 }
