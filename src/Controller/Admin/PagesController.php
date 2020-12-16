@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -9,16 +11,27 @@
  *
  * @copyright Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  * @link      https://cakephp.org CakePHP(tm) Project
- * @since     0.10.0
+ * @since     0.2.9
  * @license   https://opensource.org/licenses/mit-license.php MIT License
- * @var \App\View\AppView $this
  */
-use Cake\Cache\Cache;
-use Cake\Core\Configure;
-use Cake\Core\Plugin;
-use Cake\Datasource\ConnectionManager;
-use Cake\Error\Debugger;
-use Cake\Http\Exception\NotFoundException;
+namespace App\Controller\Admin;
 
-?>
-<h1>Women at work</h1>
+use Cake\Core\Configure;
+use Cake\Http\Exception\ForbiddenException;
+use Cake\Http\Exception\NotFoundException;
+use Cake\Http\Response;
+use Cake\View\Exception\MissingTemplateException;
+
+/**
+ * Static content controller
+ *
+ * This controller will render views from templates/Pages/
+ *
+ * @link https://book.cakephp.org/4/en/controllers/pages-controller.html
+ */
+class PagesController extends AppController
+{
+    public function index() {
+        
+    }
+}
