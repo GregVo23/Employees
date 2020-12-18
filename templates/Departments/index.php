@@ -22,9 +22,23 @@
                     <td><?= h($department->dept_no) ?></td>
                     <td><?= h($department->dept_name) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $department->dept_no]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $department->dept_no]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $department->dept_no], ['confirm' => __('Are you sure you want to delete # {0}?', $department->dept_no)]) ?>
+                        <?= $this->Html->image("view.png", [
+                            "alt" => "view",
+                            'url' => ['action' => 'view', $department->dept_no],
+                            'width' => 50                          
+                        ]);?>
+                        
+                        <?= $this->Html->image("edit.png", [
+                            "alt" => "view",
+                            'url' => ['action' => 'edit', $department->dept_no],
+                            'width' => 50                           
+                        ]);?>
+                        
+                        <?= $this->Html->image("delete.png", [
+                            "alt" => "view",
+                            'url' => ['action' => 'delete', $department->dept_no], ['confirm' => __('Are you sure you want to delete # {0}?', $department->dept_no)],
+                            'width' => 50                           
+                        ]);?>
                     </td>
                 </tr>
                 <?php endforeach; ?>

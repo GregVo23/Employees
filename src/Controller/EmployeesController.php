@@ -183,13 +183,13 @@ class EmployeesController extends AppController
         foreach($result as $depLess):
             $depNameLessWomen[] = $depLess->depName;
             $nbDepLessWomen[] = $depLess->nbWomenDep;
-        endforeach; 
+        endforeach;
 
         $result = $this->Employees->findMoreWomenDep();
         foreach($result as $depMore):
             $depNameMoreWomen[] = $depMore->depName;
             $nbDepMoreWomen[] = $depMore->nbWomenDep;
-        endforeach; 
+        endforeach;
 
         $nbWomenManager = $this->Employees->findWomenManager();
         $nbMenManager = $this->Employees->findMenManager();

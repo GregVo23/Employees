@@ -59,12 +59,6 @@ class UsersTable extends Table
             ->allowEmptyString('user_no', null, 'create');
 
         $validator
-            ->scalar('function')
-            ->maxLength('function', 50)
-            ->requirePresence('function', 'create')
-            ->notEmptyString('function');
-
-        $validator
             ->scalar('username')
             ->maxLength('username', 50)
             ->requirePresence('username', 'create')

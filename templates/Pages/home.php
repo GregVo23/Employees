@@ -21,13 +21,6 @@ use Cake\Error\Debugger;
 use Cake\Http\Exception\NotFoundException;
 
 
-use Cake\Filesystem\Folder;
-use Cake\Filesystem\File;
-
-/*$dir = new Folder('/webroot/assets/articles/');
-$files = $dir->find('.*\.pdf');
-*/
-
 //$this->disableAutoLayout();
 
 
@@ -46,25 +39,12 @@ $texteHome4 = 'Nous voulons contribuer à construire un monde meilleur et plus s
 Pour lutter contre une mortalité infantile élevée, Henri Nestlé met au point et commercialise en Suisse dès 1867, la première farine lactée.
 Il y a donc plus de 150 ans déjà, Henri Nestlé apportait une réponse à la nécessité de disposer d\'aliments sûrs et nutritifs pour remplacer le lait maternel si nécessaire et qui répondent aux besoins nutritionnels des enfants en bas âge.';
 $titleHome5 = 'Nos valeurs';
-$texteHome5 = 'Nos valeurs sont au  cœur de tout ce que nous entreprenons, nous agissons en toute légalité et honnêteté. Ces valeurs sont ancrées dans le respect, le respect pour nous-mêmes et pour toutes les personnes avec lequelles nous faisons des affaires.'
-        
+$texteHome5 = 'Nos valeurs sont au  cœur de tout ce que nous entreprenons, nous agissons en toute légalité et honnêteté. Ces valeurs sont ancrées dans le respect, le respect pour nous-mêmes et pour toutes les personnes avec lequelles nous faisons des affaires.';
+
 ?>
 <body>
+    <?= $this->element('slider'); ?>
     <main class="main">
-        <section class="container-fluid pl-0 pr-0">
-            <div>
-                <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
-                  <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <?= $this->Html->image('entreprise.jpg', ['alt' => 'Slide de Nestlé','class' => 'd-block w-100',]); ?>
-                    </div>
-                    <div class="carousel-item">
-                      <?= $this->Html->image('entreprise2.jpg', ['alt' => 'Slide de Nestlé','class' => 'd-block w-100',]); ?>
-                    </div>
-                  </div>
-                </div>
-            </div>
-        </section>
         <section>
             <div class="container">
                 <div class="content">
@@ -77,7 +57,7 @@ $texteHome5 = 'Nos valeurs sont au  cœur de tout ce que nous entreprenons, nous
                             <?= $this->Html->image("logo.png", [
                                     "alt" => "logo de Nestlé sur un mur",
                                     'url' => ['action' => $this->Url->build('/')],
-                                    'class' => 'img-fluid',
+                                    'class' => 'logoHome img-fluid',
                             ]);?>
                         </div>
                     </div>

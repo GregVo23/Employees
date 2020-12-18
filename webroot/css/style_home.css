@@ -2,12 +2,17 @@
     Created on : 18-oct.-2020, 17:49:03
     Author     : Groupe 1
 */
-
-body > main > div > main > section:nth-child(2) > div > div > div:nth-child(1) > div:nth-child(2) > a > img {
-    padding: 0 25%;
+body > main > div
+{
+    margin: 0;
+    width: 100%;    
 }
-
-#mapid {
+body > main, #carouselExampleSlidesOnly, #carouselExampleSlidesOnly > div{
+    margin: 0;
+    width: 100%;
+}
+#mapid 
+{
     margin-bottom: 30px;
     height: 250px;
     width: 100%;
