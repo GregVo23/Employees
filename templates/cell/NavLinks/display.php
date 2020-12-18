@@ -19,13 +19,16 @@
       <?php endforeach; ?>
       </ul>
         <li class="d-flex justify-content-end">
-            <?= $this->Html->link('S\'inscrire', '/pages/sign_up', ['class' => 'btn btn-danger justify-content-end mr-2'] ); ?>
+            <?= $this->Html->link('S\'inscrire', '/pages/register', ['class' => 'btn btn-danger justify-content-end mr-2'] ); ?>
         </li>
         <li class="d-flex justify-content-end">
             <!-- Button trigger modal -->
             <a type="button" class="btn btn-secondary justify-content-end mr-5" data-bs-toggle="modal" data-bs-target="#connexion">
               Connexion
             </a>
+            <li class="d-flex justify-content-end">
+                <?= $this->Html->link('Connexion2', '/users/login', ['class' => 'btn btn-danger justify-content-end mr-2'] ); ?>
+            </li>
         </li>
   </div>
 </nav>
@@ -41,17 +44,16 @@
         <button type="button" class="btn" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
       </div>
       <div class="modal-body">
-        <form>
-            <div class="mb-3">
-              <label for="userName" class="form-label">Username</label>
-              <input type="email" class="form-control" id="userName" aria-describedby="emailHelp">
-            </div>
-            <div class="mb-3">
-              <label for="password1" class="form-label">Password</label>
-              <input type="password" class="form-control" id="password1">
-            </div>
-            <button type="submit" class="btn btn-danger">Connexion</button>
-        </form>
+        <div class="users form content">
+            <?= $this->Form->create() ?>
+            <fieldset>
+                <legend><?= __('Please enter your email and password') ?></legend>
+                <?= $this->Form->control('email') ?>
+                <?= $this->Form->control('password') ?>
+            </fieldset>
+            <?= $this->Form->button(__('Login')); ?>
+            <?= $this->Form->end() ?>
+        </div>
       </div>
     </div>
   </div>
