@@ -174,5 +174,5 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
        $service->loadIdentifier('Authentication.Password', compact('fields'));
 
        return $service;
-   }
+   }  
 }

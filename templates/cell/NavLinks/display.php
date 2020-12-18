@@ -18,17 +18,23 @@
         </li>
       <?php endforeach; ?>
       </ul>
+        <?php if(!isset($_SESSION['Auth'])){ ?>
         <li class="d-flex justify-content-end">
             <?= $this->Html->link('S\'inscrire', '/pages/register', ['class' => 'btn btn-danger justify-content-end mr-2'] ); ?>
         </li>
         <li class="d-flex justify-content-end">
-            <!-- Button trigger modal -->
+            <!-- Button trigger modal
             <a type="button" class="btn btn-secondary justify-content-end mr-5" data-bs-toggle="modal" data-bs-target="#connexion">
               Connexion
-            </a>
+            </a> -->
             <li class="d-flex justify-content-end">
-                <?= $this->Html->link('Connexion2', '/users/login', ['class' => 'btn btn-danger justify-content-end mr-2'] ); ?>
+                <?= $this->Html->link('Connexion', '/users/login', ['class' => 'btn btn-danger justify-content-end mr-2'] ); ?>
             </li>
+            <?php } else { ?>
+            <li class="d-flex justify-content-end">
+                <?= $this->Html->link('Deconnexion', '/users/logout', ['class' => 'btn btn-danger justify-content-end mr-2'] ); ?>
+            </li>
+            <?php } ?>
         </li>
   </div>
 </nav>

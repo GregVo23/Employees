@@ -38,7 +38,6 @@ class UsersController extends AppController
         }
         if ($this->request->is('post') && !$result->isValid())
         {
-            //$this->Auth->identify();
             $this->Flash->error('Invalid username or password');
         }
     }
