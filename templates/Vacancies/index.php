@@ -28,7 +28,7 @@
                     <td class="actions">
                         <?= $this->Html->image("view.png", [
                             "alt" => "view",
-                            'url' => ['action' => 'view', $vacancy->vac_no],
+                            'url' => ['controller'=>'candidates', 'action' => 'add', $vacancy->vac_no],
                             'width' => 50                          
                         ]);?>
                         
