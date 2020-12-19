@@ -1,11 +1,93 @@
 /* 
-    Created on : 18-oct.-2020, 17:49:03
+    Created on : 28-nov.-2020, 17:49:03
     Author     : Groupe 1
 */
 
 
-/* employee picture */
-.emp_pict {
-    width:200px;
-    margin: 0 40%;
-}
+/* GENERAL */
+
+    body{
+        font-size: 1.3em !important;
+    }
+    .logo
+    {
+        width: 180px;
+    }
+    .fas, .fab
+    {
+        font-size: 1.2em;
+        padding-right: 10px;
+        margin-bottom: 20px;
+    }
+    body > header > nav
+    {
+        height:120px !important;
+    }
+    footer a
+    {
+        color:red !important;
+    }
+    footer a:hover
+    {
+        color:red !important;
+    }
+    #navbarSupportedContent > ul > li > a:hover
+    {
+        color:red !important;
+    }
+    #navbarSupportedContent > ul > li > a
+    {
+        padding: 0 20px !important;
+    }
+    .btn
+    {
+        font-size: 1.3em !important;
+        border-radius: 6px !important;
+    }
+
+/* PAHE HOME */
+    .logoHome
+    {
+        padding: 0 30%;
+    }
+    
+/* EMPLOYEE PAGE */
+
+.emp_pict 
+    {
+        width:200px;
+        margin: 0 40%;
+    }
+
+/* FOOTER */ 
+    * 
+    {
+      margin: 0;
+    }
+    html, body 
+    {
+      height: 100%;
+    }
+    .page-wrap 
+    {
+      min-height: 100%;
+      /* equal to footer height */
+      margin-bottom: -120px; 
+    }
+    .page-wrap:after 
+    {
+      content: "";
+      display: block;
+    }
+    .site-footer, .page-wrap:after 
+    {
+      height: 300px; 
+    }
+    .site-footer 
+    {
+      background: orange;
+    }
+    body > footer > div > div > div > div > h3
+    {
+        padding-bottom: 10px;
+    }

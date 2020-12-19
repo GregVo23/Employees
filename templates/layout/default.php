@@ -33,27 +33,31 @@ $cakeDescription = 'Nestlé';
     <!--leaflet-->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
 
-    <?= $this->Html->css(['normalize.min', 'milligram.min', 'cake', 'bootstrap.min', 'style']) ?>
-    <?= $this->Html->script(['jquery.min', 'bootstrap.bundle.min']) ?>
-
+    <?= $this->Html->css(['style','normalize.min', 'milligram.min', 'cake', 'bootstrap.min']) ?>
+    <?= $this->Html->script(['jquery.min', 'bootstrap.min']) ?>
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
+    <script src="https://kit.fontawesome.com/e6678e6ff6.js" crossorigin="anonymous"></script>
 </head>
 <header>
 <?= $navLinks ?>
 </header>
 <body>
     <main class="main">
+        <!--element slider ideal ici-->
         <div class="container">
             <?= $this->Flash->render() ?>
             <?= $this->fetch('content') ?>
         </div>
     </main>
-    <footer>
-    </footer>
-    
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <section style="height:100px;">
+        
+    </section>
+    <!-- Footer -->
+    <?= $this->element('footer'); ?>
+    <!--script js-->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

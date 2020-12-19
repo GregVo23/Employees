@@ -43,11 +43,17 @@ class AppController extends Controller
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
+        $this->loadComponent('Authentication.Authentication');
+        
+        // in a controller beforeFilter or initialize
+        // Make view and index not require a logged in user.
+        $this->Authentication->allowUnauthenticated(['view', 'index', 'display', 'indexWomen']);
 
         /*
          * Enable the following component for recommended CakePHP form protection settings.
          * see https://book.cakephp.org/4/en/controllers/components/form-protection.html
          */
         //$this->loadComponent('FormProtection');
+        
     }
 }
