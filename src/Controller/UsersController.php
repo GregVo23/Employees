@@ -14,14 +14,26 @@ class UsersController extends AppController
     public function register()
     {
         $user = $this->Users->newEmptyEntity();
+        
         if ($this->request->is('post')) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
-
-                return $this->redirect(['controller' => 'Pages', 'action' => 'display', 'home']);
+            
+            $employee = $this->loadModel('employees');   
+            $email = $employee->findByEmail($this->request->getData('email'))->first();
+            if($email)
+            {
+                $empNo = $email->emp_no;
+                $form = $this->request->getData();
+                $form['emp_no'] = $empNo;
+                $user = $this->Users->patchEntity($user, $form);
+                if ($this->Users->save($user))
+                {
+                    $this->Flash->success(__('Vous avez été enregistrer, bienvenue !'));
+                    return $this->redirect(['controller' => 'Pages', 'action' => 'display', 'home']);
+                }
+                $this->Flash->error(__('Un problème est survenu lors de l\'enregistrement.'));
+            }else{
+                $this->Flash->error(__('Votre email n\'est pas correct.'));
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         $this->set(compact('user'));
     }
@@ -38,7 +50,7 @@ class UsersController extends AppController
         }
         if ($this->request->is('post') && !$result->isValid())
         {
-            $this->Flash->error('Invalid username or password');
+            $this->Flash->error('Username ou password incorrect !');
         }
     }
     

@@ -20,7 +20,7 @@
       </ul>
         <?php if(!isset($_SESSION['Auth'])){ ?>
         <li class="d-flex justify-content-end">
-            <?= $this->Html->link('S\'inscrire', '/pages/register', ['class' => 'btn btn-danger justify-content-end mr-2'] ); ?>
+            <?= $this->Html->link('S\'inscrire', '/users/register', ['class' => 'btn btn-secondary justify-content-end mr-2'] ); ?>
         </li>
         <li class="d-flex justify-content-end">
             <!-- Button trigger modal

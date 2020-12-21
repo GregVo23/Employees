@@ -46,8 +46,6 @@ use Cake\Routing\Router;
 $routes->setRouteClass(DashedRoute::class);
 $routes->connect('/women_at_work', ['controller' => 'Employees', 'action' => 'indexWomen']);
 
-//$routes->connect('/sign_up', ['controller' => 'Pages', 'action' => 'sign_up']);
-
 
 $routes->prefix('Admin', function (RouteBuilder $routes) {
     // Because you are in the admin scope,

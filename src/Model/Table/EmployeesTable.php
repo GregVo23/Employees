@@ -60,6 +60,10 @@ class EmployeesTable extends Table
         $this->hasOne('dept_manager', [
             'foreignKey' => 'emp_no',
         ]);
+        
+        $this->hasOne('users', [
+            'foreignKey' => 'emp_no',
+        ]);
 
         $this->belongsToMany('titles', [
             'joinTable' => 'employee_title',

@@ -44,6 +44,10 @@ class UsersTable extends Table
         $this->setPrimaryKey('user_no');
 
         $this->addBehavior('Timestamp');
+        
+        $this->hasOne('employees', [
+            'foreignKey' => 'emp_no',
+        ]);
     }
 
     /**
@@ -100,8 +104,8 @@ class UsersTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->isUnique(['username']), ['errorField' => 'username']);
-        $rules->add($rules->isUnique(['email']), ['errorField' => 'email']);
+        //$rules->add($rules->isUnique(['username']), ['erreur username !' => 'username']);
+        $rules->add($rules->isUnique(['email']), ['erreur email !' => 'email']);
 
         return $rules;
     }
