@@ -161,6 +161,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
        $service->loadAuthenticator('Authentication.Form', [
        //Le nom qu'on donne aux champs du formulaire avec 'field' => ['username' => 'username']
            'fields' => $fields,
+           //'fields' => ['first_name' => 'first_name', 'prenom'],
            'identify' => true,
            'loginUrl' => Router::url([
                'prefix' => false,
