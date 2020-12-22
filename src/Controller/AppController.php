@@ -44,6 +44,8 @@ class AppController extends Controller
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
         $this->loadComponent('Authentication.Authentication');
+        $this->loadComponent('Authorization.Authorization');
+
         
         // in a controller beforeFilter or initialize
         // Make view and index not require a logged in user.

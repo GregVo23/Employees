@@ -41,6 +41,8 @@ class AppController extends BaseController
     public function initialize(): void
     {
         parent::initialize();
+        $this->Authorization->skipAuthorization();
+
     }
     
     public function beforeRender(\Cake\Event\EventInterface $event)

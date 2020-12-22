@@ -77,6 +77,8 @@ class EmployeesTable extends Table
             'targetForeignKey' => 'dept_no',
             'foreignKey' => 'emp_no',
             'bindingKey' => 'emp_no',
+            'conditions' => ['DeptEmp.to_date' => '9999-01-01']
+
         ]);
 
         $this->belongsToMany('managers',[

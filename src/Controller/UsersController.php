@@ -25,6 +25,7 @@ class UsersController extends AppController
                 $form = $this->request->getData();
                 $form['emp_no'] = $empNo;
                 $user = $this->Users->patchEntity($user, $form);
+                //dd($user);
                 if ($this->Users->save($user))
                 {
                     $this->Flash->success(__('Vous avez été enregistrer, bienvenue !'));
@@ -60,6 +61,7 @@ class UsersController extends AppController
         parent::beforeFilter($event);
 
         $this->Authentication->allowUnauthenticated(['register','login','indexWomen']);
+        $this->Authorization->skipAuthorization();
     }
     
     // in src/Controller/UsersController.php
