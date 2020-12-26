@@ -37,7 +37,37 @@ class NavLinksCell extends Cell
         $this->loadModel('Links');
 
         $links = $this->Links->find('all');
-
+        
+       if($_SESSION['Auth']){
+           $status = $_SESSION['status']; 
+           $menu = [];
+           
+           foreach($links as $link){
+               if($status === 'Admin'){
+                   $link->url = '/admin' . $link->url;
+                    $menu[] = $link;
+                }
+               elseif($status === 'Manager' && $link->manager === 'admin'){
+                   $link->url = '/admin'. $link->url;
+                   $menu[] = $link;
+                }
+               elseif($status === 'Manager' && $link->manager === 'show'){
+                   $menu[] = $link;
+                }
+               elseif($status === 'Accountant' && $link->accountant === 'admin'){
+                   $link->url = '/admin'. $link->url;
+                   $menu[] = $link;
+                }
+               elseif($status === 'Accountant' && $link->accountant === 'show'){
+                  $menu[] = $link;
+                }
+                
+                elseif($link->all === 'show'){
+                    $menu[] = $link;
+                }
+            }
+            $links = $menu;
+       }
         $this->set(compact('links'));
     }
 }

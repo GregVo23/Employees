@@ -16,7 +16,7 @@
     </aside>
     <div class="column-responsive column-80">
         <div class="departments view content">
-            <h3><?= h($department->dept_no) ?></h3>
+            <h3><?= __('Dept No : '); echo h($department->dept_no) ?></h3>
             
             <table>
                 <tr>
@@ -26,42 +26,53 @@
                     ]);?>
                     </td>
                 </tr>
-                <tr>
-                    <th><?= __('Dept No') ?></th>
-                    <td><?= h($department->dept_no) ?></td>
-                </tr>
-                <tr>
+                  <tr>
                     <th><?= __('Dept Name') ?></th>
                     <td><?= h($department->dept_name) ?></td>
                 </tr>
+                <!--  TODO   -->
+                <tr>
+                    <th><?= __('Manager\'s name');  ?> </th>
+                    <td> </td>
+
+                </tr>
+                <tr>
+                    <th><?= __('Manager\'s hire date');  ?> </th>
+                    <td>   </td>
+                </tr>
+                <!-- -->
                 <tr>
                     <th><?= __('Number of employees') ?></th>
                     <td><?= h($result) ?></td>
                 </tr>
+                <!--  TODO   -->
+                <tr>
+                    <th><?= __('Average wages') ?></th>
+                    <td     ></td>
+                </tr>
+                <!-- -->
                 <tr>
                     <th><?= __('Description') ?></th>
                     <td><?= $this->Text->autoParagraph($description); ?></td>
                 </tr>
-                <?php if($showRoi){ ?>
+            
                 <tr>
                     <th><?= __('Internal rules and regulations ') ?></th>
                     <td><?= $this->Html->link(__('CLICK HERE TO READ IT'), $rules ,['target' => '_blank']); ?></td>
                 </tr>
-                <?php } ?>
+               
                 <tr>
                     <th><?= __('Quantity of vacancies') ?></th>
                      
-                     <?php  if(!empty($nbVacancies->quantity)){ ?>
-                              <td><?php  foreach($nbVacancies as $nbVacancie):
-                                            echo $nbVacancie->quantity;
-                                            endforeach;
-                                   ?>
-                              </td>
+                     <?php if(!empty($department->vacancie)){ ?>
+                            <td>
+                             <?= $department->vacancie; ?>
+                            </td>
         
                             <td><?= $this->Html->link(__('Postuler'),['controller'=>'Vacancies'],['action' => 'view'], ['class' => 'btn btn-secondary']) ?></td>
-                        <?php } else{ ?>
+                     <?php } else { ?>
                             <td><?= "No vacancies at the moment" ?></td>
-                        <?php } ?>
+                     <?php } ?>
                 </tr>
             </table>
         </div>
