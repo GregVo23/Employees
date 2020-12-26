@@ -51,17 +51,15 @@
                 <tr>
                     <th><?= __('Quantity of vacancies') ?></th>
                      
-                     <?php  if(!empty($nbVacancies->quantity)){ ?>
-                              <td><?php  foreach($nbVacancies as $nbVacancie):
-                                            echo $nbVacancie->quantity;
-                                            endforeach;
-                                   ?>
-                              </td>
-        
+                     <?php if(!empty($department->vacancie)){ ?>
+                            <td>
+                             <?= $department->vacancie; ?>
+                            </td>
+                            
                             <td><?= $this->Html->link(__('Postuler'),['controller'=>'Vacancies'],['action' => 'view'], ['class' => 'btn btn-secondary']) ?></td>
-                        <?php } else{ ?>
+                     <?php } else { ?>
                             <td><?= "No vacancies at the moment" ?></td>
-                        <?php } ?>
+                     <?php } ?>
                 </tr>
             </table>
         </div>

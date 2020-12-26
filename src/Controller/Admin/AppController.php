@@ -48,5 +48,6 @@ class AppController extends BaseController
     public function beforeRender(\Cake\Event\EventInterface $event)
     {
         parent::beforeRender($event);
+        
     }
 }

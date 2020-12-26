@@ -19,7 +19,9 @@ class DepartmentsController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      */
     public function index()
-    {
+    {   
+        $this->Authorization->skipAuthorization();
+
         $departments = $this->paginate($this->Departments);
 
         $this->set(compact('departments'));
@@ -33,12 +35,52 @@ class DepartmentsController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null)
-    {
+    {   
+     
+        
         $department = $this->Departments->get($id, [
-            'contain' => ['Employees', 'Managers', 'Vacancies'],
+            'contain' => ['Managers', 'Vacancies'],
         ]);
+        
+        //Partie manager(nom + picture):
+        $managers =$department->managers;
+        $department->manager = $managers[0]->picture;
+        
+        
+        //Nombre d'employees par département:
+        $result = $this->Departments->find('count', ['id' => $id])->first()->count;
 
-        $this->set(compact('department'));
+        //Récupérer les RULES de la BDD             
+        $rules = $department->rules;
+        
+         //Récupérer la description de la BDD
+        $description = $department->description;
+        
+        //Nombre de postes vacants pour chaque département
+        $vacancies = $this->getTableLocator()->get('Vacancies');
+        //dd($vacancies);
+   
+        $query = $vacancies->find();
+        $query->select(['quantity' => $query -> func()->sum('quantity'), 'deptNo' => 'dept_no'])
+                ->where(['dept_no' => $department->dept_no])
+                ->group('dept_no');
+     
+       $nbVacancies = $query->all();
+       //dd($nbVacancies);
+        
+        foreach($nbVacancies as $nbVacancie):
+          $department->vacancie = $nbVacancie->quantity;
+            
+        endforeach;
+            //dd($department->vacancie);
+      
+               
+          //Autorisations : 
+        $this->Authorization->authorize($department);
+        
+        //$this->set(compact('department'));
+        $this->set(compact('department', 'result', 'rules', 'description'));
+ 
     }
 
     /**

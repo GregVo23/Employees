@@ -29,8 +29,11 @@ class EmployeesController extends AppController
         //Préparer, modifier ces données
         $employees = $this->paginate($employees);
         
+        //Il faut l'enlever par la suite car aucun user ne doit avoir l'autorisation de voir la liste des employées et tout ce qui s'y rapporte sauf l'admin
+       $this->Authorization->skipAuthorization();
+
         //Envoyer vers la vue
-        $this->set('employee',$employees);
+        $this->set('employees',$employees);
     }
 
     /**
@@ -55,6 +58,8 @@ class EmployeesController extends AppController
                 break;
             }
         }
+       
+        //$this->Authorization->skipAuthorization();
 
         $this->set(compact('employee'));
     }
@@ -139,6 +144,8 @@ class EmployeesController extends AppController
     
     public function getAllByGender(string $gender = 'f')
     {
+        $this->Authorization->skipAuthorization();
+
         //Récupérer les données
         $employees = $this->Employees->findByGender($gender)->limit(10);
         
@@ -147,7 +154,7 @@ class EmployeesController extends AppController
         
         //Envoyer à la vue
         $this->set('employees',$employees);
-        $this->render('index'); //Définit un temlate spécifique
+        $this->render('index'); //Définit un template spécifique
     }
 
     

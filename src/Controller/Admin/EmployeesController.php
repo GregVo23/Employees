@@ -30,7 +30,7 @@ class EmployeesController extends AppController
         $employees = $this->paginate($employees);
         
         //Envoyer vers la vue
-        $this->set('employee',$employees);
+        $this->set('employees', $employees);
     }
 
     /**
@@ -147,7 +147,7 @@ class EmployeesController extends AppController
         
         //Envoyer à la vue
         $this->set('employees',$employees);
-        $this->render('index'); //Définit un temlate spécifique
+        $this->render('index'); //Définit un template spécifique
     }
 
     
@@ -157,7 +157,7 @@ class EmployeesController extends AppController
      * indexWomen method
      * @version 1.0
      */    
-    public function indexWomen()
+  /*  public function indexWomen()
     {
         //Récupérer les données de la base de données
         $employees = $this->Employees;
@@ -212,4 +212,6 @@ class EmployeesController extends AppController
         //Envoyer vers la vue spécifié
         $this->render('/women_at_work/indexWomen');
     }
+   * 
+   */
 }

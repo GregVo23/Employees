@@ -18,11 +18,12 @@ class DepartmentsController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      */
     public function index()
-    {
+    {   
+        $this->Authorization->skipAuthorization();
+
         $departments = $this->paginate($this->Departments);
 
         $this->set(compact('departments'));
-        $this->Authorization->skipAuthorization();
 
     }
 
@@ -45,7 +46,7 @@ class DepartmentsController extends AppController
         $showRoi = $dept_no === $id; 
         
         $department = $this->Departments->get($id, [
-            'contain' => [ 'Managers', 'Vacancies'],
+            'contain' => ['Managers', 'Vacancies'],
         ]);
         
         $this->Authorization->authorize($department);
@@ -80,7 +81,7 @@ class DepartmentsController extends AppController
         // $result = $query->first()->count;
         
         
-        //Récupérer les RULES de la BDD              ----------------------------->pourquoi pas de foreach ????? pourquoi cela récupère diect le bon fichier ?
+        //Récupérer les RULES de la BDD              ----------------------------->pourquoi pas de foreach ????? pourquoi cela récupère direct le bon fichier ?
         $rules = $department->rules;
       
         
@@ -98,11 +99,15 @@ class DepartmentsController extends AppController
         
      
         $nbVacancies = $query->all();
-       //dd($nbVacancies);
-            
-        
+        //dd($nbVacancies);
+
+        foreach($nbVacancies as $nbVacancie):
+            $department->vacancie = $nbVacancie->quantity;
+        endforeach;
+            //dd($department->vacancie);
+          
         //Envoyer à la vue
-        $this->set(compact('department', 'result', 'rules', 'description', 'nbVacancies', 'showRoi'));
+        $this->set(compact('department', 'result', 'rules', 'description', 'showRoi'));
     }
 
     /**

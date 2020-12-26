@@ -13,8 +13,10 @@
         'f'
     ], ['class' => 'btn btn-primary mx-2 float-right']) ?>
     <?= $this->Html->link(__('Men'), ['action' => 'getAllByGender','m'], ['class' => 'btn btn-primary mx-2 float-right']) ?>
+    
+    
     <h3><?= __('Employees') ?></h3>
-    <?= $cellMenWomenRatio ?>
+    
     <div class="table-responsive">
         <table>
             <thead>
@@ -57,5 +59,5 @@
         </ul>
         <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
     </div>
-    <?= $cellMenWomenRatio ?>
+
 </div>
