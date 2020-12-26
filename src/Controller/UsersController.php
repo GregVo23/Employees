@@ -46,8 +46,14 @@ class UsersController extends AppController
         // If the user is logged in send them away.
         if ($result->isValid())
         {
+            //Ecrire dans la session le status du user connecté
+
+            $status = $this->loadModel('Employees')->get($this->Authentication->getIdentity()->get('emp_no'), ['contain' => ['titles']]);
+            $_SESSION['status'] = $status->titles[0]->title;
+            
             $target = $this->Authentication->getLoginRedirect() ?? '/';
             return $this->redirect($target);
+
         }
         if ($this->request->is('post') && !$result->isValid())
         {
