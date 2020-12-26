@@ -21,8 +21,6 @@ use Cake\Error\Debugger;
 use Cake\Http\Exception\NotFoundException;
 
 
-//$this->disableAutoLayout();
-
 
 $this->Html->css('style_home', ['block' => true]);
 $this->Html->script('map.inc', ['block' => true]);
