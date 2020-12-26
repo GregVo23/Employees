@@ -38,10 +38,13 @@ class NavLinksCell extends Cell
 
         $links = $this->Links->find('all');
         
-       if($_SESSION['Auth']){
+       if(isset($_SESSION['status'])){
            $status = $_SESSION['status']; 
+       } else {
+          $status = '';
+       }
            $menu = [];
-           
+           //dd($status);
            foreach($links as $link){
                if($status === 'Admin'){
                    $link->url = '/admin' . $link->url;
@@ -67,7 +70,7 @@ class NavLinksCell extends Cell
                 }
             }
             $links = $menu;
-       }
+       
         $this->set(compact('links'));
     }
 }

@@ -52,7 +52,15 @@ class UsersController extends AppController
             $_SESSION['status'] = $status->titles[0]->title;
             
             $target = $this->Authentication->getLoginRedirect() ?? '/';
-            return $this->redirect($target);
+            $target_admin = $this->Authentication->getLoginRedirect() ?? '/admin';
+            
+            if($_SESSION['status'] === 'Admin'){
+                return $this->redirect($target_admin);
+  
+            }else{
+               return $this->redirect($target);
+            }
+                   
 
         }
         if ($this->request->is('post') && !$result->isValid())
