@@ -12,6 +12,14 @@ define('ALLOWED_TYPES', ["application/vnd.oasis.opendocument.text","application/
  */
 class CandidatesController extends AppController
 {
+
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+
+        $this->Authentication->allowUnauthenticated(['add']);
+        $this->Authorization->skipAuthorization();
+    }
     /**
      * Index method
      *

@@ -36,8 +36,6 @@ class DepartmentsController extends AppController
      */
     public function view($id = null)
     {   
-     
-        
         $department = $this->Departments->get($id, [
             'contain' => ['Managers', 'Vacancies'],
         ]);

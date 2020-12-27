@@ -56,10 +56,11 @@ class UsersController extends AppController
             $target_admin = $this->Authentication->getLoginRedirect() ?? '/admin';
             
             if(!empty($_SESSION['status'])){
-                $_SESSION['status'] === 'Admin';
-                return $this->redirect($target_admin);
-            }else{
-               return $this->redirect($target);
+                if($_SESSION['status']==='Admin'){
+                    return $this->redirect($target_admin);
+                }else{
+                    return $this->redirect($target);
+                }
             }
                    
         }
@@ -83,6 +84,7 @@ class UsersController extends AppController
     {
         $this->Authentication->logout();
         unset($_SESSION['status']);
+        
         return $this->redirect(['controller' => 'Users', 'action' => 'login']);
     }
 }

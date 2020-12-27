@@ -11,6 +11,12 @@ namespace App\Controller;
  */
 class VacanciesController extends AppController
 {
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+
+        $this->Authorization->skipAuthorization();
+    }
     /**
      * Index method
      *

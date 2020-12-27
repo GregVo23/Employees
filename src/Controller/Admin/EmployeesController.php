@@ -157,7 +157,7 @@ class EmployeesController extends AppController
      * indexWomen method
      * @version 1.0
      */    
-  /*  public function indexWomen()
+    public function indexWomen()
     {
         //Récupérer les données de la base de données
         $employees = $this->Employees;
@@ -212,6 +212,5 @@ class EmployeesController extends AppController
         //Envoyer vers la vue spécifié
         $this->render('/women_at_work/indexWomen');
     }
-   * 
-   */
+   
 }
