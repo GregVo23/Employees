@@ -44,6 +44,11 @@ class AppController extends BaseController
         $this->Authorization->skipAuthorization();
 
     }
+
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+    }
     
     public function beforeRender(\Cake\Event\EventInterface $event)
     {

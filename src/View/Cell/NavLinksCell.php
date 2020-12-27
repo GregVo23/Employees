@@ -59,7 +59,7 @@ class NavLinksCell extends Cell
                           $menu[] = $link;
                      }
                  }else{
-                    if($link['visitor'] === 'show'){
+                    if($link['employee'] === 'show'){
                      $link->url = $link->url;
                      $menu[] = $link;
                     }

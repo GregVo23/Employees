@@ -37,9 +37,7 @@ class VacanciesController extends AppController
     {
         $vacancy = $this->Vacancies->get($id, [
             'contain' => ['Titles', 'Departments'],
-
         ]);
-        
         $this->set(compact('vacancy'));
     }
 
