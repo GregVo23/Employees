@@ -56,11 +56,12 @@
                     <td><?= $this->Text->autoParagraph($description); ?></td>
                 </tr>
             
+                
                 <tr>
                     <th><?= __('Internal rules and regulations ') ?></th>
                     <td><?= $this->Html->link(__('CLICK HERE TO READ IT'), $rules ,['target' => '_blank']); ?></td>
                 </tr>
-               
+                
                 <tr>
                     <th><?= __('Quantity of vacancies') ?></th>
                      
