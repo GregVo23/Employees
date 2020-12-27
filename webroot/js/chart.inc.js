@@ -116,7 +116,7 @@ window.onload = function(){
     new Chart(document.getElementById("myBarChart2"),
     {"type":"bar","data":{"labels":depNameLessWomen,
             "datasets":[{
-                    "data":nbDepLessWomen,"fill":false,
+                    "data":nbDepMoreWomen,"fill":false,
                     "backgroundColor":["rgba(255, 99, 132, 0.2)","rgba(255, 99, 132, 0.3)","rgba(255, 99, 132, 0.4)"],
                     "borderColor":["rgb(255, 99, 132)","rgb(255, 99, 132)","rgb(255, 99, 132)"],
                     "borderWidth":1}]},"options":{"scales":{"yAxes":[{"ticks":{"beginAtZero":true}}]},legend:{display: false}}});

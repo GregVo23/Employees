@@ -35,42 +35,45 @@ class NavLinksCell extends Cell
     public function display()
     {
         $this->loadModel('Links');
-
         $links = $this->Links->find('all');
+        $menu = [];
         
-       if(isset($_SESSION['status'])){
-           $status = $_SESSION['status']; 
-       } else {
-          $status = '';
-       }
-           $menu = [];
-           //dd($status);
-           foreach($links as $link){
-               if($status === 'Admin'){
-                   $link->url = '/admin' . $link->url;
-                    $menu[] = $link;
-                }
-               elseif($status === 'Manager' && $link->manager === 'admin'){
-                   $link->url = '/admin'. $link->url;
-                   $menu[] = $link;
-                }
-               elseif($status === 'Manager' && $link->manager === 'show'){
-                   $menu[] = $link;
-                }
-               elseif($status === 'Accountant' && $link->accountant === 'admin'){
-                   $link->url = '/admin'. $link->url;
-                   $menu[] = $link;
-                }
-               elseif($status === 'Accountant' && $link->accountant === 'show'){
-                  $menu[] = $link;
-                }
-                
-                elseif($link->all === 'show'){
+        if(!empty($_SESSION['status'])){
+            foreach($links as $link){
+                 $status = $_SESSION['status'];
+                 if($status === 'Admin'){
+                     if($link['admin'] === 'show'){
+                          $link->url = '/admin' . $link->url;
+                          $menu[] = $link;
+                     }
+                 }
+                 elseif($status === 'Manager'){
+                     if($link['manager'] === 'show'){
+                          $link->url = '/admin' . $link->url;
+                          $menu[] = $link;
+                     }
+                 }
+                 elseif($status === 'Accountant'){
+                     if($link['accountant'] === 'show'){
+                          $link->url = '/admin' . $link->url;
+                          $menu[] = $link;
+                     }
+                 }else{
+                    if($link['visitor'] === 'show'){
+                     $link->url = $link->url;
+                     $menu[] = $link;
+                    }
+                 }
+            }   
+        }else{
+             foreach($links as $link){
+                if($link['visitor'] === 'show'){
+                    $link->url = $link->url;
                     $menu[] = $link;
                 }
             }
-            $links = $menu;
-       
+        }
+        $links = $menu;
         $this->set(compact('links'));
     }
 }
