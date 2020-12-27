@@ -37,8 +37,6 @@ $this->Html->css('Chart.min', ['block' => true]);
     <?php echo "let nbHireWomen = '".implode("<>", h($nbHireWomen))."'.split('<>')"; ?>; 
     <?php echo "let nbDepMoreWomen = '".implode("<>", h($nbDepMoreWomen))."'.split('<>')"; ?>;
     <?php echo "let depNameMoreWomen = '".implode("<>", h($depNameMoreWomen))."'.split('<>')"; ?>;
-    <?php echo "let nbDepLessWomen = '".implode("<>", h($nbDepLessWomen))."'.split('<>')"; ?>;
-    <?php echo "let depNameLessWomen = '".implode("<>", h($depNameLessWomen))."'.split('<>')"; ?>;
 </script>
 
 <h1 class="pb-4 pt-3">Women at work</h1>
@@ -49,7 +47,7 @@ $this->Html->css('Chart.min', ['block' => true]);
             'class' => 'img-fluid pb-4',
         ]);?>
         <h2 class="pb-5">La proportion par sexe ches Nestlé</h2>
-        <p class="pb-3">La proportion de femmmes et hommes employée par Nestlé est presque semblable c'est à dire <?= h($cellMenWomenRatio) ?>, Nestlé tient à coeur à conserver cette proportion au sein de ses employés. Nestlé compte un total actuel de <?= h($cellNbWomen) ?> femmes au sein de l'entreprise. </p>
+        <p class="pb-3">La proportion de femmmes et hommes employée par Nestlé est presque semblable c'est à dire <?= h($cellMenWomenRatio) ?>, Nestlé tient à coeur à conserver cette proportion au sein de ses employés. Nestlé compte davantage de managers femmes au sein de l'entreprise. </p>
         <di class="row">
         <div class="col-6 pr-5 pt-5 pb-5">
             <h3 class="pb-3">Proportion de femmes et d’hommes au total</h3>

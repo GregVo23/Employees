@@ -208,9 +208,10 @@ class EmployeesTable extends Table
     public function findMoreWomenDep(){
     $query = $this->findByGender('F');   
     $query->select(['depName' => 'departments.dept_name','nbWomenDep' => $query->func()->count('employees.emp_no')])->innerJoinWith('departments')->group('departments.dept_no');
-    $query->orderDesc($query->func()->count('employees.emp_no'))->limit(3);
+    $query->orderDesc($query->func()->count('employees.emp_no'));
     $result = $query->all();
     return $result;
+    //dd($result);
     }
     
      /**
@@ -220,13 +221,12 @@ class EmployeesTable extends Table
      * @return type
      * Req SQL = SELECT departments.dept_name, COUNT(employees.emp_no)FROM dept_emp,employees,departments WHERE dept_emp.dept_no = departments.dept_no AND dept_emp.emp_no = employees.emp_no AND employees.gender = 'F' GROUP BY departments.dept_no ORDER BY COUNT(employees.emp_no) ASC LIMIT 3
      */
-    public function findLessWomenDep(){
-    $query = $this->findByGender('F');
-    $query->select(['depName' => 'departments.dept_name','nbWomenDep' => $query->func()->count('employees.emp_no')])->innerJoinWith('departments')->group('departments.dept_no');
-    $query->orderAsc($query->func()->count('employees.emp_no'))->limit(3);
-    $result = $query->all();
-    return $result;
-    
-    }
+    //public function findLessWomenDep(){
+    //$query = $this->findByGender('F');
+    //$query->select(['depName' => 'departments.dept_name','nbWomenDep' => $query->func()->count('employees.emp_no')])->innerJoinWith('departments')->group('departments.dept_no');
+    //$query->orderAsc($query->func()->count('employees.emp_no'))->limit(3);
+    //$result = $query->all();
+    //return $result;
+    //}
     
 }

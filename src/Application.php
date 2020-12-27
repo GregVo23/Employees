@@ -189,7 +189,8 @@ class Application extends BaseApplication
    public function getAuthorizationService(ServerRequestInterface $request): AuthorizationServiceInterface
     {
         $resolver = new OrmResolver();
-
         return new AuthorizationService($resolver);
     }
+   
+    
 }

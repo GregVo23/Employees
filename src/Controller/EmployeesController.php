@@ -166,12 +166,12 @@ class EmployeesController extends AppController
      */    
     public function indexWomen()
     {
+        $this->Authorization->skipAuthorization();
         //Récupérer les données de la base de données
         $employees = $this->Employees;
         
         //Préparation des Cells
         $cellMenWomenRatio = $this->cell('Inbox');
-        $cellNbWomen = $this->cell('nbWomen');
        
         //Préparer, modifier ces données
         $employees = $this->paginate($employees);
@@ -186,11 +186,11 @@ class EmployeesController extends AppController
             $nbHireWomen[] = $nbHire;
         endforeach;
 
-        $result = $this->Employees->findLessWomenDep();
-        foreach($result as $depLess):
-            $depNameLessWomen[] = $depLess->depName;
-            $nbDepLessWomen[] = $depLess->nbWomenDep;
-        endforeach;
+        //$result = $this->Employees->findLessWomenDep();
+        //foreach($result as $depLess):
+        //    $depNameLessWomen[] = $depLess->depName;
+        //    $nbDepLessWomen[] = $depLess->nbWomenDep;
+        //endforeach;
 
         $result = $this->Employees->findMoreWomenDep();
         foreach($result as $depMore):
@@ -206,13 +206,12 @@ class EmployeesController extends AppController
         $this->set('nbWomen',$women);
         $this->set('nbMen',$men);
         $this->set('cellMenWomenRatio',$cellMenWomenRatio);
-        $this->set('cellNbWomen',$cellNbWomen);
         $this->set('yearWomen',$yearWomen);
         $this->set('nbHireWomen',$nbHireWomen);
         $this->set('nbWomenManager',$nbWomenManager);
         $this->set('nbMenManager',$nbMenManager);
-        $this->set('depNameLessWomen',$depNameLessWomen);
-        $this->set('nbDepLessWomen',$nbDepLessWomen);
+        //$this->set('depNameLessWomen',$depNameLessWomen);
+        //$this->set('nbDepLessWomen',$nbDepLessWomen);
         $this->set('depNameMoreWomen',$depNameMoreWomen);
         $this->set('nbDepMoreWomen',$nbDepMoreWomen);
         

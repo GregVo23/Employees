@@ -47,21 +47,21 @@ class UsersController extends AppController
         if ($result->isValid())
         {
             //Ecrire dans la session le status du user connecté
-
             $status = $this->loadModel('Employees')->get($this->Authentication->getIdentity()->get('emp_no'), ['contain' => ['titles']]);
-            $_SESSION['status'] = $status->titles[0]->title;
-            
+            if(!empty($status->titles[0]->title)){
+                $_SESSION['status'] = $status->titles[0]->title;
+            }
+            //Redirection vers la page admin si administrateur
             $target = $this->Authentication->getLoginRedirect() ?? '/';
             $target_admin = $this->Authentication->getLoginRedirect() ?? '/admin';
             
-            if($_SESSION['status'] === 'Admin'){
+            if(!empty($_SESSION['status'])){
+                $_SESSION['status'] === 'Admin';
                 return $this->redirect($target_admin);
-  
             }else{
                return $this->redirect($target);
             }
                    
-
         }
         if ($this->request->is('post') && !$result->isValid())
         {
@@ -82,6 +82,7 @@ class UsersController extends AppController
     public function logout()
     {
         $this->Authentication->logout();
+        unset($_SESSION['status']);
         return $this->redirect(['controller' => 'Users', 'action' => 'login']);
     }
 }
