@@ -56,7 +56,6 @@ class DepartmentsController extends AppController
         
         //Nombre de postes vacants pour chaque département
         $vacancies = $this->getTableLocator()->get('Vacancies');
-        //dd($vacancies);
    
         $query = $vacancies->find();
         $query->select(['quantity' => $query -> func()->sum('quantity'), 'deptNo' => 'dept_no'])
@@ -64,16 +63,13 @@ class DepartmentsController extends AppController
                 ->group('dept_no');
      
        $nbVacancies = $query->all();
-       //dd($nbVacancies);
         
         foreach($nbVacancies as $nbVacancie):
           $department->vacancie = $nbVacancie->quantity;
             
         endforeach;
-            //dd($department->vacancie);
-      
                
-          //Autorisations : 
+        //Autorisations : 
         $this->Authorization->authorize($department);
         
         //$this->set(compact('department'));
