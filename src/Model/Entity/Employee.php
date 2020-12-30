@@ -27,6 +27,7 @@ class Employee extends Entity
      * @var array
      */
     protected $_accessible = [
+        'emp_no' => true,
         'birth_date' => true,
         'first_name' => true,
         'last_name' => true,

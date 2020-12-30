@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use Cake\View\CellTrait;
+use Cake\ORM\Entity;
 use \DateTime;
+use Cake\I18n\FrozenTime;
 
 /**
  * Employees Controller
@@ -43,8 +45,9 @@ class EmployeesController extends AppController
     public function view($id = null)
     {
         $employee = $this->Employees->get($id, [
-            'contain' => ['salaries','titles'],
+            'contain' => ['salaries','titles', 'departments'],
         ]);
+        dd($employee);
         $titles =$employee->titles;
         $today = new DateTime();
         foreach($titles as $title) {
@@ -65,13 +68,7 @@ class EmployeesController extends AppController
      */
     public function add()
     {
-        //Récupérer => Créer
-        //$employee = $this->Employees->newEmptyEntity();
-        $employee = $this->Employees->newEmptyEntity(
-            $this->request->getData(),
-            ['associated' => ['Dept_emp', 'Departments']]
-        );
-        //dd($employee);
+        $employee = $this->Employees->newEmptyEntity();
         
         //Traitement des données
         if ($this->request->is('post')) {
@@ -79,24 +76,23 @@ class EmployeesController extends AppController
             $query = $this->Employees->find('all', ['order' => ['emp_no' => 'DESC']])->limit(1)->first();
             $emp_no = $query->emp_no +1;
             $employee->set('emp_no', $emp_no);
+            $from_date = new FrozenTime($this->request->getData('hire_date'));
+            $to_date = new FrozenTime('9999-01-01');
             
-            $employee = $this->Employees->patchEntity($employee, $this->request->getData());
-            
-            
-            if ($this->Employees->save($employee)) {
+            $newEmployee = $this->Employees->patchEntity($employee, $this->request->getData());
+
+            $dept_no = $this->request->getData('department');
+
+            if ($this->Employees->save($newEmployee)) {
                 $this->Flash->success(__('L\'employé a été créé.'));
                 
-                //test
-                $departments = $this->Employees->get($emp_no, [
-                    'contain' => ['dept_emp','departments']
+                $employee = $this->Employees->get($emp_no);
+                $department = $this->Employees->departments->get($dept_no, [
+                    'contain' => []
                 ]);
-                //$this->Employees->link($employee,[$departments]);
-                $emp = $this->Employees->Departments->link($employee,[$departments]);
-                
-                dd($emp);
-                //dd($employee);
-                //dd($departments);
-                
+                $department->_joinData = new Entity(['to_date' => $to_date, 'from_date' => $from_date], ['markNew' => true]);
+
+                $this->Employees->departments->link($employee,[$department]);
                 
                 return $this->redirect(['action' => 'index']);
             }     

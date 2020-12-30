@@ -133,7 +133,7 @@ class EmployeeTitleController extends AppController
         
         //Suppression de l'ancien manager
 
-        $oldManager = $this->EmployeeTitle->find()->where(['emp_title_no =' => '3'])->where(['to_date =' => '9999-01-01'])->first();
+        $oldManager = $this->EmployeeTitle->find()->where(['title_no =' => '3'])->where(['to_date =' => '9999-01-01'])->first();
         $emp_title_no = $oldManager->emp_title_no;
         
         $employee = $this->EmployeeTitle->newEmptyEntity();
