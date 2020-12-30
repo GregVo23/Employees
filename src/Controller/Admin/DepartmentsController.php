@@ -40,9 +40,13 @@ class DepartmentsController extends AppController
             'contain' => ['Managers', 'Vacancies'],
         ]);
         
-        //Partie manager(nom + picture):
+        //Partie manager(picture + name + hire date):
         $managers =$department->managers;
+       // dd($managers);
         $department->manager = $managers[0]->picture;
+        $department->first_n = $managers[0]->first_name;
+        $department->last_n = $managers[0]->last_name;
+        $department->hire = $managers[0]->hire_date;
         
         
         //Nombre d'employees par département:
@@ -72,6 +76,10 @@ class DepartmentsController extends AppController
         endforeach;
             //dd($department->vacancie);
       
+        //Salaire moyen par departement
+       /*  $salaryAvg = $this->Employees->find('Avg', ['id' => $id])->first()->avg;
+        dd($salaryAvg);*/
+        
                
           //Autorisations : 
         $this->Authorization->authorize($department);
@@ -88,6 +96,8 @@ class DepartmentsController extends AppController
      */
     public function add()
     {
+        $this->Authorization->skipAuthorization();
+
         $department = $this->Departments->newEmptyEntity();
         if ($this->request->is('post')) {
             $department = $this->Departments->patchEntity($department, $this->request->getData());
@@ -112,9 +122,12 @@ class DepartmentsController extends AppController
      */
     public function edit($id = null)
     {
+        $this->Authorization->skipAuthorization();
+
         $department = $this->Departments->get($id, [
             'contain' => ['Employees', 'Managers'],
         ]);
+    
         if ($this->request->is(['patch', 'post', 'put'])) {
             $department = $this->Departments->patchEntity($department, $this->request->getData());
             if ($this->Departments->save($department)) {
@@ -124,9 +137,10 @@ class DepartmentsController extends AppController
             }
             $this->Flash->error(__('The department could not be saved. Please, try again.'));
         }
-        $employees = $this->Departments->Employees->find('list', ['limit' => 200]);
+        $employees = $this->Departments->Employees->find('list');
         $managers = $this->Departments->Managers->find('list', ['limit' => 200]);
         $this->set(compact('department', 'employees', 'managers'));
+ 
     }
 
     /**
@@ -148,4 +162,5 @@ class DepartmentsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
 }

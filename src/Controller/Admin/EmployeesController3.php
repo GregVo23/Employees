@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use Cake\View\CellTrait;
 use \DateTime;
@@ -29,11 +29,8 @@ class EmployeesController extends AppController
         //Préparer, modifier ces données
         $employees = $this->paginate($employees);
         
-        //Il faut l'enlever par la suite car aucun user ne doit avoir l'autorisation de voir la liste des employées et tout ce qui s'y rapporte sauf l'admin
-       $this->Authorization->skipAuthorization();
-
         //Envoyer vers la vue
-        $this->set('employees',$employees);
+        $this->set('employees', $employees);
     }
 
     /**
@@ -45,8 +42,6 @@ class EmployeesController extends AppController
      */
     public function view($id = null)
     {
-          
-
         $employee = $this->Employees->get($id, [
             'contain' => ['salaries','titles'],
         ]);
@@ -60,9 +55,6 @@ class EmployeesController extends AppController
                 break;
             }
         }
-      
-        //$this->Authorization->skipAuthorization();
-
         $this->set(compact('employee'));
     }
 
@@ -74,25 +66,102 @@ class EmployeesController extends AppController
     public function add()
     {
         //Récupérer => Créer
+        //$employee = $this->Employees->newEmptyEntity();
         $employee = $this->Employees->newEmptyEntity();
+        //dd($employee);
         
-        $employee->password = hash($pass);
-        //Traitement
-        //Rien faire en GET
-        //Persister en POST
+        //Traitement des données
         if ($this->request->is('post')) {
-            $employee = $this->Employees->patchEntity($employee, $this->request->getData());
-            if ($this->Employees->save($employee)) {
-                $this->Flash->success(__('The employee has been saved.'));
+            //Récupérer l'id et l'incrémenter et l'assigner au nouvel employé
+            $query = $this->Employees->find('all', ['order' => ['emp_no' => 'DESC']])->limit(1)->first();
+            $emp_no = $query->emp_no +1;
+            $employee->set('emp_no', $emp_no);
+            //$employee->_joinData = $employee->Dept_emp->newEntity();
+            $from_date = $this->request->getData('hire_date');
+            $to_date = $this->request->getData('hire_date');
+            $employee->set('from_date', $from_date);
+            $employee->set('to_date', $to_date);
+            //$employee->_joinData = $this->Employees->dept_emp->newEntity();
+            //$employee->_joinData->to_date = '9889-01-01';
 
+            /*
+            $data = [
+                'emp_no' => $emp_no,
+                'gender' => 'M',
+                'birth_date' => $this->request->getData('hire_date'),
+                'hire_date' => $this->request->getData('hire_date'),
+                'email' => 'great@sds.com',
+                'first_name' => 'My great ',
+                'last_name' => 'Some cont',
+                'departments' => [
+                    [
+                        'dept_no' => 'd009',
+                        '_joinData' => [
+                            'to_date' => $this->request->getData('hire_date'),
+                            'from_date' => $this->request->getData('hire_date')
+                        ]
+                    ],
+                ]
+            ];
+           $newEmployee = $this->Employees->newEntity($data, ['associated' => ['departments._joinData']]);
+            */
+
+
+            
+            //dd($employee);
+            $newEmployee = $this->Employees->patchEntity($employee, $this->request->getData());
+
+            $dept_no = $this->request->getData('department');
+            //dd($dept_no);
+
+            /*
+            $newEmployee->departments[0]->_joinData->to_date = $this->request->getData('hire_date');
+            $newEmployee->departments[0]->_joinData->from_date = $this->request->getData('hire_date');
+            */
+
+
+            if ($this->Employees->save($newEmployee)) {
+                $this->Flash->success(__('L\'employé a été créé.'));
+                
+                $employee = $this->Employees->get($emp_no);
+                //$employee->_joinData = new Entity(['from_date' => $from_date], ['to_date' => $to_date]);
+                $departments = $this->Employees->departments->get($dept_no, [
+                    'contain' => []
+                ]);
+                //dd($departments);
+
+                //$this->Employees->link($employee,[$departments]);
+                $emp = $this->Employees->departments->link($employee,[$departments]);
+                
+                
+               // dd($employee = $this->Employees->get('499999', ['contain' => ['departments']]));
+                //$employee->departments[0]->_joinData->toDate = $this->request->getData('hire_date');
+
+                // Nécessaire car nous changeons une propriété directement
+                //$employee->dirty('departments', true);
+
+                $this->Employees->save($employee, ['associated' => ['departments']]);
+                               
+                
                 return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The employee could not be saved. Please, try again.'));
+            }     
+            $this->Flash->error(__('Une erreur est survenue lors de la création de l\'employé.'));
         }
         
+        //La liste des genres
+        $gender = [
+            'M' => 'homme',
+            'F' => 'femme'
+        ];
+        
+        //Récupération de la liste des departements
+        $departments = $this->loadModel('Departments')
+        ->find('list', ['keyfield' => 'id', 'valueField' => 'dept_name']);
+        
         //Envoyer vers la vue
-        $this->set(compact('employee'));
+        $this->set(compact('employee', 'departments', 'gender'));
     }
+    
 
     /**
      * Edit method
@@ -146,8 +215,6 @@ class EmployeesController extends AppController
     
     public function getAllByGender(string $gender = 'f')
     {
-        $this->Authorization->skipAuthorization();
-
         //Récupérer les données
         $employees = $this->Employees->findByGender($gender)->limit(10);
         
@@ -168,12 +235,12 @@ class EmployeesController extends AppController
      */    
     public function indexWomen()
     {
-        $this->Authorization->skipAuthorization();
         //Récupérer les données de la base de données
         $employees = $this->Employees;
         
         //Préparation des Cells
         $cellMenWomenRatio = $this->cell('Inbox');
+        $cellNbWomen = $this->cell('nbWomen');
        
         //Préparer, modifier ces données
         $employees = $this->paginate($employees);
@@ -188,11 +255,11 @@ class EmployeesController extends AppController
             $nbHireWomen[] = $nbHire;
         endforeach;
 
-        //$result = $this->Employees->findLessWomenDep();
-        //foreach($result as $depLess):
-        //    $depNameLessWomen[] = $depLess->depName;
-        //    $nbDepLessWomen[] = $depLess->nbWomenDep;
-        //endforeach;
+        $result = $this->Employees->findLessWomenDep();
+        foreach($result as $depLess):
+            $depNameLessWomen[] = $depLess->depName;
+            $nbDepLessWomen[] = $depLess->nbWomenDep;
+        endforeach;
 
         $result = $this->Employees->findMoreWomenDep();
         foreach($result as $depMore):
@@ -208,12 +275,13 @@ class EmployeesController extends AppController
         $this->set('nbWomen',$women);
         $this->set('nbMen',$men);
         $this->set('cellMenWomenRatio',$cellMenWomenRatio);
+        $this->set('cellNbWomen',$cellNbWomen);
         $this->set('yearWomen',$yearWomen);
         $this->set('nbHireWomen',$nbHireWomen);
         $this->set('nbWomenManager',$nbWomenManager);
         $this->set('nbMenManager',$nbMenManager);
-        //$this->set('depNameLessWomen',$depNameLessWomen);
-        //$this->set('nbDepLessWomen',$nbDepLessWomen);
+        $this->set('depNameLessWomen',$depNameLessWomen);
+        $this->set('nbDepLessWomen',$nbDepLessWomen);
         $this->set('depNameMoreWomen',$depNameMoreWomen);
         $this->set('nbDepMoreWomen',$nbDepMoreWomen);
         

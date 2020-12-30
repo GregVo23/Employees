@@ -27,10 +27,17 @@
                     echo $this->Form->control('last_name');
                     echo $this->Form->control('gender');
                     echo $this->Form->control('hire_date');
-                ?>
+                    /*echo $this->Form->select(
+                            'title',
+                            [$titleEmp,
+                            ['label' => __('Nouveau titre')
+                            ]);
+                ?>*/
+                ?>          
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>
             <?= $this->Form->end() ?>
+
         </div>
     </div>
 </div>

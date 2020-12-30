@@ -46,6 +46,7 @@ class EmployeesController extends AppController
             'contain' => ['salaries','titles'],
         ]);
         $titles =$employee->titles;
+        //dd($titles);
         $today = new DateTime();
         foreach($titles as $title) {
             $date = new DateTime($title['_joinData']->to_date->format('Y-m-d'));
@@ -55,7 +56,7 @@ class EmployeesController extends AppController
                 break;
             }
         }
-
+        
         $this->set(compact('employee'));
     }
 
@@ -69,7 +70,7 @@ class EmployeesController extends AppController
         //Récupérer => Créer
         $employee = $this->Employees->newEmptyEntity();
         
-        $employee->password = hash($pass);
+        //$employee->password = hash($pass);
         //Traitement
         //Rien faire en GET
         //Persister en POST
@@ -97,10 +98,16 @@ class EmployeesController extends AppController
     public function edit($id = null)
     {
         $employee = $this->Employees->get($id, [
-            'contain' => [],
-        ]);
+            'contain' => ['employee_title', 'titles'],
+        ]); 
+      
         if ($this->request->is(['patch', 'post', 'put'])) {
+            //$title = $this->request->getData('title');
+          
             $employee = $this->Employees->patchEntity($employee, $this->request->getData());
+            
+     
+        
             if ($this->Employees->save($employee)) {
                 $this->Flash->success(__('The employee has been saved.'));
 
@@ -108,6 +115,9 @@ class EmployeesController extends AppController
             }
             $this->Flash->error(__('The employee could not be saved. Please, try again.'));
         }
+        
+        
+         
         $this->set(compact('employee'));
     }
 

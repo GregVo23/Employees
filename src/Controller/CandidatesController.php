@@ -58,7 +58,7 @@ class CandidatesController extends AppController
                 $candidateInfo['vac_no'] = $vac_no;
                 $candidate = $this->Candidates->patchEntity($candidate, $candidateInfo);
 
-                if ( $this->Candidates->save($candidate)) {
+                if ($this->Candidates->save($candidate)) {
                     $vacancy = $this->Candidates->Vacancies->get($vac_no, [
                         'contain' => ['Departments', 'Titles']
                     ]);

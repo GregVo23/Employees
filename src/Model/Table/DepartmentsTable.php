@@ -100,14 +100,24 @@ class DepartmentsTable extends Table
     }
 
     public function findCount(Query $query, array $options)
-    {
-         $query->select([
+    {   
+        //dd($query);
+        $query->select([
             'Employees.emp_no',
             'count' => $query->func()->count('*')]);
         $query->innerJoinWith('Employees')
         ->where(['departments.dept_no =' => $options['id']]);
-        return $query;
+        
+       return $query;
     }
     
-    
+   /*     public function findAvg(Query $query, array $options)
+    {
+        $query->select(['salary' => $query->func()->avg('salaries.salary'), 'deptNo' => 'dept_emp.dept_no']);
+        $query->innerJoinWith('salaries, employee_title, dept_emp, employees')
+      //  ->where(['departments.dept_no =' => $options['id']]);
+        ->where(['dept_emp.to_date =' => '9999-01-01', 'employee_title.title_no !=' => '3', 'dept_emp.dept_no =' => $options['id']])
+        ->group('dept_emp.dept_no');
+        return $query;
+    }*/
 }

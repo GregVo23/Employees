@@ -46,6 +46,8 @@ use Cake\Routing\Router;
 $routes->setRouteClass(DashedRoute::class);
 $routes->connect('/women_at_work', ['controller' => 'Employees', 'action' => 'indexWomen']);
 $routes->connect('/admin/women_at_work', ['controller' => 'Employees', 'action' => 'indexWomen']);
+//$routes->connect('/admin/departments', ['controller' => 'Employees', 'action' => 'findAvg']);
+//$routes->connect('/admin/departments/view', ['controller' => 'Departments', 'action' => 'newManager']);
 
 $routes->prefix('Admin', function (RouteBuilder $routes) {
     // Because you are in the admin scope,
@@ -62,7 +64,7 @@ $routes->scope('/', function (RouteBuilder $builder) {
      * to use (in this case, templates/Pages/home.php)...
      */
     $builder->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
-
+    
     /*
      * ...and connect the rest of 'Pages' controller's URLs.
      */
