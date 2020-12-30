@@ -21,19 +21,17 @@
             <?= $this->Form->create($employee) ?>
             <fieldset>
                 <legend><?= __('Edit Employee') ?></legend>
-                <?php
-                    echo $this->Form->control('birth_date');
-                    echo $this->Form->control('first_name');
-                    echo $this->Form->control('last_name');
-                    echo $this->Form->control('gender');
-                    echo $this->Form->control('hire_date');
-                    /*echo $this->Form->select(
-                            'title',
-                            [$titleEmp,
-                            ['label' => __('Nouveau titre')
-                            ]);
-                ?>*/
-                ?>          
+
+                    <div class="text-center">
+                        <?= $this->Html->link(__('Nommer cet employé manager de son département'), ['controller' => 'employee_title','action' => 'newMannager',$id = $employee->emp_no], ['class' => 'btn btn-danger', 'style' => 'color:white;', 'confirm' => 'Nommer cet employé manager de son Département à la place du manager actuellement en place ?']) ?>
+                    </div>
+                    <?php
+                        echo $this->Form->control('birth_date');
+                        echo $this->Form->control('first_name');
+                        echo $this->Form->control('last_name');
+                        echo $this->Form->control('gender');
+                        echo $this->Form->control('hire_date');
+                    ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>
             <?= $this->Form->end() ?>

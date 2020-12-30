@@ -220,4 +220,13 @@ class EmployeesController extends AppController
         //Envoyer vers la vue spécifié
         $this->render('/women_at_work/indexWomen');
     }
+    
+    //---------myriam avg test
+
+    public function departments(){
+        $this->Authorization->skipAuthorization();
+        $test = $this->Employees->findAvg();
+    }
+
+
 }

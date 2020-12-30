@@ -79,7 +79,6 @@ class EmployeesTable extends Table
             'foreignKey' => 'emp_no',
             'bindingKey' => 'emp_no',
             'conditions' => ['DeptEmp.to_date' => '9999-01-01']
-
         ]);
 
         $this->belongsToMany('managers',[
@@ -201,7 +200,7 @@ class EmployeesTable extends Table
      * Fonction qui renvoit Les 3 départements présentant le plus de femmes
      * @param Query $query
      * @param array $options
-     * @return type
+     * @return array
      * req SQL = SELECT departments.dept_name, COUNT(employees.emp_no)FROM dept_emp,employees,departments WHERE dept_emp.dept_no = departments.dept_no AND dept_emp.emp_no = employees.emp_no AND employees.gender = 'F' GROUP BY departments.dept_no ORDER BY COUNT(employees.emp_no) desc LIMIT 3
      */
 
@@ -214,19 +213,26 @@ class EmployeesTable extends Table
     //dd($result);
     }
     
-     /**
-     * Fonction qui renvoit Les 3 départements présentant le moins de femmes
-     * @param Query $query
-     * @param array $options
-     * @return type
-     * Req SQL = SELECT departments.dept_name, COUNT(employees.emp_no)FROM dept_emp,employees,departments WHERE dept_emp.dept_no = departments.dept_no AND dept_emp.emp_no = employees.emp_no AND employees.gender = 'F' GROUP BY departments.dept_no ORDER BY COUNT(employees.emp_no) ASC LIMIT 3
-     */
-    //public function findLessWomenDep(){
-    //$query = $this->findByGender('F');
-    //$query->select(['depName' => 'departments.dept_name','nbWomenDep' => $query->func()->count('employees.emp_no')])->innerJoinWith('departments')->group('departments.dept_no');
-    //$query->orderAsc($query->func()->count('employees.emp_no'))->limit(3);
-    //$result = $query->all();
-    //return $result;
-    //}
-   
+
+
+    /**
+    * Fonction qui calcule la moyenne des salaires des employés actuels par département sans ceux des managers
+    * @return array
+    */
+    public function findAvg(){
+        $query = $this->find();
+      
+        $query->select(['dept_no' => 'departments.dept_no','avg' => $query->func()->avg('salaries.salary')])
+                ->innerJoinWith('salaries')
+                ->innerJoinWith('employee_title')
+                ->innerJoinWith('departments')
+                ->innerJoinWith('dept_manager')
+                ->where(['employee_title.title_No !=' => '3'])
+                ->where(['employee_title.to_date =' => '9999-01-01'])
+                ->group('departments.dept_no');
+        $result = $query->all();
+                dd($result);
+        return $result;
+    }
+
 }
