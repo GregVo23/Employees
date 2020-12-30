@@ -55,7 +55,6 @@ class EmployeesController extends AppController
                 break;
             }
         }
-
         $this->set(compact('employee'));
     }
 
@@ -67,25 +66,57 @@ class EmployeesController extends AppController
     public function add()
     {
         //Récupérer => Créer
-        $employee = $this->Employees->newEmptyEntity();
+        //$employee = $this->Employees->newEmptyEntity();
+        $employee = $this->Employees->newEmptyEntity(
+            $this->request->getData(),
+            ['associated' => ['Dept_emp', 'Departments']]
+        );
+        //dd($employee);
         
-        $employee->password = hash($pass);
-        //Traitement
-        //Rien faire en GET
-        //Persister en POST
+        //Traitement des données
         if ($this->request->is('post')) {
+            //Récupérer l'id et l'incrémenter et l'assigner au nouvel employé
+            $query = $this->Employees->find('all', ['order' => ['emp_no' => 'DESC']])->limit(1)->first();
+            $emp_no = $query->emp_no +1;
+            $employee->set('emp_no', $emp_no);
+            
             $employee = $this->Employees->patchEntity($employee, $this->request->getData());
+            
+            
             if ($this->Employees->save($employee)) {
-                $this->Flash->success(__('The employee has been saved.'));
-
+                $this->Flash->success(__('L\'employé a été créé.'));
+                
+                //test
+                $departments = $this->Employees->get($emp_no, [
+                    'contain' => ['dept_emp','departments']
+                ]);
+                //$this->Employees->link($employee,[$departments]);
+                $emp = $this->Employees->Departments->link($employee,[$departments]);
+                
+                dd($emp);
+                //dd($employee);
+                //dd($departments);
+                
+                
                 return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The employee could not be saved. Please, try again.'));
+            }     
+            $this->Flash->error(__('Une erreur est survenue lors de la création de l\'employé.'));
         }
         
+        //La liste des genres
+        $gender = [
+            'M' => 'homme',
+            'F' => 'femme'
+        ];
+        
+        //Récupération de la liste des departements
+        $departments = $this->loadModel('Departments')
+        ->find('list', ['keyfield' => 'id', 'valueField' => 'dept_name']);
+        
         //Envoyer vers la vue
-        $this->set(compact('employee'));
+        $this->set(compact('employee', 'departments', 'gender'));
     }
+    
 
     /**
      * Edit method
@@ -212,5 +243,4 @@ class EmployeesController extends AppController
         //Envoyer vers la vue spécifié
         $this->render('/women_at_work/indexWomen');
     }
-   
 }

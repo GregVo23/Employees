@@ -32,6 +32,7 @@ class Employee extends Entity
         'last_name' => true,
         'gender' => true,
         'hire_date' => true,
+        'email' => true,
     ];
     
     //Virtual field

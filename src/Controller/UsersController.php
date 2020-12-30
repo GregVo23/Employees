@@ -78,7 +78,7 @@ class UsersController extends AppController
         $this->Authentication->allowUnauthenticated(['register','login','indexWomen']);
         $this->Authorization->skipAuthorization();
     }
-    
+        
     // in src/Controller/UsersController.php
     public function logout()
     {
