@@ -30,27 +30,27 @@
                     <th><?= __('Dept Name') ?></th>
                     <td><?= h($department->dept_name) ?></td>
                 </tr>
-                <!--  TODO   -->
+      
                 <tr>
                     <th><?= __('Manager\'s name');  ?> </th>
-                    <td> </td>
+                    <td><?= h($department->first_n).' '.' '.h($department->last_n)?></td>
 
                 </tr>
                 <tr>
                     <th><?= __('Manager\'s hire date');  ?> </th>
-                    <td>   </td>
+                    <td><?= h($department->hire->nice('Europe/Paris', 'fr-FR')) ?></td>
                 </tr>
-                <!-- -->
+          
                 <tr>
                     <th><?= __('Number of employees') ?></th>
                     <td><?= h($result) ?></td>
                 </tr>
-                <!--  TODO   -->
+               
                 <tr>
                     <th><?= __('Average wages') ?></th>
                     <td     ></td>
                 </tr>
-                <!-- -->
+               
                 <tr>
                     <th><?= __('Description') ?></th>
                     <td><?= $this->Text->autoParagraph($description); ?></td>

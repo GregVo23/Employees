@@ -45,6 +45,8 @@ class EmployeesController extends AppController
      */
     public function view($id = null)
     {
+          
+
         $employee = $this->Employees->get($id, [
             'contain' => ['salaries','titles'],
         ]);
@@ -58,7 +60,7 @@ class EmployeesController extends AppController
                 break;
             }
         }
-       
+      
         //$this->Authorization->skipAuthorization();
 
         $this->set(compact('employee'));

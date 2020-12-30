@@ -4,9 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use Cake\View\CellTrait;
-use Cake\ORM\Entity;
 use \DateTime;
-use Cake\I18n\FrozenTime;
 
 /**
  * Employees Controller
@@ -45,11 +43,9 @@ class EmployeesController extends AppController
     public function view($id = null)
     {
         $employee = $this->Employees->get($id, [
-            'contain' => ['salaries','titles', 'departments'],
+            'contain' => ['salaries','titles'],
         ]);
-        dd($employee);
         $titles =$employee->titles;
-        //dd($titles);
         $today = new DateTime();
         foreach($titles as $title) {
             $date = new DateTime($title['_joinData']->to_date->format('Y-m-d'));
@@ -59,7 +55,6 @@ class EmployeesController extends AppController
                 break;
             }
         }
-
         $this->set(compact('employee'));
     }
 
@@ -70,30 +65,83 @@ class EmployeesController extends AppController
      */
     public function add()
     {
+        //Récupérer => Créer
+        //$employee = $this->Employees->newEmptyEntity();
         $employee = $this->Employees->newEmptyEntity();
-
+        //dd($employee);
+        
+        //Traitement des données
         if ($this->request->is('post')) {
             //Récupérer l'id et l'incrémenter et l'assigner au nouvel employé
             $query = $this->Employees->find('all', ['order' => ['emp_no' => 'DESC']])->limit(1)->first();
             $emp_no = $query->emp_no +1;
             $employee->set('emp_no', $emp_no);
-            $from_date = new FrozenTime($this->request->getData('hire_date'));
-            $to_date = new FrozenTime('9999-01-01');
+            //$employee->_joinData = $employee->Dept_emp->newEntity();
+            $from_date = $this->request->getData('hire_date');
+            $to_date = $this->request->getData('hire_date');
+            $employee->set('from_date', $from_date);
+            $employee->set('to_date', $to_date);
+            //$employee->_joinData = $this->Employees->dept_emp->newEntity();
+            //$employee->_joinData->to_date = '9889-01-01';
+
+            /*
+            $data = [
+                'emp_no' => $emp_no,
+                'gender' => 'M',
+                'birth_date' => $this->request->getData('hire_date'),
+                'hire_date' => $this->request->getData('hire_date'),
+                'email' => 'great@sds.com',
+                'first_name' => 'My great ',
+                'last_name' => 'Some cont',
+                'departments' => [
+                    [
+                        'dept_no' => 'd009',
+                        '_joinData' => [
+                            'to_date' => $this->request->getData('hire_date'),
+                            'from_date' => $this->request->getData('hire_date')
+                        ]
+                    ],
+                ]
+            ];
+           $newEmployee = $this->Employees->newEntity($data, ['associated' => ['departments._joinData']]);
+            */
+
+
             
+            //dd($employee);
             $newEmployee = $this->Employees->patchEntity($employee, $this->request->getData());
 
             $dept_no = $this->request->getData('department');
+            //dd($dept_no);
+
+            /*
+            $newEmployee->departments[0]->_joinData->to_date = $this->request->getData('hire_date');
+            $newEmployee->departments[0]->_joinData->from_date = $this->request->getData('hire_date');
+            */
+
 
             if ($this->Employees->save($newEmployee)) {
                 $this->Flash->success(__('L\'employé a été créé.'));
                 
                 $employee = $this->Employees->get($emp_no);
-                $department = $this->Employees->departments->get($dept_no, [
+                //$employee->_joinData = new Entity(['from_date' => $from_date], ['to_date' => $to_date]);
+                $departments = $this->Employees->departments->get($dept_no, [
                     'contain' => []
                 ]);
-                $department->_joinData = new Entity(['to_date' => $to_date, 'from_date' => $from_date], ['markNew' => true]);
+                //dd($departments);
 
-                $this->Employees->departments->link($employee,[$department]);
+                //$this->Employees->link($employee,[$departments]);
+                $emp = $this->Employees->departments->link($employee,[$departments]);
+                
+                
+               // dd($employee = $this->Employees->get('499999', ['contain' => ['departments']]));
+                //$employee->departments[0]->_joinData->toDate = $this->request->getData('hire_date');
+
+                // Nécessaire car nous changeons une propriété directement
+                //$employee->dirty('departments', true);
+
+                $this->Employees->save($employee, ['associated' => ['departments']]);
+                               
                 
                 return $this->redirect(['action' => 'index']);
             }     
@@ -125,16 +173,10 @@ class EmployeesController extends AppController
     public function edit($id = null)
     {
         $employee = $this->Employees->get($id, [
-            'contain' => ['employee_title', 'titles'],
-        ]); 
-      
+            'contain' => [],
+        ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            //$title = $this->request->getData('title');
-          
             $employee = $this->Employees->patchEntity($employee, $this->request->getData());
-            
-     
-        
             if ($this->Employees->save($employee)) {
                 $this->Flash->success(__('The employee has been saved.'));
 
@@ -142,9 +184,6 @@ class EmployeesController extends AppController
             }
             $this->Flash->error(__('The employee could not be saved. Please, try again.'));
         }
-        
-        
-         
         $this->set(compact('employee'));
     }
 

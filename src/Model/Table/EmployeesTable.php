@@ -214,6 +214,7 @@ class EmployeesTable extends Table
     }
     
 
+
     /**
     * Fonction qui calcule la moyenne des salaires des employés actuels par département sans ceux des managers
     * @return array
@@ -233,4 +234,5 @@ class EmployeesTable extends Table
                 dd($result);
         return $result;
     }
+
 }
