@@ -71,6 +71,10 @@ class DemandsTable extends Table
             ->notEmptyString('about');
 
         $validator
+            ->boolean('validated_once')
+            ->notEmptyString('validated_once');
+
+        $validator
             ->scalar('status')
             ->notEmptyString('status');
 

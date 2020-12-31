@@ -12,7 +12,10 @@ use Cake\ORM\Entity;
  * @property int $emp_no
  * @property string $type
  * @property string $about
+ * @property bool $validated_once
  * @property string $status
+ *
+ * @property \App\Model\Entity\Employee $employee
  */
 class Demand extends Entity
 {
@@ -29,6 +32,8 @@ class Demand extends Entity
         'emp_no' => true,
         'type' => true,
         'about' => true,
+        'validated_once' => true,
         'status' => true,
+        'employee' => true,
     ];
 }
