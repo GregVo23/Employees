@@ -68,7 +68,7 @@ class DemandsController extends AppController
         $demand = $this->Demands->newEmptyEntity();
         if ($this->request->is('post')) {
             $error='';
-            if(!preg_match('/^[1-9]\d+(\.\d{3})*(,\d+)?$/',$this->request->getData('about'))){
+            if(!preg_match('/^[1-9]\d+([,.]\d{1,2})?$/',$this->request->getData('about'))){
                 $error='Veuillez entrez un montant valide.';
             }else{
                 $demand = $this->Demands->patchEntity($demand, $this->request->getData());
