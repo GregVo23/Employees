@@ -114,7 +114,18 @@ class Application extends BaseApplication
             ]));
                 
             $middlewareQueue->add(new AuthenticationMiddleware($this));
-            $middlewareQueue->add(new AuthorizationMiddleware($this));
+            $middlewareQueue->add(new AuthorizationMiddleware($this, [
+                'unauthorizedHandler' => [
+                    'className' => 'Authorization.Redirect',
+                    'url' => '/users/login',
+                    'queryParam' => 'redirectUrl',
+                    'exceptions' => [
+                        MissingIdentityException::class,
+                        OtherException::class,
+                        ForbiddenException::class,
+                    ],
+                ],
+            ]));
             
 
         return $middlewareQueue;
@@ -189,7 +200,8 @@ class Application extends BaseApplication
    public function getAuthorizationService(ServerRequestInterface $request): AuthorizationServiceInterface
     {
         $resolver = new OrmResolver();
-        return new AuthorizationService($resolver);
+        $service = new AuthorizationService($resolver);
+        return $service;
     }
    
     

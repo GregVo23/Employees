@@ -47,6 +47,12 @@ class EmployeesTable extends Table
         $this->hasMany('salaries', [
             'foreignKey' => 'emp_no',
             'targetForeignKey' => 'emp_no',
+            'conditions' => ['Salaries.to_date' => '9999-01-01']
+        ]);
+
+        $this->hasMany('demands', [
+            'foreignKey' => 'emp_no',
+            'targetForeignKey' => 'emp_no',
         ]);
 
         $this->hasMany('employee_title', [

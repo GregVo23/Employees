@@ -21,6 +21,7 @@ class DemandsFixture extends TestFixture
         'emp_no' => ['type' => 'integer', 'length' => null, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'type' => ['type' => 'string', 'length' => null, 'null' => false, 'default' => null, 'collate' => 'utf8mb4_general_ci', 'comment' => '', 'precision' => null],
         'about' => ['type' => 'string', 'length' => 10, 'null' => false, 'default' => null, 'collate' => 'utf8mb4_general_ci', 'comment' => '', 'precision' => null],
+        'validated_once' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => '0', 'comment' => '', 'precision' => null],
         'status' => ['type' => 'string', 'length' => null, 'null' => false, 'default' => 'pending', 'collate' => 'utf8mb4_general_ci', 'comment' => '', 'precision' => null],
         '_indexes' => [
             'emp_no' => ['type' => 'index', 'columns' => ['emp_no'], 'length' => []],
@@ -48,6 +49,7 @@ class DemandsFixture extends TestFixture
                 'emp_no' => 1,
                 'type' => 'Lorem ipsum dolor sit amet',
                 'about' => 'Lorem ip',
+                'validated_once' => 1,
                 'status' => 'Lorem ipsum dolor sit amet',
             ],
         ];

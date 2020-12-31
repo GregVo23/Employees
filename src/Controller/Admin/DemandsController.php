@@ -25,9 +25,69 @@ class DemandsController extends AppController
      */
     public function index()
     {
-        $demands = $this->paginate($this->Demands);
+        /**
+         * Cas de figure : 
+         *  
+         *   Manager:
+         * - Les employés de mon département qui veulent une augmentation $raises
+         * - Les employés de mon département qui veulent être muté ailleurs $incomers
+         * - Les employés d'un autre département qui veulent être muté chez moi. $outcomers
+         * 
+         *   Comptable:
+         * - Les employés qui veulent une augmentation.
+         * 
+         */
 
-        $this->set(compact('demands'));
+        $raises = $incomers = $leaving = [];
+
+        $this->loadModel('Employees');
+        
+        $user=$this->Authentication->getIdentity();
+        $user = $this->Employees->get($user->get('emp_no'), [
+            'contain' => ['departments']
+        ]);
+        $userDept = $user->departments[0]->dept_no;
+        $demands = $this->Demands->find()->toArray();
+        foreach($demands as $demand){
+            if($demand->status === 'pending'){
+                if($demand->type === 'Raise'){
+                    
+                    $demandEmployee = $this->Employees->get($demand->emp_no, ['contain' => ['departments', 'titles']]);
+                    if($_SESSION['status'] === 'Admin'
+                        || $_SESSION['status'] === 'Accountant'
+                        || $userDept === $demandEmployee->departments[0]->dept_no){
+                        $demandEmployeeSalary = $this->Employees->get($demand->emp_no, ['contain' => ['salaries']])->salaries[0]->salary;
+
+                        $demand->about = $demand->about;
+                        $demand->currentSalary = $demandEmployeeSalary;
+                        $demand->employee = $demandEmployee->first_name . ' ' . $demandEmployee->last_name;
+                        $demand->employeeDepartment = $demandEmployee->departments[0]->dept_name;
+                        $demand->employeeTitle = $demandEmployee->titles[0]->title;
+
+                        $raises[] = $demand;
+                    }
+                }
+                else {
+                    $demandEmployee = $this->Employees->get($demand->emp_no, ['contain' => ['departments', 'titles']]);
+                    $demandDept = $this->Employees->departments->get($demand->about);
+                    $demand->employee = $demandEmployee->first_name . ' ' . $demandEmployee->last_name;
+                    $demand->employeeTitle = $demandEmployee->titles[0]->title;
+
+                    if($demand->about === $userDept){
+                        $demand->employeeDepartment = $demandEmployee->departments[0]->dept_name;
+                        $incomers[] = $demand;
+                    }else{
+                        $demand->department = $demandDept->dept_name;
+
+                        $demandEmployeeDept = $demandEmployee->departments[0]->dept_no;
+                        if($userDept===$demandEmployeeDept || $_SESSION['status'] === 'Admin'){
+                            $leaving[] = $demand;
+                        }
+                    }
+                }
+            }
+        }
+        $this->set(compact('incomers', 'raises', 'leaving'));
     }
 
     /**
@@ -77,16 +137,23 @@ class DemandsController extends AppController
         $demand = $this->Demands->get($id, [
             'contain' => [],
         ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $demand = $this->Demands->patchEntity($demand, $this->request->getData());
-            if ($this->Demands->save($demand)) {
-                $this->Flash->success(__('The demand has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+        try{
+            $this->Authorization->authorize($demand);
+            if ($this->request->is(['patch', 'post', 'put'])) {
+                $demand = $this->Demands->patchEntity($demand, $this->request->getData());
+                if ($this->Demands->save($demand)) {
+                    $this->Flash->success(__('The demand has been saved.'));
+    
+                    return $this->redirect(['action' => 'index']);
+                }
+                $this->Flash->error(__('The demand could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The demand could not be saved. Please, try again.'));
-        }
-        $this->set(compact('demand'));
+            $this->set(compact('demand'));
+        }catch(\Exception $e){
+            $this->Flash->error(__($e->getResult()->getReason()));
+            return $this->redirect(['action' => 'index']);
+        };
+       
     }
 
     /**

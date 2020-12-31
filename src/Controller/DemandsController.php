@@ -13,7 +13,6 @@ class DemandsController extends AppController
 {
     public function beforeFilter(\Cake\Event\EventInterface $event)
     {
-        $this->Authorization->skipAuthorization();
         parent::beforeFilter($event);
     }
     /**
@@ -23,25 +22,29 @@ class DemandsController extends AppController
      */
     public function index()
     {
-        $demands = $this->paginate($this->Demands);
-
-        $this->set(compact('demands'));
-    }
-
-    /**
-     * View method
-     *
-     * @param string|null $id Demand id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $demand = $this->Demands->get($id, [
-            'contain' => [],
-        ]);
-
-        $this->set(compact('demand'));
+        $pendings=[];
+        $passed=[];
+        $this->Authorization->skipAuthorization();
+        $emp = $this->Authentication->getIdentity()->get('emp_no');
+        $employee = $this->getTableLocator()->get('Employees')->
+        get($emp, [
+            'contain' => ['demands'],
+            ]); 
+        $demands = $employee->demands;
+        $this->loadModel('Departments');
+        foreach($demands as $demand){
+            if($demand->type==="Reassignment"){
+                $demand->about=$this->Departments->findByDeptNo($demand->about)->first()->dept_name;
+            }else{
+                $demand->about=$demand->about. ' €';
+            }
+            if($demand->status==="pending"){
+                $pendings[]=$demand;
+            }else {
+                $passed[]=$demand;
+            }
+        }
+        $this->set(compact('pendings', 'passed'));
     }
 
     /**
@@ -51,60 +54,93 @@ class DemandsController extends AppController
      */
     public function add()
     {
+        $this->Authorization->skipAuthorization();
+    }
+
+    /**
+     * AddRaise method
+     *
+     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
+     */
+    public function addRaise()
+    {
+        $this->Authorization->skipAuthorization();
         $demand = $this->Demands->newEmptyEntity();
         if ($this->request->is('post')) {
-            $demand = $this->Demands->patchEntity($demand, $this->request->getData());
-            if ($this->Demands->save($demand)) {
-                $this->Flash->success(__('The demand has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+            $error='';
+            if(!preg_match('/^[1-9]\d+(\.\d{3})*(,\d+)?$/',$this->request->getData('about'))){
+                $error='Veuillez entrez un montant valide.';
+            }else{
+                $demand = $this->Demands->patchEntity($demand, $this->request->getData());
+                $demand->set('emp_no', $this->Authentication->getIdentity()->get('emp_no'));
+                $demand->set('type', 'Raise');
+                if ($this->Demands->save($demand)) {
+                    $this->Flash->success(__('The demand has been saved.'));
+                    return $this->redirect(['action' => 'index']);
+                }else {
+                    $error='The demand could not be saved. Please, try again.';
+                }
             }
-            $this->Flash->error(__('The demand could not be saved. Please, try again.'));
+            $this->Flash->error(__($error));
         }
         $this->set(compact('demand'));
     }
 
     /**
-     * Edit method
+     * Add reassignment method
      *
-     * @param string|null $id Demand id.
-     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
      */
-    public function edit($id = null)
+    public function addReassignment()
     {
-        $demand = $this->Demands->get($id, [
-            'contain' => [],
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $demand = $this->Demands->patchEntity($demand, $this->request->getData());
-            if ($this->Demands->save($demand)) {
-                $this->Flash->success(__('The demand has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+        $this->Authorization->skipAuthorization();
+        $demand = $this->Demands->newEmptyEntity();
+        $departments = $this->loadModel('Departments')->find('list', ['keyfield' => 'id', 'valueField' => 'dept_name']);
+        if ($this->request->is('post')) {
+            $error='';
+            $this->loadModel('Departments');
+            $dept = $this->Departments->findByDeptName($this->request->getData('department'))->first();
+            if(!$dept){
+                $error='Veuillez entrer un département valide.';
+            }else{
+                $demand->set('type', 'reassignment');
+                $demand->set('about', $this->request->getData('department'));
+                $demand->set('emp_no', $this->Authentication->getIdentity()->get('emp_no'));
+                if ($this->Demands->save($demand)) {
+                    $this->Flash->success(__('The demand has been saved.'));
+                    return $this->redirect(['action' => 'index']);
+                }else {
+                $error='The demand could not be saved. Please, try again.';
+                }
             }
-            $this->Flash->error(__('The demand could not be saved. Please, try again.'));
+            $this->Flash->error(__($error));
         }
-        $this->set(compact('demand'));
+        $this->set(compact('demand', 'departments'));
     }
 
     /**
-     * Delete method
+     * Cancel method
      *
      * @param string|null $id Demand id.
      * @return \Cake\Http\Response|null|void Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function cancel($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
-        $demand = $this->Demands->get($id);
-        if ($this->Demands->delete($demand)) {
-            $this->Flash->success(__('The demand has been deleted.'));
-        } else {
-            $this->Flash->error(__('The demand could not be deleted. Please, try again.'));
-        }
+        $demand =$this->Demands->get($id);
+        $this->Authorization->authorize($demand);
+        $modifiedDemand = $this->Demands->findByDemandNo($id)->first()->toArray();
+        $modifiedDemand['status']='cancelled';
 
-        return $this->redirect(['action' => 'index']);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $demand = $this->Demands->patchEntity($demand, $modifiedDemand);
+            if ($this->Demands->save($demand)) {
+                $this->Flash->success(__('The demand has been cancelled.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The demand could not be cancelled. Please, try again.'));
+        }
+        $this->set(compact('demand'));
     }
 }
