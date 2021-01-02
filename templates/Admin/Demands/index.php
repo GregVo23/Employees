@@ -27,9 +27,8 @@
                     <td><?= $this->Number->currency($raise->currentSalary, 'EUR') ?></td>
                     <td><?= $this->Number->currency($raise->about, 'EUR') ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $raise->demand_no]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $raise->demand_no]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $raise->demand_no], ['confirm' => __('Are you sure you want to delete # {0}?', $raise->demand_no)]) ?>
+                        <?= $this->Form->postLink(__('Annuler'), ['action' => 'cancel', $raise->demand_no], ['confirm' => __('Annuler la demande définitivement?')]) ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>
@@ -57,9 +56,8 @@
                     <td><?= h($incomer->employeeDepartment) ?></td>
                     <td><?= h($incomer->employeeTitle) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $incomer->demand_no]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $incomer->demand_no]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $incomer->demand_no], ['confirm' => __('Are you sure you want to delete # {0}?', $raise->demand_no)]) ?>
+                        <?= $this->Form->postLink(__('Annuler'), ['action' => 'cancel', $incomer->demand_no], ['confirm' => __('Annuler la demande définitivement?')]) ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>
@@ -86,9 +84,8 @@
                     <td><?= h($leaver->department) ?></td>
                     <td><?= h($leaver->employeeTitle) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $leaver->demand_no]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $leaver->demand_no]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $leaver->demand_no], ['confirm' => __('Are you sure you want to delete # {0}?', $raise->demand_no)]) ?>
+                        <?= $this->Form->postLink(__('Annuler'), ['action' => 'cancel',  $leaver->demand_no], ['confirm' => __('Annuler la demande définitivement?')]) ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>

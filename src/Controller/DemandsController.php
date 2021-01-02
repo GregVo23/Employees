@@ -75,10 +75,10 @@ class DemandsController extends AppController
                 $demand->set('emp_no', $this->Authentication->getIdentity()->get('emp_no'));
                 $demand->set('type', 'Raise');
                 if ($this->Demands->save($demand)) {
-                    $this->Flash->success(__('The demand has been saved.'));
+                    $this->Flash->success(__('La demande a bien été introduite.'));
                     return $this->redirect(['action' => 'index']);
                 }else {
-                    $error='The demand could not be saved. Please, try again.';
+                    $error='La demande n\'a pas pu être sauvegardée. Veuillez réessayer.';
                 }
             }
             $this->Flash->error(__($error));
@@ -131,12 +131,12 @@ class DemandsController extends AppController
         $this->Authorization->authorize($demand);
         $modifiedDemand = $this->Demands->findByDemandNo($id)->first()->toArray();
         $modifiedDemand['status']='cancelled';
+        $adminRoles= ['Accountant', 'Admin', 'Manager'];
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $demand = $this->Demands->patchEntity($demand, $modifiedDemand);
             if ($this->Demands->save($demand)) {
-                $this->Flash->success(__('The demand has been cancelled.'));
-
+                $this->Flash->success(__('La demande a été annulée.'));
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The demand could not be cancelled. Please, try again.'));

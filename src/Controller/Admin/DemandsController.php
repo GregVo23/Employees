@@ -157,6 +157,33 @@ class DemandsController extends AppController
     }
 
     /**
+     * Cancel method
+     *
+     * @param string|null $id Demand id.
+     * @return \Cake\Http\Response|null|void Redirects to index.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function cancel($id = null)
+    {
+        $demand =$this->Demands->get($id);
+        $this->Authorization->authorize($demand);
+        $modifiedDemand = $this->Demands->findByDemandNo($id)->first()->toArray();
+        $modifiedDemand['status']='cancelled';
+        $adminRoles= ['Accountant', 'Admin', 'Manager'];
+
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $demand = $this->Demands->patchEntity($demand, $modifiedDemand);
+            if ($this->Demands->save($demand)) {
+                $this->Flash->success(__('La demande a été annulée.'));
+                return $this->redirect(['action' => 'index']);
+                
+            }
+            $this->Flash->error(__('The demand could not be cancelled. Please, try again.'));
+        }
+        $this->set(compact('demand'));
+    }
+
+    /**
      * Delete method
      *
      * @param string|null $id Demand id.
