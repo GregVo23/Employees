@@ -50,7 +50,6 @@ class DemandsController extends AppController
                         || ($userDept === $demandEmployee->departments[0]->dept_no && !$demand->validated_once)){
 
                         $demandEmployeeSalary = $this->Employees->get($demand->emp_no, ['contain' => ['salaries']])->salaries[0]->salary;
-                       // dd($demandEmployeeSalary);
                         $demand->about = $demand->about;
                         $demand->currentSalary = $demandEmployeeSalary;
                         $demand->employee = $demandEmployee->first_name . ' ' . $demandEmployee->last_name;
