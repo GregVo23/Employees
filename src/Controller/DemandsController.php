@@ -21,10 +21,11 @@ class DemandsController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      */
     public function index()
-    {
+    {   
+        $this->Authorization->skipAuthorization();
+
         $pendings=[];
         $passed=[];
-        $this->Authorization->skipAuthorization();
         $emp = $this->Authentication->getIdentity()->get('emp_no');
         $employee = $this->getTableLocator()->get('Employees')->
         get($emp, [

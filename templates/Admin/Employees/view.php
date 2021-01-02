@@ -54,6 +54,7 @@
                     <td><?= h($employee->function) ?></td>
                 </tr>
                 <tr>
+                    <th><?= __('Salary') ?></th>
                     <td colspan="2">
                         <ul>
                         <?php foreach($employee->salaries as $salary) : ?>

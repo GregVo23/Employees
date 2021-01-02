@@ -57,7 +57,7 @@ class DemandsController extends AppController
                         || $_SESSION['status'] === 'Accountant'
                         || $userDept === $demandEmployee->departments[0]->dept_no){
                         $demandEmployeeSalary = $this->Employees->get($demand->emp_no, ['contain' => ['salaries']])->salaries[0]->salary;
-
+                       // dd($demandEmployeeSalary);
                         $demand->about = $demand->about;
                         $demand->currentSalary = $demandEmployeeSalary;
                         $demand->employee = $demandEmployee->first_name . ' ' . $demandEmployee->last_name;

@@ -17,6 +17,8 @@ class PartnersController extends AppController
      */
     public function index()
     {
+        $this->Authorization->skipAuthorization();
+
         $partners = $this->paginate($this->Partners);
 
         $this->set(compact('partners'));
@@ -31,6 +33,8 @@ class PartnersController extends AppController
      */
     public function view($id = null)
     {
+        $this->Authorization->skipAuthorization();
+
         $partner = $this->Partners->get($id, [
             'contain' => [],
         ]);

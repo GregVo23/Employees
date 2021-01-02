@@ -45,13 +45,10 @@ use Cake\Routing\Router;
 /** @var \Cake\Routing\RouteBuilder $routes */
 $routes->setRouteClass(DashedRoute::class);
 
-//test 
-$routes->connect('/departments', ['controller' => 'Employees', 'action' => 'findAvg']);
 
 
 $routes->connect('/women_at_work', ['controller' => 'Employees', 'action' => 'indexWomen']);
 $routes->connect('/admin/women_at_work', ['controller' => 'Employees', 'action' => 'indexWomen']);
-//$routes->connect('/admin/departments', ['controller' => 'Employees', 'action' => 'findAvg']);
 //$routes->connect('/admin/departments/view', ['controller' => 'Departments', 'action' => 'newManager']);
 
 $routes->prefix('Admin', function (RouteBuilder $routes) {
