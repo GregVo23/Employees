@@ -222,11 +222,11 @@ class EmployeesController extends AppController
     }
     
     //---------myriam avg test
-
+/*
     public function departments(){
         $this->Authorization->skipAuthorization();
         $test = $this->Employees->findAvg();
     }
 
-
+*/
 }

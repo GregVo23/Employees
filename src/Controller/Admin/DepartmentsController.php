@@ -59,33 +59,51 @@ class DepartmentsController extends AppController
         $description = $department->description;
         
         //Nombre de postes vacants pour chaque département
-        $vacancies = $this->getTableLocator()->get('Vacancies');
+       $vacancies = $this->getTableLocator()->get('Vacancies');
+     
         //dd($vacancies);
    
         $query = $vacancies->find();
         $query->select(['quantity' => $query -> func()->sum('quantity'), 'deptNo' => 'dept_no'])
-                ->where(['dept_no' => $department->dept_no])
-                ->group('dept_no');
+                ->where(['dept_no' => $department->dept_no]);
+               // ->group('dept_no');
      
-       $nbVacancies = $query->all();
+       //$nbVacancies = $query->all();
+       $department->vacancie = $query->first()->quantity;
        //dd($nbVacancies);
-        
+     /*   
         foreach($nbVacancies as $nbVacancie):
           $department->vacancie = $nbVacancie->quantity;
             
         endforeach;
-            //dd($department->vacancie);
+     */
       
-        //Salaire moyen par departement
-       /*  $salaryAvg = $this->Employees->find('Avg', ['id' => $id])->first()->avg;
-        dd($salaryAvg);*/
-        
+        //Moyenne des salaires par départments
+        $managerQuery = $this->getTableLocator()->get('dept_manager')->find()
+            ->select(['dept_manager.emp_no'])
+            ->where(['dept_manager.dept_no' => $id,
+                     'dept_manager.to_date ' => '9999-01-01'
+                ]);
                
+        $query = $this->getTableLocator()->get('salaries')->find()
+            ->select(['avg' => $query->func()->avg('salary')])
+            ->join([
+            'dept_emp' => [
+                'table' => 'dept_emp',
+                'conditions' => 'salaries.emp_no = dept_emp.emp_no'
+            ]
+            ])
+            ->where(['dept_emp.dept_no' => $id,
+                     'dept_emp.emp_no NOT IN' => $managerQuery     
+            ]);
+        
+        $avgSalary = $query->first()->avg;
+       // dd($avgSalary);
           //Autorisations : 
         $this->Authorization->authorize($department);
         
         //$this->set(compact('department'));
-        $this->set(compact('department', 'result', 'rules', 'description'));
+        $this->set(compact('department', 'result', 'rules', 'description', 'avgSalary'));
  
     }
 

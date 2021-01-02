@@ -48,7 +48,10 @@
                
                 <tr>
                     <th><?= __('Average wages') ?></th>
-                    <td     ></td>
+                   
+                    <td> <?= $this->Number->currency($avgSalary,"EUR",[
+                                'locale' => 'FR_fr'
+                        ]) ?></td>
                 </tr>
                
                 <tr>
