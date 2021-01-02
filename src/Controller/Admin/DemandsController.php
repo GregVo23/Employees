@@ -25,19 +25,7 @@ class DemandsController extends AppController
      */
     public function index()
     {
-        /**
-         * Cas de figure : 
-         *  
-         *   Manager:
-         * - Les employés de mon département qui veulent une augmentation $raises
-         * - Les employés de mon département qui veulent être muté ailleurs $incomers
-         * - Les employés d'un autre département qui veulent être muté chez moi. $outcomers
-         * 
-         *   Comptable:
-         * - Les employés qui veulent une augmentation.
-         * 
-         */
-
+        //Incomers and pople leaving regard reassignments
         $raises = $incomers = $leaving = [];
 
         $this->loadModel('Employees');
@@ -48,14 +36,19 @@ class DemandsController extends AppController
         ]);
         $userDept = $user->departments[0]->dept_no;
         $demands = $this->Demands->find()->toArray();
+
         foreach($demands as $demand){
+
             if($demand->status === 'pending'){
+
                 if($demand->type === 'Raise'){
                     
                     $demandEmployee = $this->Employees->get($demand->emp_no, ['contain' => ['departments', 'titles']]);
+
                     if($_SESSION['status'] === 'Admin'
-                        || $_SESSION['status'] === 'Accountant'
-                        || $userDept === $demandEmployee->departments[0]->dept_no){
+                        || ($_SESSION['status'] === 'Accountant' && $demand->validated_once)
+                        || ($userDept === $demandEmployee->departments[0]->dept_no && !$demand->validated_once)){
+
                         $demandEmployeeSalary = $this->Employees->get($demand->emp_no, ['contain' => ['salaries']])->salaries[0]->salary;
 
                         $demand->about = $demand->about;
@@ -73,14 +66,13 @@ class DemandsController extends AppController
                     $demand->employee = $demandEmployee->first_name . ' ' . $demandEmployee->last_name;
                     $demand->employeeTitle = $demandEmployee->titles[0]->title;
 
-                    if($demand->about === $userDept){
+                    if($demand->about === $userDept && $demand->validated_once){
                         $demand->employeeDepartment = $demandEmployee->departments[0]->dept_name;
                         $incomers[] = $demand;
                     }else{
                         $demand->department = $demandDept->dept_name;
-
                         $demandEmployeeDept = $demandEmployee->departments[0]->dept_no;
-                        if($userDept===$demandEmployeeDept || $_SESSION['status'] === 'Admin'){
+                        if(($userDept===$demandEmployeeDept && !$demand->validated_once) || $_SESSION['status'] === 'Admin'){
                             $leaving[] = $demand;
                         }
                     }
