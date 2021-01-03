@@ -58,25 +58,25 @@
         },
         {
             "name": "cakephp/authentication",
-            "version": "2.3.1",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/authentication.git",
-                "reference": "0d7b2730393494e5111501284d99e4a9661e4b89"
+                "reference": "048648d2e1daf73eed789404663aefee6747359e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/authentication/zipball/0d7b2730393494e5111501284d99e4a9661e4b89",
-                "reference": "0d7b2730393494e5111501284d99e4a9661e4b89",
+                "url": "https://api.github.com/repos/cakephp/authentication/zipball/048648d2e1daf73eed789404663aefee6747359e",
+                "reference": "048648d2e1daf73eed789404663aefee6747359e",
                 "shasum": ""
             },
             "require": {
                 "cakephp/core": "^4.0",
+                "laminas/laminas-diactoros": "^2.2.2",
                 "psr/http-client": "^1.0",
                 "psr/http-message": "^1.0",
                 "psr/http-server-handler": "^1.0",
-                "psr/http-server-middleware": "^1.0",
-                "zendframework/zend-diactoros": "^2.0"
+                "psr/http-server-middleware": "^1.0"
             },
             "require-dev": {
                 "cakephp/cakephp": "^4.0",
@@ -122,24 +122,24 @@
                 "issues": "https://github.com/cakephp/authentication/issues",
                 "source": "https://github.com/cakephp/authentication"
             },
-            "time": "2020-11-14T01:51:52+00:00"
+            "time": "2020-12-29T23:33:37+00:00"
         },
         {
             "name": "cakephp/authorization",
-            "version": "2.0.5",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/authorization.git",
-                "reference": "c9eb8b1b6c159e904ead3be86eebda055056fb61"
+                "reference": "23f181885ed6c6b3283c8cd6c1b9bb2953d332ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/authorization/zipball/c9eb8b1b6c159e904ead3be86eebda055056fb61",
-                "reference": "c9eb8b1b6c159e904ead3be86eebda055056fb61",
+                "url": "https://api.github.com/repos/cakephp/authorization/zipball/23f181885ed6c6b3283c8cd6c1b9bb2953d332ea",
+                "reference": "23f181885ed6c6b3283c8cd6c1b9bb2953d332ea",
                 "shasum": ""
             },
             "require": {
-                "cakephp/core": "^4.0",
+                "cakephp/http": "^4.0",
                 "php": ">=7.2",
                 "psr/http-client": "^1.0",
                 "psr/http-message": "^1.0",
@@ -188,7 +188,7 @@
                 "issues": "https://github.com/cakephp/authorization/issues",
                 "source": "https://github.com/cakephp/authorization"
             },
-            "time": "2020-11-14T01:51:36+00:00"
+            "time": "2020-12-29T20:19:24+00:00"
         },
         {
             "name": "cakephp/cakephp",

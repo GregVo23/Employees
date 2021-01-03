@@ -37,6 +37,10 @@ $this->Html->css('Chart.min', ['block' => true]);
     <?php echo "let nbHireWomen = '".implode("<>", h($nbHireWomen))."'.split('<>')"; ?>; 
     <?php echo "let nbDepMoreWomen = '".implode("<>", h($nbDepMoreWomen))."'.split('<>')"; ?>;
     <?php echo "let depNameMoreWomen = '".implode("<>", h($depNameMoreWomen))."'.split('<>')"; ?>;
+    <?php echo "let nbDepLessWomen = '".implode("<>", h($nbDepLessWomen))."'.split('<>')"; ?>;
+    <?php echo "let depNameLessWomen = '".implode("<>", h($depNameLessWomen))."'.split('<>')"; ?>;
+        console.log(nbDepLessWomen);
+        console.log(depNameLessWomen);
 </script>
 
 <h1 class="pb-4 pt-3">Women at work</h1>

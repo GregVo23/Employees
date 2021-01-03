@@ -43,11 +43,19 @@ class EmployeesTable extends Table
         $this->setTable('employees');
         $this->setDisplayField('emp_no');
         $this->setPrimaryKey('emp_no');
-        
+        /*
+        $this->hasMany('salariesToday', [
+            'foreignKey' => 'emp_no',
+            'targetForeignKey' => 'emp_no',
+            'className' => 'salaries',
+            'conditions' => ['Salaries.to_date' => '9999-01-01']
+        ]);
+        */
         $this->hasMany('salaries', [
             'foreignKey' => 'emp_no',
             'targetForeignKey' => 'emp_no',
-            'conditions' => ['Salaries.to_date' => '9999-01-01']
+            'className' => 'salaries'
+            //'conditions' => ['Salaries.to_date' => '9999-01-01']
         ]);
 
         $this->hasMany('demands', [
@@ -165,7 +173,7 @@ class EmployeesTable extends Table
                 $nbHire[] = $employee->nbWomen;
             endif;
         endforeach;
-        
+
         return ['years' => $years,'nbHire' =>$nbHire];
     }
     
@@ -216,37 +224,6 @@ class EmployeesTable extends Table
     $query->orderDesc($query->func()->count('employees.emp_no'));
     $result = $query->all();
     return $result;
-    //dd($result);
     }
     
-
-    /**
-    * Fonction qui calcule la moyenne des salaires des employés actuels par département sans ceux des managers
-    * @return array
-    */
-  /* public function findAvg()
-   {
-       
-
-        $query = $this->find();
-             dd($query);
-
-        $query->select(['dept_no' => 'dept_emp.dept_no','avg' => $query->func()->avg('salaries.salary')])
-                ->innerJoinWith('salaries')
-               ->innerJoinWith('employee_title')
-               // ->innerJoinWith('departments')
-               // ->innerJoinWith('dept_manager')
-                ->innerJoinWith('dept_emp')
-                ->where(['employee_title.title_no !=' => '3'])
-                ->where(['employee_title.to_date =' => '9999-01-01'])                   
-                //->group('departments.dept_no');
-                ->group('dept_emp.dept_no');
-        
-        //dd($query);
-        $result = $query->all();
-        dd($result);
-       
-        return $query;
-    }*/
-
 }
