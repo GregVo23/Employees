@@ -26,9 +26,23 @@
                     <td><?= h($salary->from_date) ?></td>
                     <td><?= h($salary->to_date) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $salary->emp_no]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $salary->emp_no]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $salary->emp_no], ['confirm' => __('Are you sure you want to delete # {0}?', $salary->emp_no)]) ?>
+                        <?= $this->Html->image("view.png", [
+                            "alt" => "view",
+                            'url' => ['action' => 'view', $salary->emp_no],
+                            'width' => 50                          
+                        ]);?>
+                        
+                        <?= $this->Html->image("edit.png", [
+                            "alt" => "view",
+                            'url' => ['action' => 'edit', $salary->emp_no],
+                            'width' => 50                           
+                        ]);?>
+                        
+                        <?= $this->Html->image("delete.png", [
+                            "alt" => "view",
+                            'url' => ['action' => 'delete', $salary->emp_no], ['confirm' => __('Are you sure you want to delete # {0}?', $salary->emp_no)],
+                            'width' => 50                           
+                        ]);?>
                     </td>
                 </tr>
                 <?php endforeach; ?>
