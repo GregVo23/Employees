@@ -30,7 +30,7 @@
                         <p><?= $this->Html->link('Partenaires', '/partners'); ?></p>
                     </div>
                     <div class="col-md-6">
-                        <p><?= $this->Html->link('Connexion', '/users/login'); ?></p>
+                        <p><?= $this->Html->link('Connexion', '#connexion', ['data-bs-toggle' => "modal", 'data-bs-target' => "#connexion"]); ?></p>
                         <p><?= $this->Html->link('Déconnexion', '/users/logout'); ?></p>
                         <p><?= $this->Html->link('S\'inscrire', '/pages/register'); ?></p>
                         <p><a href="#">Offres d'emplois</a></p>
