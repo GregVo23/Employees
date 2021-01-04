@@ -250,38 +250,5 @@ class EmployeesController extends AppController
         $this->render('/women_at_work/indexWomen');
     }
     
-        //---------myriam avg test
-
-/*    public function departments(){
-        $this->Authorization->skipAuthorization();
-        $test = $this->Employees->findAvg();
-    }*/
-      /**
-    * Fonction qui calcule la moyenne des salaires des employés actuels par département sans ceux des managers
-    * @return array
-    */
-  /* public function avg(){
-       // $avgSalaries = $this->getTableLocator()->get('Vacancies', '');
-      $query = $this->find();
-       // dd($query);
-
-        $query->select(['dept_no' => 'departments.dept_no','avg' => $query->func()->avg('salaries.salary')])
-                ->innerJoinWith('salaries')
-                ->innerJoinWith('employee_title')
-                ->innerJoinWith('departments')
-                ->innerJoinWith('dept_manager')
-                ->where(['employee_title.title_No !=' => '3'])
-                ->where(['employee_title.to_date =' => '9999-01-01'])
-                ->group('departments.dept_no');
-        $resultAvg = $query->all();
-        dd($resultAvg); 
-     
-          //Envoyer à la vue
-   //     $this->set('resultAvg',$resultAvg);
-     //   $this->render('/admin/departments/view'); //Définit un template spécifique
-        $this->set('query',$query);
-        $this->render('/admin/departments/view'); //Définit un template spécifique
-    }*/
-
 
 }

@@ -81,9 +81,8 @@ class DepartmentsController extends AppController
         //Moyenne des salaires par départments
         $managerQuery = $this->getTableLocator()->get('dept_manager')->find()
             ->select(['dept_manager.emp_no'])
-            ->where(['dept_manager.dept_no' => $id,
-                     'dept_manager.to_date ' => '9999-01-01'
-                ]);
+            ->where(['dept_manager.dept_no' => $id])
+            ->where(['dept_manager.to_date ' => '9999-01-01']);
                
         $query = $this->getTableLocator()->get('salaries')->find()
             ->select(['avg' => $query->func()->avg('salary')])
@@ -93,9 +92,8 @@ class DepartmentsController extends AppController
                 'conditions' => 'salaries.emp_no = dept_emp.emp_no'
             ]
             ])
-            ->where(['dept_emp.dept_no' => $id,
-                     'dept_emp.emp_no NOT IN' => $managerQuery     
-            ]);
+            ->where(['dept_emp.dept_no' => $id])
+            ->where(['dept_emp.emp_no NOT IN' => $managerQuery]);
         
         $avgSalary = $query->first()->avg;
        // dd($avgSalary);
@@ -141,23 +139,65 @@ class DepartmentsController extends AppController
     public function edit($id = null)
     {
         $this->Authorization->skipAuthorization();
-
+        
+        //Récupérer l'id du département
         $department = $this->Departments->get($id, [
             'contain' => ['Employees', 'Managers'],
         ]);
-    
+        //dd($department);
+                  
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $department = $this->Departments->patchEntity($department, $this->request->getData());
-            if ($this->Departments->save($department)) {
+            $departmentInfo = $this->Departments->patchEntity($department, $this->request->getData());
+           
+            //Récupérer l'id de l'employée
+            $emp_no = $this->request->getData('employee');
+            //dd($emp_no);
+            
+            if ($this->Departments->save($departmentInfo)) {
                 $this->Flash->success(__('The department has been saved.'));
+                
+       
+                $employee = $this->Departments->Employees->get($emp_no, [
+                    'contain' => []
+                ]);
+                dd($employee);
+               //Lier les employées à leur dép
+               $this->Departments->Employees->link($department,[$employee]);
 
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The department could not be saved. Please, try again.'));
         }
-        $employees = $this->Departments->Employees->find('list');
-        $managers = $this->Departments->Managers->find('list', ['limit' => 200]);
-        $this->set(compact('department', 'employees', 'managers'));
+       //$employees = $this->Departments->Employees->find('list',['limit' => 200]);  
+        
+        //Récupération de la liste des departements
+        
+            /*$employees = $this->loadModel('Employees')
+             ->find('list', ['keyfield' => 'id', 'valueField' => 'last_name', 'limit' => 10])->all();
+              dd($employees);*/
+
+         $query = $this->getTableLocator()->get('employees')->find();  
+         $query->select(['name' => $query->func()->concat(['last_name' => 'identifier', ' ', 'first_name' => 'identifier'])])
+            ->join([
+            'dept_emp' => [
+                'table' => 'dept_emp',
+                'conditions' => 'dept_emp.emp_no = employees.emp_no', 
+            ]
+            ])
+            ->where(['dept_emp.dept_no' => $id])->limit(15);
+         //Conversion de l'objet itérable en tableau   
+         $employees = $query->toArray();
+        //dd($employees);
+       
+         $employeeNameSelect = [];
+         foreach($employees as $employeeName):
+            $employeeNameSelect[] = $employeeName->name;
+         endforeach;
+        // dd($employeeNameSelect);
+
+         $managers = $this->Departments->Managers->find('list', ['limit' => 200]);
+
+         $this->set(compact('managers', 'department','employeeNameSelect'));     
  
     }
 
