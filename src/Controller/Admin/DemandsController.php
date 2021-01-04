@@ -20,12 +20,14 @@ class DemandsController extends AppController
     }
     /**
      * Index method
+     * @var $raises raises demands.
+     * @var $incomers demands from people outside our department and want to come in.
+     * @var $leaving demands from people inside our department and want to leave for another one.
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
     public function index()
     {
-        //Incomers and pople leaving regard reassignments
         $raises = $incomers = $leaving = [];
 
         $this->loadModel('Employees');
@@ -44,10 +46,9 @@ class DemandsController extends AppController
                 if($demand->type === 'Raise'){
                     
                     $demandEmployee = $this->Employees->get($demand->emp_no, ['contain' => ['departments', 'titles']]);
-
                     if($_SESSION['status'] === 'Admin'
                         || ($_SESSION['status'] === 'Accountant' && $demand->validated_once)
-                        || ($userDept === $demandEmployee->departments[0]->dept_no && !$demand->validated_once)){
+                        || ($_SESSION['status'] === 'Manager' && $userDept === $demandEmployee->departments[0]->dept_no && !$demand->validated_once)){
 
                         $demandEmployeeSalary = $this->Employees->get($demand->emp_no, ['contain' => ['salaries']])->salaries[0]->salary;
                         $demand->about = $demand->about;
