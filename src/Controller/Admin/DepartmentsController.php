@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use \DateTime;
+use Cake\I18n\FrozenTime;
 
 /**
  * Departments Controller
@@ -144,60 +146,166 @@ class DepartmentsController extends AppController
         $department = $this->Departments->get($id, [
             'contain' => ['Employees', 'Managers'],
         ]);
-        //dd($department);
-                  
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $departmentInfo = $this->Departments->patchEntity($department, $this->request->getData());
-           
-            //Récupérer l'id de l'employée
-            $emp_no = $this->request->getData('employee');
-            //dd($emp_no);
-            
-            if ($this->Departments->save($departmentInfo)) {
-                $this->Flash->success(__('The department has been saved.'));
-                
-       
-                $employee = $this->Departments->Employees->get($emp_no, [
-                    'contain' => []
-                ]);
-                dd($employee);
-               //Lier les employées à leur dép
-               $this->Departments->Employees->link($department,[$employee]);
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The department could not be saved. Please, try again.'));
-        }
-       //$employees = $this->Departments->Employees->find('list',['limit' => 200]);  
-        
-        //Récupération de la liste des departements
-        
-            /*$employees = $this->loadModel('Employees')
-             ->find('list', ['keyfield' => 'id', 'valueField' => 'last_name', 'limit' => 10])->all();
-              dd($employees);*/
-
+       //dd($department->managers);
+     
+        //Partie manager(name + hire date):
+          $managersFirstName = $department->managers[0]->first_name;
+          $managersLastName = $department->managers[0]->last_name;
+ 
+               //Trouver les employees du département
          $query = $this->getTableLocator()->get('employees')->find();  
-         $query->select(['name' => $query->func()->concat(['last_name' => 'identifier', ' ', 'first_name' => 'identifier'])])
+         $query->select(['empNo' => 'employees.emp_no' ,'last_name'])  //Le emp_no n'est pas vraiment nécessaire ici mais bon...
             ->join([
             'dept_emp' => [
                 'table' => 'dept_emp',
-                'conditions' => 'dept_emp.emp_no = employees.emp_no', 
+                'conditions' => 'dept_emp.emp_no = employees.emp_no',
             ]
             ])
-            ->where(['dept_emp.dept_no' => $id])->limit(15);
+            ->where(['dept_emp.dept_no' => $id])->limit(15)
+            ->where(['dept_emp.to_date =' => '9999-01-01']);
+            
          //Conversion de l'objet itérable en tableau   
-         $employees = $query->toArray();
-        //dd($employees);
+        $employees = $query->all();
+       //dd($employees);
        
-         $employeeNameSelect = [];
+        $employeeNameSelect = [];
+        //$idEmp = [];
          foreach($employees as $employeeName):
-            $employeeNameSelect[] = $employeeName->name;
+              $employeeNameSelect[] = $employeeName->last_name;
+           //$idEmp[] = $employeeName->empNo;       
          endforeach;
-        // dd($employeeNameSelect);
+         
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $departmentInfo = $this->Departments->patchEntity($department, $this->request->getData());
+          
+           //Récupérer les infos du formulaire (input de type select), ici on récupère le last_name de l'employée selectionné
+           $nameEmp = $employeeNameSelect[$this->request->getData('employee')];
+           //dd($nameEmp);
 
+           //Trouver les emp_no des employées du département (de l'employée sélectionné)
+           $query = $this->getTableLocator()->get('employees')->find();  
+           $query->select(['empNo' => 'employees.emp_no'])
+            
+                 ->where(['last_name like' => '%'.$nameEmp.'%'])->limit(1);
+  
+           $emp_no = $query->first()->empNo;
+           //dd($emp_no);   
+           
+           //Assigner le titre de manager à l'employée sélectionné
+                //Récupérer emp_title_no de l'employée sélectionné pour pouvoir changer sa to_date à aujourd'hui (mettre fin à sa fonction actuelle)
+           $query = $this->getTableLocator()->get('employees')->find();  
+           $query->select(['titleEmp'=>'employee_title.emp_title_no'])
+                 ->join([
+                'employee_title' => [
+                'table' => 'employee_title',
+                'conditions' => 'employee_title.emp_no = employees.emp_no',
+            ]
+            ])
+            ->where(['employee_title.emp_no' => $emp_no]);
+           $employeeTitleNow = $query->first()->titleEmp;
+           //dd($employeeTitleNow);
+           
+           $employeeTitleInfo = $this->Departments->Employees->employee_title->get($employeeTitleNow, [
+                    'contain' => []
+                    ]);
+           //dd($employeeTitleInfo);
+           $employeeTitleInfo->to_date = new FrozenTime();
+           
+               //Créer une nouvelle entitée(une nouvelle ligne dans la table employee_title)
+                    //récupérer le dernier emp_title_no pour pouvoir l'incrémenter de 1
+               $query = $this->getTableLocator()->get('employees')->find();  
+               $query->select(['titleEmp'=>'employee_title.emp_title_no'])
+                 ->join([
+                'employee_title' => [
+                'table' => 'employee_title',
+                'conditions' => 'employee_title.emp_no = employees.emp_no',
+            ]
+            ])
+            ->order(['titleEmp' => 'DESC'])
+            ->limit(1);
+               
+            $queryEmpTitle = $query->first();
+            //dd($queryEmpTitle->titleEmp);
+            $last_emp_title_no = $queryEmpTitle->titleEmp +1;
+           //dd($last_emp_title_no);
+            $today = new FrozenTime();
+            $to_date = new FrozenTime('9999-01-01');
+           
+               //Ajout des données dans la nouvelle entitée
+            $employeeNewFunction = $this->Departments->Employees->employee_title->newEmptyEntity();
+            $employeeNewFunction->set('emp_no', $emp_no);
+            $employeeNewFunction->set('to_date', $to_date);
+            $employeeNewFunction->set('from_date', $today);
+            $employeeNewFunction->set('emp_title_no', $last_emp_title_no);
+            $employeeNewFunction->set('title_no', '3');
+            
+            
+            //Révoquer le manager actuel
+           $managerId = $department->managers[0]->emp_no;
+            //dd($managerId);
+            ///Changer la to_date du manager actuelle------------------------
+       /*    $managerInfo = $department->managers[0]->get($managerId, [  -->$managerId => est un int et pas une chaine de caractère donc get ne fct pas !
+                    'contain' => []
+                    ]);
+           //dd($managerInfo);
+           $managerRevok->to_date = new FrozenTime();  */
+           
+           /*$managerInfo = $this->LoadModel('dept_manager')->find()->select(['to_date'])->where(['emp_no' =>$managerId]);
+           dd($managerInfo->first()->to_date);*/
+           //TODO//
+           $deptManager = $this->LoadModel('Managers');
+          
+           $newManager = $deptManager->newEmptyEntity();
+           $newManager->set('from_date', $today);
+           //dd($endManager);
+           
+           
+            if ($this->Departments->save($departmentInfo)) {
+                $this->Flash->success(__('Le nom du départment a été sauvé.'));
+                
+             
+                //$employeeTitleInfo->to_date = new FrozenTime();
+                //dd($employeeTitleInfo->to_date);
+                
+                $employee = $this->Departments->Employees->get($emp_no, [
+                    'contain' => []
+                ]);
+                //dd($employee);
+                
+               //Lier les employées à leur départment
+               $this->Departments->Employees->link($department,[$employee]);
+
+                //return $this->redirect(['action' => 'index']);
+            } else {
+              $this->Flash->error(__('Le nom du départment n\'a pas pu être sauvé. Veuillez réessayer svp !'));
+            }
+            if($this->Departments->Employees->employee_title->save($employeeTitleInfo)){
+                $this->Flash->success(__('L\'employée sélectionné à cessé sa fonction actuelle.'));
+                
+              
+            } else {
+               $this->Flash->error(__('L\'employée n\' a pas cesser sa fonction actuelle. Un problème est survenu !'));
+            }
+         /*   if($this->Departments->Employees->  ->save($employeeTitleInfo)){
+                
+            } else {
+                  $this->Flash->error(__('Le manager actuelle n\'a pas été révoqué ! Veuillez réessayer !'));
+            }*/
+            if($this->Departments->Employees->employee_title->save($employeeNewFunction)){
+                 $this->Flash->success(__('L\'employée est devenu manager de son départment.'));
+
+                 return $this->redirect(['action' => 'index']);
+            } else { 
+                $this->Flash->error(__('L\'employée n\' a pu devenir manager. Un problème est survenu !'));
+
+            }
+        }
+     
+         
          $managers = $this->Departments->Managers->find('list', ['limit' => 200]);
 
-         $this->set(compact('managers', 'department','employeeNameSelect'));     
+      $this->set(compact('managers', 'department','employeeNameSelect','managersFirstName','managersLastName'));     
+        //$this->set(compact('managers', 'department','managersFirstName','managersLastName', 'employees'));     
  
     }
 
