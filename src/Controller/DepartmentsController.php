@@ -39,6 +39,8 @@ class DepartmentsController extends AppController
         $this->Authorization->skipAuthorization();
        
         $showRoi=false;
+        $showManager = false;
+
         if($this->Authentication->getResult()->isValid()){
             $showManager = true;
 
