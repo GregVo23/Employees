@@ -42,6 +42,7 @@ class UsersController extends AppController
     // in src/Controller/UsersController.php
     public function login()
     {
+        //dump($_SESSION);
         $result = $this->Authentication->getResult();
         // If the user is logged in send them away.
         if ($result->isValid())
@@ -56,7 +57,7 @@ class UsersController extends AppController
             $target_admin = $this->Authentication->getLoginRedirect() ?? '/admin';
             
             if(!empty($_SESSION['status'])){
-                if($_SESSION['status']==='Admin'){
+                if($_SESSION['status']==='Admin'||$_SESSION['status']==='Accountant'){
                     return $this->redirect($target_admin);
                 }else{
                     return $this->redirect($target);

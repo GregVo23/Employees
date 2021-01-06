@@ -5,36 +5,36 @@
  */
 ?>
 <div class="demands index content">
-    <h3><?= __('Demandes d\'augmentation') ?></h3>
-    <div class="table-responsive">
-        <table>
-            <thead>
-                <tr>
-                    <th><?= __('Employé') ?></th>
-                    <th><?= __('Département') ?></th>
-                    <th><?= __('Titre') ?></th>
-                    <th><?= __('Salaire actuel') ?></th>
-                    <th><?= __('Salaire demandé') ?></th>
-                    <th class="actions"><?= __('Actions') ?></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($raises as $raise): ?>
-                <tr>
-                    <td><?= h($raise->employee) ?></td>
-                    <td><?= h($raise->employeeDepartment) ?></td>
-                    <td><?= h($raise->employeeTitle) ?></td>
-                    <td><?= $this->Number->currency($raise->currentSalary, 'EUR') ?></td>
-                    <td><?= $this->Number->currency($raise->about, 'EUR') ?></td>
-                    <td class="actions">
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $raise->demand_no]) ?>
-                        <?= $this->Form->postLink(__('Annuler'), ['action' => 'cancel', $raise->demand_no], ['confirm' => __('Annuler la demande définitivement?')]) ?>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
+        <h3><?= __('Demandes d\'augmentation') ?></h3>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th><?= __('Employé') ?></th>
+                        <th><?= __('Département') ?></th>
+                        <th><?= __('Titre') ?></th>
+                        <th><?= __('Salaire actuel') ?></th>
+                        <th><?= __('Salaire demandé') ?></th>
+                        <th class="actions"><?= __('Actions') ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($raises as $raise): ?>
+                    <tr>
+                        <td><?= h($raise->employee) ?></td>
+                        <td><?= h($raise->employeeDepartment) ?></td>
+                        <td><?= h($raise->employeeTitle) ?></td>
+                        <td><?= $this->Number->currency($raise->currentSalary, 'EUR') ?></td>
+                        <td><?= $this->Number->currency($raise->about, 'EUR') ?></td>
+                        <td class="actions">
+                            <?= $this->Html->link(__('Edit'), ['action' => 'edit', $raise->demand_no]) ?>
+                            <?= $this->Form->postLink(__('Annuler'), ['action' => 'cancel', $raise->demand_no], ['confirm' => __('Annuler la demande définitivement?')]) ?>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
     <br />
     <hr />
     <?php if($_SESSION['status']!=='Accountant') { ?>

@@ -19,10 +19,10 @@
             <h3><?= h($employee->emp_no) ?></h3>
             <table>
                 <tr>
-                    <td><?= $this->Html->image(h($employee->picture), [
+                    <td><?= $this->Html->image(h("/img".$employee->picture), [
                                     "alt" => "employee picture",
                                     'class' => 'img-fluid emp_pict',
-                    ]);?>
+                            ]);?>
                     </td>
                 </tr>
                 <tr>

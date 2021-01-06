@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use Cake\I18n\FrozenTime;
 
 /**
  * EmployeeTitle Controller
@@ -113,53 +114,126 @@ class EmployeeTitleController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function newMannager($id = null) {
-        //ATTENTION retirer cet authorisation
+        //TODO retirer cet authorisation
         $this->Authorization->skipAuthorization();
         
-        //Nommer le nouveau manager
+        //Récupérer l'id et l'incrémenter
+        $query = $this->EmployeeTitle->find('all', ['order' => ['emp_title_no' => 'DESC']])->limit(1)->first();
+        $last_emp_title_no = $query->emp_title_no +1;
+
+        //Variables date du jour + variable date continue
+        $today = new FrozenTime(date('Y-m-d'));
+        $to_date = new FrozenTime('9999-01-01');
+
+        //Assignation des nouvelles données pour le nouveau poste de manager
+        $employee = $this->EmployeeTitle->newEmptyEntity();        
+        $employee->set('emp_no', $id);
+        $employee->set('to_date', $to_date);
+        $employee->set('from_date', $today);
+        $employee->set('emp_title_no', $last_emp_title_no);
+        $employee->set('title_no', '3');
         
+        //Rechercher l'employé
         $emp_title_no = $this->EmployeeTitle->find()->where(['emp_no =' => $id])->first();
         $emp_title_no = $emp_title_no->emp_title_no;
-        
-        $employee = $this->EmployeeTitle->newEmptyEntity();
-        $employeeNow = $this->EmployeeTitle->get($emp_title_no, [
-            'contain' => [],
-        ]);
-        
-        $titreManager = [
-            'title_no' => '3',];
-        
-        $employee = $this->EmployeeTitle->patchEntity($employeeNow, $titreManager);            
-        
-        //Suppression de l'ancien manager
+        $titleNow = $this->EmployeeTitle->get($emp_title_no);
 
-        $oldManager = $this->EmployeeTitle->find()->where(['title_no =' => '3'])->where(['to_date =' => '9999-01-01'])->first();
-        $emp_title_no = $oldManager->emp_title_no;
-        
-        $employee = $this->EmployeeTitle->newEmptyEntity();
-        $employeeNow = $this->EmployeeTitle->get($emp_title_no, [
-            'contain' => [],
-        ]);
-        
-        $titreManager = [
-            'to_date' => date()->format("Y-m-d"),];
-        
-        $noLonger = $this->EmployeeTitle->patchEntity($employeeNow, $titreManager);  
-        
-        //Messages de retour 
-        
-        if ($this->EmployeeTitle->save($employee)) {
-            $this->Flash->success(__('L\'employé est maintenant manager de son département.'));
+        //Definir la date de fin du poste actuel de l'employé a la date d'aujourd'hui.
+        $titleNow->set('to_date', $today);
+
+        if ($this->EmployeeTitle->save($titleNow)) {
+                $this->Flash->success(__('L\'employé a stoppé sa fonction actuelle.'));
         } else {
             $this->Flash->error(__('Une erreur est survenue.'));
         }
         
-        if ($this->EmployeeTitle->save($noLonger)) {
-            $this->Flash->success(__('L\'ancien manager n\a plus de poste chez Nestlé.'));
+        if ($this->EmployeeTitle->save($employee)) {
+                $this->Flash->success(__('L\'employé est désormais manager.'));
         } else {
-            $this->Flash->error(__('Une erreur est survenue, l\'ancien manager est toujours en place.'));
+            $this->Flash->error(__('Une erreur est survenue lors de la réception du nouveau titre.'));
         }
+                        
+        //Rechercher le numéro de departement actuel de l'employé
+        $query = $this->getTableLocator()->get('dept_emp')->find();
+        $query->select('dept_emp.dept_no')
+        ->where(['dept_emp.emp_no =' => $id]);
+        $result = $query->toArray();
+        $deptNo = $deptNo = $result[0]->dept_no;
+        
+        //recuperer l' "emp_title_no" du manager du departement de l'employé
+        $query = $this->getTableLocator()->get('employees')->find();
+        $query->select('employee_title.emp_title_no')
+        ->innerJoinWith('employee_title')
+        ->innerJoinWith('dept_manager')
+        ->where(['dept_manager.dept_no =' => $deptNo, 'employee_title.title_no =' => '3']);
+        $result = $query->toArray();
+        $emp_title_no_manager = $idManager = $result[0]->_matchingData["employee_title"]->emp_title_no;
+        
+        //récuperer l' "emp_title_no" du manager du departement du manager
+        $manNow = $this->EmployeeTitle->get($emp_title_no_manager);
+        
+        //Mise a jour -> Definir la date de fin du poste actuel a la date d'aujourd'hui.
+        $manNow->set('to_date', $today);
+        $empMan = $manNow->emp_no;
+        
+        //Recherche du dept_no du manager
+        $query = $this->getTableLocator()->get('dept_emp')->find();
+        $query->select('dept_emp.dept_no')
+        ->where(['dept_emp.emp_no =' => $empMan]);
+        $result = $query->toArray();
+        $deptNoMan = $deptNo = $result[0]->dept_no;
 
+        //Ajout du nouveaux manager dans la table dept_manager
+        $DeptManager = $this->loadModel('dept_manager');
+        $entDeptManager = $DeptManager->newEmptyEntity();
+        $entDeptManager->emp_no = $id;
+        $entDeptManager->dept_no = $deptNoMan;
+        $entDeptManager->from_date = $today;
+        $entDeptManager->to_date = '9999-01-01';
+        if ($DeptManager->save($entDeptManager)) {
+            $this->Flash->success(__('Le nouveau manager commence sa fonction actuelle.'));
+        }else{
+            $this->Flash->error(__('Une erreur est survenue.'));            
+        }
+        
+        if ($this->EmployeeTitle->save($manNow)) {
+                $employee = $this->EmployeeTitle->employees->get($empMan);
+                $department = $this->EmployeeTitle->employees->departments->get($deptNoMan);
+                
+                $department->_joinData = ['to_date' => '9999-01-01', 'from_date' => $today];
+                    //$employee->_joinData->to_date = '9999-01-01';
+                    //$employee->_joinData->from_date = $today;
+                $this->EmployeeTitle->employees->departments->link($employee,[$department]);
+                $this->Flash->success(__('L\'ancien manager a stoppé sa fonction actuelle.'));
+        } else {
+            $this->Flash->error(__('Une erreur est survenue.'));
+        }
+        
+        //Fin de versement de salaire ancien mannager.
+        $manSalaries = $this->loadModel('salaries');
+        
+        $salaryMan = $manSalaries
+        ->find()
+        ->where(['emp_no' => $id])
+        ->first();
+        $salaryDate = $salaryMan->from_date;
+        $salary = $salaryMan->salary;
+
+        $manSalary = [
+            'to_date' => $today,
+            'from_date' => $salaryDate,
+            'salary' => $salary,
+            'emp_no' => $id
+        ];
+
+        $dataSalary = $manSalaries->patchEntity($salaryMan, $manSalary);
+
+        if ($manSalaries->save($dataSalary)) {
+                $this->Flash->success(__('Stop du salaire de l\'ancien manager.'));
+        } else {
+            $this->Flash->error(__('l\'ancien manager recoit toujours son salaire.'));
+        }        
+        
         return $this->redirect(['controller' => 'employees', 'action' => 'index']);
     }
 }
