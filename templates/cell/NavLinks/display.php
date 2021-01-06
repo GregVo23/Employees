@@ -23,10 +23,6 @@
             <?= $this->Html->link('S\'inscrire', '/users/register', ['class' => 'btn btn-secondary justify-content-end mr-2'] ); ?>
         </li>
         <li class="d-flex justify-content-end">
-            <!-- Button trigger modal
-            <a type="button" class="btn btn-secondary justify-content-end mr-5" data-bs-toggle="modal" data-bs-target="#connexion">
-              Connexion
-            </a> -->
             <li class="d-flex justify-content-end">
                 <?= $this->Html->link('Connexion', '/users/login', ['class' => 'btn btn-danger justify-content-end mr-2'] ); ?>
             </li>

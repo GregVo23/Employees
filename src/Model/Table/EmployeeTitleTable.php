@@ -43,6 +43,11 @@ class EmployeeTitleTable extends Table
         
         $this->hasOne('employees', [
             'foreignKey' => 'emp_no',
+            'targetForeignKey' => 'emp_no'
+        ]);
+        $this->hasMany('departments', [
+            'foreignKey' => 'emp_no',
+            'targetForeignKey' => 'emp_no'
         ]);
     }
 
@@ -79,4 +84,23 @@ class EmployeeTitleTable extends Table
 
         return $validator;
     }
+    
+    
+        /**
+        * Fonction qui renvoit Les 3 départements présentant le plus de femmes
+        * @param Query $query
+        * @param array $options
+        * @return array
+        * req SQL = SELECT departments.dept_name, COUNT(employees.emp_no)FROM dept_emp,employees,departments WHERE dept_emp.dept_no = departments.dept_no AND dept_emp.emp_no = employees.emp_no AND employees.gender = 'F' GROUP BY departments.dept_no ORDER BY COUNT(employees.emp_no) desc LIMIT 3
+        */
+
+    
+       public function findMannager($id = null){
+       $query = $this->findByTitle_no('3');   
+       $query->innerJoinWith('employees')
+       ->innerJoinWith('departments')
+        ->where(['departments.dept_no =' => 'id']);
+       $result = $query->toArray();
+       return $result;
+       }
 }

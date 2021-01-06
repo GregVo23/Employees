@@ -63,8 +63,9 @@ class EmployeesTable extends Table
             'targetForeignKey' => 'emp_no',
         ]);
 
-        $this->hasMany('employee_title', [
+        $this->hasOne('employee_title', [
             'foreignKey' => 'emp_no',
+            'targetForeignKey' => 'emp_no',
         ]);
         
         $this->hasOne('dept_emp', [

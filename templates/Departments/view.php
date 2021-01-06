@@ -20,10 +20,11 @@
             
             <table>
                 <tr>
-                    <td><?= $this->Html->image(h("/img".$department->manager), [
-                        "alt" => "manager picture",
-                        'class' => 'img-fluid emp_pict',
-                    ]);?>
+                    <td><?php if(isset($department->manager)){}
+                            $this->Html->image(h("/img".$department->manager), [
+                            "alt" => "manager picture",
+                            'class' => 'img-fluid emp_pict',
+                            ]);?>
                     </td>
                 </tr>
                 <tr>

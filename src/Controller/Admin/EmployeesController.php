@@ -142,9 +142,7 @@ class EmployeesController extends AppController
             }
             $this->Flash->error(__('The employee could not be saved. Please, try again.'));
         }
-        
-        
-         
+
         $this->set(compact('employee'));
     }
 
