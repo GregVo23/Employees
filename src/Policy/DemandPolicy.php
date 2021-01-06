@@ -13,14 +13,6 @@ use Cake\ORM\TableRegistry;
  */
 class DemandPolicy
 {
-    public function before($user, $resource, $action)
-    {
-        $user = TableRegistry::getTableLocator()->get('Employees')->get($user->get('emp_no'), ["contain" => ['titles']]);
-        if ($user->titles[0]->title==='Admin'){
-            return true;
-        }
-    }
-
     /**
      * Check if $user can edit Demand
      *
@@ -41,6 +33,9 @@ class DemandPolicy
          * Si c'est pour une demande d'affectation seuls les managers du département de l'employé 
          * ou du département de la réaffectation son autorisés à modifier la demande.
          */
+        if ($user->titles[0]->title==='Admin'){
+            return true;
+        }
         $authorizedRoles = ['Manager', 'Accountant'];
         if(!in_array( $user->titles[0]->title, $authorizedRoles)){
             return new Result(false, 'No permission to edit demands.');
@@ -95,7 +90,9 @@ class DemandPolicy
          * Si c'est pour une demande d'affectation seuls les managers du département de l'employé 
          * ou du département de la réaffectation son autorisés à modifier la demande.
          */
-        
+        if ($user->titles[0]->title==='Admin'){
+            return true;
+        }
         if($demand->emp_no === $user->get('emp_no')){
             return new Result(true);
         }
