@@ -20,7 +20,7 @@
             
             <table>
                 <tr>
-                    <td><?= $this->Html->image(h("/img".$department->manager), [
+                    <td><?= $this->Html->image(h($department->manager), [
                         "alt" => "manager picture",
                         'class' => 'img-fluid emp_pict',
                     ]);?>
