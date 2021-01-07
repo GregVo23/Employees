@@ -43,14 +43,14 @@ class EmployeesTable extends Table
         $this->setTable('employees');
         $this->setDisplayField('emp_no');
         $this->setPrimaryKey('emp_no');
-        /*
+        
         $this->hasMany('salariesToday', [
             'foreignKey' => 'emp_no',
             'targetForeignKey' => 'emp_no',
             'className' => 'salaries',
-            'conditions' => ['Salaries.to_date' => '9999-01-01']
+            'conditions' => ['SalariesToday.to_date' => '9999-01-01']
         ]);
-        */
+        
         $this->hasMany('salaries', [
             'foreignKey' => 'emp_no',
             'targetForeignKey' => 'emp_no',

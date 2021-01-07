@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 namespace App\Controller\Admin;
-
+use Cake\I18n\FrozenTime;
 use App\Controller\AppController;
 
 /**
@@ -102,19 +102,74 @@ class DemandsController extends AppController
      *
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    public function validate($id)
     {
-        $demand = $this->Demands->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $demand = $this->Demands->patchEntity($demand, $this->request->getData());
-            if ($this->Demands->save($demand)) {
-                $this->Flash->success(__('The demand has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+        $demand = $this->Demands->get($id, [
+            'contain' => [],
+        ]);
+        $this->loadModel('Salaries');
+        $this->loadModel('Employees');
+        
+            $this->Authorization->skipAuthorization();
+            if ($this->request->is(['patch', 'post', 'put'])) {
+                $modifiedDemand = $this->Demands->findByDemandNo($id)->first()->toArray();
+                if($_SESSION['status']==='Accountant'){
+                    $modifiedDemand['status']='validated';
+                    $emp = $this->Employees->get($modifiedDemand['emp_no'], [
+                        'contain'=>['salariesToday']
+                    ]);
+                    $emp->salaries_today[0]->to_date=new FrozenTime();
+                    $salary = $emp->salaries_today[0];
+                }
+                else if ($_SESSION['status']==='Manager'){
+                    if($demand->validated_once){
+                        $modifiedDemand['status']='validated';
+                    }
+                    else{
+                        $modifiedDemand['validated_once'] = 1;
+                    }
+                }
+                else if($_SESSION['status']==='Admin'){
+                    $modifiedDemand['status']='validated';
+                }
+                $demand = $this->Demands->patchEntity($demand, $modifiedDemand);
+                if ($this->Demands->save($demand)) {
+                    $this->Flash->success(__('The demand has been saved.'));
+                    if($modifiedDemand['status']==='validated'){
+                        if($modifiedDemand['type']==='Raise'){
+                            $newSalary = $this->Salaries->newEmptyEntity();
+                            $newSalary->set('emp_no', $modifiedDemand['emp_no']);
+                            $newSalary->set('salary', $modifiedDemand['about']);
+                            $newSalary->set('from_date', new FrozenTime());
+                            $newSalary->set('to_date', new FrozenTime('9999-01-01'));
+                            if($this->Salaries->save($salary) && $this->Salaries->save($newSalary)){
+                                $this->Flash->success(__('The salary has been updated.'));
+                            }
+                        }else{
+                            //reaffectation
+                        }
+                    }
+    
+                    return $this->redirect(['action' => 'index']);
+                }
+                $this->Flash->error(__('The demand could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The demand could not be saved. Please, try again.'));
-        }
-        $this->set(compact('demand'));
+            $this->set(compact('demand'));
+        
+            return $this->redirect(['action' => 'index']);
+
+       
+        // $demand = $this->Demands->newEmptyEntity();
+        // if ($this->request->is('post')) {
+        //     $demand = $this->Demands->patchEntity($demand, $this->request->getData());
+        //     if ($this->Demands->save($demand)) {
+        //         $this->Flash->success(__('The demand has been saved.'));
+
+        //         return $this->redirect(['action' => 'index']);
+        //     }
+        //     $this->Flash->error(__('The demand could not be saved. Please, try again.'));
+        // }
+        // $this->set(compact('demand'));
     }
 
     /**

@@ -76,6 +76,7 @@ class DemandsController extends AppController
                 $demand->set('emp_no', $this->Authentication->getIdentity()->get('emp_no'));
                 $demand->set('type', 'Raise');
                 if ($this->Demands->save($demand)) {
+                    //TODO
                     $this->Flash->success(__('La demande a bien été introduite.'));
                     return $this->redirect(['action' => 'index']);
                 }else {

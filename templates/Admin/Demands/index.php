@@ -27,8 +27,9 @@
                         <td><?= $this->Number->currency($raise->currentSalary, 'EUR') ?></td>
                         <td><?= $this->Number->currency($raise->about, 'EUR') ?></td>
                         <td class="actions">
-                            <?= $this->Html->link(__('Edit'), ['action' => 'edit', $raise->demand_no]) ?>
-                            <?= $this->Form->postLink(__('Annuler'), ['action' => 'cancel', $raise->demand_no], ['confirm' => __('Annuler la demande définitivement?')]) ?>
+                            <?= $this->Form->postLink(__('Valider'), ['action' => 'validate', $raise->demand_no], ['confirm' => __('Valider la demande ?'), 'class'=>'btn btn-secondary' , 'style'=>'color:white'], ) ?>
+                            <?= $this->Html->link(__('Edit'), ['action' => 'edit', $raise->demand_no], ['class'=>'btn btn-secondary' , 'style'=>'color:white']) ?>
+                            <?= $this->Form->postLink(__('Annuler'), ['action' => 'cancel', $raise->demand_no, 'class'=>'btn btn-primary'], ['confirm' => __('Annuler la demande définitivement?'), 'class'=>'btn btn-danger' , 'style'=>'color:white']) ?>
                         </td>
                     </tr>
                     <?php endforeach; ?>
@@ -56,8 +57,9 @@
                     <td><?= h($incomer->employeeDepartment) ?></td>
                     <td><?= h($incomer->employeeTitle) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $incomer->demand_no]) ?>
-                        <?= $this->Form->postLink(__('Annuler'), ['action' => 'cancel', $incomer->demand_no], ['confirm' => __('Annuler la demande définitivement?')]) ?>
+                    <?= $this->Form->postLink(__('Valider'), ['action' => 'validate', $incomer->demand_no, 'class'=>'btn btn-primary'], ['confirm' => __('Valider la demande ?'), 'class'=>'btn btn-secondary' , 'style'=>'color:white']) ?>
+                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $incomer->demand_no], ['class'=>'btn btn-secondary' , 'style'=>'color:white']) ?>
+                        <?= $this->Form->postLink(__('Annuler'), ['action' => 'cancel', $incomer->demand_no, 'class'=>'btn btn-primary'], ['confirm' => __('Annuler la demande définitivement?'), 'class'=>'btn btn-secondary' , 'style'=>'color:white']) ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>
@@ -84,8 +86,9 @@
                     <td><?= h($leaver->department) ?></td>
                     <td><?= h($leaver->employeeTitle) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $leaver->demand_no]) ?>
-                        <?= $this->Form->postLink(__('Annuler'), ['action' => 'cancel',  $leaver->demand_no], ['confirm' => __('Annuler la demande définitivement?')]) ?>
+                        <?= $this->Form->postLink(__('Valider'), ['action' => 'validate', $leaver->demand_no, 'class'=>'btn btn-primary'], ['confirm' => __('Valider la demande ?'), 'class'=>'btn btn-secondary' , 'style'=>'color:white']) ?>
+                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $leaver->demand_no], ['class'=>'btn btn-secondary' , 'style'=>'color:white']) ?>
+                        <?= $this->Form->postLink(__('Annuler'), ['action' => 'cancel',  $leaver->demand_no, 'class'=>'btn btn-primary'], ['confirm' => __('Annuler la demande définitivement?'), 'class'=>'btn btn-secondary' , 'style'=>'color:white']) ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>
