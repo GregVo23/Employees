@@ -245,30 +245,17 @@ class DepartmentsController extends AppController
             $employeeNewFunction->set('title_no', '3');
             
             
-            //Révoquer le manager actuel
-         
-               //Récupérer l'emp_no du manager pour la query
-            //$managerId = $department->managers[0]->emp_no;
-              // dd($managerId);
-            ///Changer la to_date du manager actuelle------------------------
-                //$managerIdString = strval($managerId);
-                //dd($managerIdString);
+            
+           $manDeptModel = $this->LoadModel('dept_manager');
+
+           $managerRevok = $manDeptModel 
+                          ->find()
+                          ->where(['emp_no' => $managerId])
+                          ->where(['to_date' => '9999-01-01'])
+                          ->first();
+
+           $managerRevok->set('to_date', $today);
            
-           /*$managerInfo = $department->managers[0]->get($managerId, [  //-->$managerId => est un int et pas une chaine de caractère donc get ne fct pas !
-                    'contain' => []
-                   ]); 
-           dd($managerInfo);     OU  */
-           /* $managerInfo = $this->LoadModel('dept_manager')->find()->select(['to_date'])->where(['emp_no' =>$managerId]);
-           dd($managerInfo->first()->to_date);*/
-           
-            $queryManager = $this->getTableLocator()->get('dept_manager')->find();  
-            $queryManager->select(['toDate'=>'dept_manager.to_date'])
-                         ->where(['dept_manager.emp_no =' => $managerId]);
-            $managerRevok = $queryManager->first();
-            //dd($managerInfo);
-           
-            $managerRevok->toDate = new FrozenTime();  
-            //dd($managerInfo->toDate);
            
            //Création de la nouvelle entité dans dept_manager pour le nouveau manager (sélectionné parmi les employées du department)
            $managerModel = $this->LoadModel('dept_manager');
@@ -277,17 +264,27 @@ class DepartmentsController extends AppController
            $newManager->set('dept_no',$departmentDeptNo);
            $newManager->set('from_date',$today);
            $newManager->set('to_date',$to_date);
-           //dd($endManager);
+
            
            //Mettre fin au salaire du manager actuel lorsque l'on en désigne un nouveau 
-                //Modifier la date to_date du manager qui sera remplacé
-            $queryStopSalary = $this->getTableLocator()->get('salaries')->find();  
-            $queryStopSalary->select(['toDate'=>'salaries.to_date'])
-                         ->where(['salaries.emp_no =' => $managerId]);
-            $managerStopSalary = $queryManager->first();
-            //dd($managerStopSalary->toDate);
+            //Modifier la date to_date du manager qui sera remplacé
            
-            $managerStopSalary->toDate = new FrozenTime(); 
+           $managerModel = $this->LoadModel('salaries');
+
+           $managerSalary = $managerModel 
+                          ->find()
+                          ->where(['emp_no' => $managerId])
+                          ->where(['to_date' => '9999-01-01'])
+                          ->first();
+
+           $managerSalary->set('to_date', $today);
+           
+
+
+           
+           
+           
+           
            
         }
           
@@ -318,11 +315,11 @@ class DepartmentsController extends AppController
                    $this->Flash->success(__('L\'employée sélectionné à cessé sa fonction actuelle.'));
                      //dd($_POST['employee']);
 
-                    if($this->Departments->Employees->dept_manager->save($managerRevok)){
+                    if($manDeptModel->save($managerRevok)){
                          $this->Flash->success(__('Le manager actuelle a été révoqué (fin de sa fonction).'));
                                 if($this->Departments->Employees->dept_manager->save($newManager)){
                                     $this->Flash->success(__('Création de la nouvelle entité dans la table dept_manager pour l\'employée devenu manager.'));
-                                        if($this->Departments->Employees->dept_manager->save($managerStopSalary)){
+                                        if($managerModel->save($managerSalary)){
                                             $this->Flash->error(__('Le salaire du manager a cessé !'));
 
                                         } else {
