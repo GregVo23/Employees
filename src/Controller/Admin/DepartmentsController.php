@@ -151,7 +151,8 @@ class DepartmentsController extends AppController
         //Partie manager(name + hire date):
           $managersFirstName = $department->managers[0]->first_name;
           $managersLastName = $department->managers[0]->last_name;
- 
+          $managerId = $department->managers[0]->emp_no;
+        // dd($managersId);
                //Trouver les employees du département
          $query = $this->getTableLocator()->get('employees')->find();  
          $query->select(['empNo' => 'employees.emp_no' ,'last_name'])  //Le emp_no n'est pas vraiment nécessaire ici mais bon...
@@ -163,8 +164,7 @@ class DepartmentsController extends AppController
             ])
             ->where(['dept_emp.dept_no' => $id])->limit(15)
             ->where(['dept_emp.to_date =' => '9999-01-01']);
-            
-         //Conversion de l'objet itérable en tableau   
+              
         $employees = $query->all();
        //dd($employees);
        
@@ -173,28 +173,33 @@ class DepartmentsController extends AppController
          foreach($employees as $employeeName):
               $employeeNameSelect[] = $employeeName->last_name;
            //$idEmp[] = $employeeName->empNo;       
-         endforeach;
+         endforeach;       
+         $departmentCurrentName =  $department->dept_name;
+         $departmentDeptNo =  $department->dept_no;
+         
          
         if ($this->request->is(['patch', 'post', 'put'])) {
             $departmentInfo = $this->Departments->patchEntity($department, $this->request->getData());
-          
+            
+          //Pour nommer l'employée sélectionné manager
            //Récupérer les infos du formulaire (input de type select), ici on récupère le last_name de l'employée selectionné
-           $nameEmp = $employeeNameSelect[$this->request->getData('employee')];
+          if($_POST['employee'] !== ''){
+            $nameEmp = $employeeNameSelect[$this->request->getData('employee')];
            //dd($nameEmp);
-
+          
            //Trouver les emp_no des employées du département (de l'employée sélectionné)
-           $query = $this->getTableLocator()->get('employees')->find();  
-           $query->select(['empNo' => 'employees.emp_no'])
+           $queryEmp = $this->getTableLocator()->get('employees')->find();  
+           $queryEmp->select(['empNo' => 'employees.emp_no'])
             
                  ->where(['last_name like' => '%'.$nameEmp.'%'])->limit(1);
   
-           $emp_no = $query->first()->empNo;
+           $emp_no = $queryEmp->first()->empNo;
            //dd($emp_no);   
            
            //Assigner le titre de manager à l'employée sélectionné
                 //Récupérer emp_title_no de l'employée sélectionné pour pouvoir changer sa to_date à aujourd'hui (mettre fin à sa fonction actuelle)
-           $query = $this->getTableLocator()->get('employees')->find();  
-           $query->select(['titleEmp'=>'employee_title.emp_title_no'])
+           $queryTitle = $this->getTableLocator()->get('employees')->find();  
+           $queryTitle->select(['titleEmp'=>'employee_title.emp_title_no'])
                  ->join([
                 'employee_title' => [
                 'table' => 'employee_title',
@@ -202,7 +207,7 @@ class DepartmentsController extends AppController
             ]
             ])
             ->where(['employee_title.emp_no' => $emp_no]);
-           $employeeTitleNow = $query->first()->titleEmp;
+           $employeeTitleNow = $queryTitle->first()->titleEmp;
            //dd($employeeTitleNow);
            
            $employeeTitleInfo = $this->Departments->Employees->employee_title->get($employeeTitleNow, [
@@ -231,7 +236,7 @@ class DepartmentsController extends AppController
             $today = new FrozenTime();
             $to_date = new FrozenTime('9999-01-01');
            
-               //Ajout des données dans la nouvelle entitée
+               //Ajout des données dans la nouvelle entitée dans la table employee_title
             $employeeNewFunction = $this->Departments->Employees->employee_title->newEmptyEntity();
             $employeeNewFunction->set('emp_no', $emp_no);
             $employeeNewFunction->set('to_date', $to_date);
@@ -241,71 +246,114 @@ class DepartmentsController extends AppController
             
             
             //Révoquer le manager actuel
-           $managerId = $department->managers[0]->emp_no;
-            //dd($managerId);
+         
+               //Récupérer l'emp_no du manager pour la query
+            //$managerId = $department->managers[0]->emp_no;
+              // dd($managerId);
             ///Changer la to_date du manager actuelle------------------------
-       /*    $managerInfo = $department->managers[0]->get($managerId, [  -->$managerId => est un int et pas une chaine de caractère donc get ne fct pas !
-                    'contain' => []
-                    ]);
-           //dd($managerInfo);
-           $managerRevok->to_date = new FrozenTime();  */
+                //$managerIdString = strval($managerId);
+                //dd($managerIdString);
            
-           /*$managerInfo = $this->LoadModel('dept_manager')->find()->select(['to_date'])->where(['emp_no' =>$managerId]);
+           /*$managerInfo = $department->managers[0]->get($managerId, [  //-->$managerId => est un int et pas une chaine de caractère donc get ne fct pas !
+                    'contain' => []
+                   ]); 
+           dd($managerInfo);     OU  */
+           /* $managerInfo = $this->LoadModel('dept_manager')->find()->select(['to_date'])->where(['emp_no' =>$managerId]);
            dd($managerInfo->first()->to_date);*/
-           //TODO//
-           $deptManager = $this->LoadModel('Managers');
-          
-           $newManager = $deptManager->newEmptyEntity();
-           $newManager->set('from_date', $today);
+           
+            $queryManager = $this->getTableLocator()->get('dept_manager')->find();  
+            $queryManager->select(['toDate'=>'dept_manager.to_date'])
+                         ->where(['dept_manager.emp_no =' => $managerId]);
+            $managerRevok = $queryManager->first();
+            //dd($managerInfo);
+           
+            $managerRevok->toDate = new FrozenTime();  
+            //dd($managerInfo->toDate);
+           
+           //Création de la nouvelle entité dans dept_manager pour le nouveau manager (sélectionné parmi les employées du department)
+           $managerModel = $this->LoadModel('dept_manager');
+           $newManager = $managerModel->newEmptyEntity();
+           $newManager->set('emp_no',$emp_no);
+           $newManager->set('dept_no',$departmentDeptNo);
+           $newManager->set('from_date',$today);
+           $newManager->set('to_date',$to_date);
            //dd($endManager);
            
+           //Mettre fin au salaire du manager actuel lorsque l'on en désigne un nouveau 
+                //Modifier la date to_date du manager qui sera remplacé
+            $queryStopSalary = $this->getTableLocator()->get('salaries')->find();  
+            $queryStopSalary->select(['toDate'=>'salaries.to_date'])
+                         ->where(['salaries.emp_no =' => $managerId]);
+            $managerStopSalary = $queryManager->first();
+            //dd($managerStopSalary->toDate);
            
-            if ($this->Departments->save($departmentInfo)) {
-                $this->Flash->success(__('Le nom du départment a été sauvé.'));
-                
-             
-                //$employeeTitleInfo->to_date = new FrozenTime();
-                //dd($employeeTitleInfo->to_date);
-                
-                $employee = $this->Departments->Employees->get($emp_no, [
-                    'contain' => []
-                ]);
-                //dd($employee);
-                
-               //Lier les employées à leur départment
-               $this->Departments->Employees->link($department,[$employee]);
+            $managerStopSalary->toDate = new FrozenTime(); 
+           
+        }
+          
+          if($departmentCurrentName != $_POST['dept_name']){
+                if ($this->Departments->save($departmentInfo)) {
+                    $this->Flash->success(__('Le nom du départment a été sauvé.'));
+                    //dd($departmentInfo);
 
-                //return $this->redirect(['action' => 'index']);
-            } else {
-              $this->Flash->error(__('Le nom du départment n\'a pas pu être sauvé. Veuillez réessayer svp !'));
-            }
-            if($this->Departments->Employees->employee_title->save($employeeTitleInfo)){
-                $this->Flash->success(__('L\'employée sélectionné à cessé sa fonction actuelle.'));
-                
-              
-            } else {
-               $this->Flash->error(__('L\'employée n\' a pas cesser sa fonction actuelle. Un problème est survenu !'));
-            }
-         /*   if($this->Departments->Employees->  ->save($employeeTitleInfo)){
-                
-            } else {
-                  $this->Flash->error(__('Le manager actuelle n\'a pas été révoqué ! Veuillez réessayer !'));
-            }*/
-            if($this->Departments->Employees->employee_title->save($employeeNewFunction)){
-                 $this->Flash->success(__('L\'employée est devenu manager de son départment.'));
+                    //$employeeTitleInfo->to_date = new FrozenTime();
+                    //dd($employeeTitleInfo->to_date);
 
-                 return $this->redirect(['action' => 'index']);
-            } else { 
-                $this->Flash->error(__('L\'employée n\' a pu devenir manager. Un problème est survenu !'));
+                    $employee = $this->Departments->Employees->get($emp_no, [
+                        'contain' => []
+                    ]);
+                    //dd($employee);
 
-            }
+                   //Lier les employées à leur départment
+                   $this->Departments->Employees->link($department,[$employee]);
+
+                    //return $this->redirect(['action' => 'index']);
+                } else {
+                  $this->Flash->error(__('Le nom du départment n\'a pas pu être sauvé. Veuillez réessayer svp !'));
+                }
+           }
+           
+           if($_POST['employee'] !== ''){
+                if($this->Departments->Employees->employee_title->save($employeeTitleInfo)){
+                   $this->Flash->success(__('L\'employée sélectionné à cessé sa fonction actuelle.'));
+                     //dd($_POST['employee']);
+
+                    if($this->Departments->Employees->dept_manager->save($managerRevok)){
+                         $this->Flash->success(__('Le manager actuelle a été révoqué (fin de sa fonction).'));
+                                if($this->Departments->Employees->dept_manager->save($newManager)){
+                                    $this->Flash->success(__('Création de la nouvelle entité dans la table dept_manager pour l\'employée devenu manager.'));
+                                        if($this->Departments->Employees->dept_manager->save($managerStopSalary)){
+                                            $this->Flash->error(__('Le salaire du manager a cessé !'));
+
+                                        } else {
+                                             $this->Flash->error(__('Un problème est survenu lors de la mise en arrêt du salaire!'));
+                                        }
+                                }else{
+                                   $this->Flash->error(__('Problème lors de la création de l\'entité dans la table dept_manager !'));
+                                }   
+                     } else {
+                         $this->Flash->error(__('Le manager actuelle n\'a pas été révoqué ! Veuillez réessayer !'));
+                     }
+
+                     if($this->Departments->Employees->employee_title->save($employeeNewFunction)){
+                        $this->Flash->error(__('L\'employée n\' a pu devenir manager. Un problème est survenu !'));
+
+                        return $this->redirect(['action' => 'index']);
+                        
+                     } else { 
+                        $this->Flash->error(__('L\'employée n\' a pu devenir manager. Un problème est survenu !'));
+                     } 
+                } else {
+                    $this->Flash->error(__('L\'employée n\' a pas cesser sa fonction actuelle. Un problème est survenu !'));
+                }
+           }
+           
         }
      
          
          $managers = $this->Departments->Managers->find('list', ['limit' => 200]);
 
       $this->set(compact('managers', 'department','employeeNameSelect','managersFirstName','managersLastName'));     
-        //$this->set(compact('managers', 'department','managersFirstName','managersLastName', 'employees'));     
  
     }
 
