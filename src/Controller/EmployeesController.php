@@ -61,7 +61,6 @@ class EmployeesController extends AppController
             }
         }
       
-        //$this->Authorization->skipAuthorization();
 
         $this->set(compact('employee'));
     }
@@ -180,6 +179,7 @@ class EmployeesController extends AppController
         $women = $this->Employees->findByGender('F')->count();
         $men = $this->Employees->findByGender('M')->count();
         
+        //Les femmes employées par années
         $result = $this->Employees->findWomenHire();
         foreach($result['years'] as $year):
             $yearWomen[] = $year;
@@ -188,18 +188,21 @@ class EmployeesController extends AppController
             $nbHireWomen[] = $nbHire;
         endforeach;
 
-        //$result = $this->Employees->findLessWomenDep();
-        //foreach($result as $depLess):
-        //    $depNameLessWomen[] = $depLess->depName;
-        //    $nbDepLessWomen[] = $depLess->nbWomenDep;
-        //endforeach;
-
+        //Les 3 départements contenant "le plus"/"le moins" d'employées femmes
         $result = $this->Employees->findMoreWomenDep();
+        $cpt = 0;
         foreach($result as $depMore):
-            $depNameMoreWomen[] = $depMore->depName;
-            $nbDepMoreWomen[] = $depMore->nbWomenDep;
+            $cpt++;
+            if($cpt < 4):
+                $depNameMoreWomen[] = $depMore->depName;
+                $nbDepMoreWomen[] = $depMore->nbWomenDep;                            
+            endif;
+            if($cpt > 6):
+                $depNameLessWomen[] = $depMore->depName;
+                $nbDepLessWomen[] = $depMore->nbWomenDep;                
+            endif;
         endforeach;
-
+        
         $nbWomenManager = $this->Employees->findWomenManager();
         $nbMenManager = $this->Employees->findMenManager();
         
@@ -212,13 +215,12 @@ class EmployeesController extends AppController
         $this->set('nbHireWomen',$nbHireWomen);
         $this->set('nbWomenManager',$nbWomenManager);
         $this->set('nbMenManager',$nbMenManager);
-        //$this->set('depNameLessWomen',$depNameLessWomen);
-        //$this->set('nbDepLessWomen',$nbDepLessWomen);
+        $this->set('depNameLessWomen',$depNameLessWomen);
+        $this->set('nbDepLessWomen',$nbDepLessWomen);
         $this->set('depNameMoreWomen',$depNameMoreWomen);
         $this->set('nbDepMoreWomen',$nbDepMoreWomen);
         
         //Envoyer vers la vue spécifié
         $this->render('/women_at_work/indexWomen');
     }
-    
 }

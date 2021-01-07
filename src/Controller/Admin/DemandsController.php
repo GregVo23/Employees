@@ -20,24 +20,14 @@ class DemandsController extends AppController
     }
     /**
      * Index method
+     * @var $raises raises demands.
+     * @var $incomers demands from people outside our department and want to come in.
+     * @var $leaving demands from people inside our department and want to leave for another one.
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
     public function index()
     {
-        /**
-         * Cas de figure : 
-         *  
-         *   Manager:
-         * - Les employés de mon département qui veulent une augmentation $raises
-         * - Les employés de mon département qui veulent être muté ailleurs $incomers
-         * - Les employés d'un autre département qui veulent être muté chez moi. $outcomers
-         * 
-         *   Comptable:
-         * - Les employés qui veulent une augmentation.
-         * 
-         */
-
         $raises = $incomers = $leaving = [];
 
         $this->loadModel('Employees');
@@ -48,16 +38,19 @@ class DemandsController extends AppController
         ]);
         $userDept = $user->departments[0]->dept_no;
         $demands = $this->Demands->find()->toArray();
+
         foreach($demands as $demand){
+
             if($demand->status === 'pending'){
+
                 if($demand->type === 'Raise'){
                     
                     $demandEmployee = $this->Employees->get($demand->emp_no, ['contain' => ['departments', 'titles']]);
                     if($_SESSION['status'] === 'Admin'
-                        || $_SESSION['status'] === 'Accountant'
-                        || $userDept === $demandEmployee->departments[0]->dept_no){
+                        || ($_SESSION['status'] === 'Accountant' && $demand->validated_once)
+                        || ($_SESSION['status'] === 'Manager' && $userDept === $demandEmployee->departments[0]->dept_no && !$demand->validated_once)){
+
                         $demandEmployeeSalary = $this->Employees->get($demand->emp_no, ['contain' => ['salaries']])->salaries[0]->salary;
-                       // dd($demandEmployeeSalary);
                         $demand->about = $demand->about;
                         $demand->currentSalary = $demandEmployeeSalary;
                         $demand->employee = $demandEmployee->first_name . ' ' . $demandEmployee->last_name;
@@ -73,14 +66,13 @@ class DemandsController extends AppController
                     $demand->employee = $demandEmployee->first_name . ' ' . $demandEmployee->last_name;
                     $demand->employeeTitle = $demandEmployee->titles[0]->title;
 
-                    if($demand->about === $userDept){
+                    if($demand->about === $userDept && $demand->validated_once){
                         $demand->employeeDepartment = $demandEmployee->departments[0]->dept_name;
                         $incomers[] = $demand;
                     }else{
                         $demand->department = $demandDept->dept_name;
-
                         $demandEmployeeDept = $demandEmployee->departments[0]->dept_no;
-                        if($userDept===$demandEmployeeDept || $_SESSION['status'] === 'Admin'){
+                        if(($userDept===$demandEmployeeDept && !$demand->validated_once) || $_SESSION['status'] === 'Admin'){
                             $leaving[] = $demand;
                         }
                     }
@@ -154,6 +146,33 @@ class DemandsController extends AppController
             return $this->redirect(['action' => 'index']);
         };
        
+    }
+
+    /**
+     * Cancel method
+     *
+     * @param string|null $id Demand id.
+     * @return \Cake\Http\Response|null|void Redirects to index.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function cancel($id = null)
+    {
+        $demand =$this->Demands->get($id);
+        $this->Authorization->authorize($demand);
+        $modifiedDemand = $this->Demands->findByDemandNo($id)->first()->toArray();
+        $modifiedDemand['status']='cancelled';
+        $adminRoles= ['Accountant', 'Admin', 'Manager'];
+
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $demand = $this->Demands->patchEntity($demand, $modifiedDemand);
+            if ($this->Demands->save($demand)) {
+                $this->Flash->success(__('La demande a été annulée.'));
+                return $this->redirect(['action' => 'index']);
+                
+            }
+            $this->Flash->error(__('The demand could not be cancelled. Please, try again.'));
+        }
+        $this->set(compact('demand'));
     }
 
     /**

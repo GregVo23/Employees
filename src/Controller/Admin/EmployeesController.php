@@ -142,9 +142,7 @@ class EmployeesController extends AppController
             }
             $this->Flash->error(__('The employee could not be saved. Please, try again.'));
         }
-        
-        
-         
+
         $this->set(compact('employee'));
     }
 
@@ -186,69 +184,4 @@ class EmployeesController extends AppController
         $this->set('employees',$employees);
         $this->render('index'); //Définit un template spécifique
     }
-
-    
-    //----------------------|*| WOMEN AT WORK PAGE VIEW |*|------------------------//
-
-    /**
-     * indexWomen method
-     * @version 1.0
-     */    
-    public function indexWomen()
-    {
-        //Récupérer les données de la base de données
-        $employees = $this->Employees;
-        
-        //Préparation des Cells
-        $cellMenWomenRatio = $this->cell('Inbox');
-        $cellNbWomen = $this->cell('nbWomen');
-       
-        //Préparer, modifier ces données
-        $employees = $this->paginate($employees);
-        $women = $this->Employees->findByGender('F')->count();
-        $men = $this->Employees->findByGender('M')->count();
-        
-        $result = $this->Employees->findWomenHire();
-        foreach($result['years'] as $year):
-            $yearWomen[] = $year;
-        endforeach;
-        foreach($result['nbHire'] as $nbHire):
-            $nbHireWomen[] = $nbHire;
-        endforeach;
-
-        $result = $this->Employees->findLessWomenDep();
-        foreach($result as $depLess):
-            $depNameLessWomen[] = $depLess->depName;
-            $nbDepLessWomen[] = $depLess->nbWomenDep;
-        endforeach;
-
-        $result = $this->Employees->findMoreWomenDep();
-        foreach($result as $depMore):
-            $depNameMoreWomen[] = $depMore->depName;
-            $nbDepMoreWomen[] = $depMore->nbWomenDep;
-        endforeach;
-
-        $nbWomenManager = $this->Employees->findWomenManager();
-        $nbMenManager = $this->Employees->findMenManager();
-        
-        //Envoyer vers la vue
-        $this->set('employee',$employees);
-        $this->set('nbWomen',$women);
-        $this->set('nbMen',$men);
-        $this->set('cellMenWomenRatio',$cellMenWomenRatio);
-        $this->set('cellNbWomen',$cellNbWomen);
-        $this->set('yearWomen',$yearWomen);
-        $this->set('nbHireWomen',$nbHireWomen);
-        $this->set('nbWomenManager',$nbWomenManager);
-        $this->set('nbMenManager',$nbMenManager);
-        $this->set('depNameLessWomen',$depNameLessWomen);
-        $this->set('nbDepLessWomen',$nbDepLessWomen);
-        $this->set('depNameMoreWomen',$depNameMoreWomen);
-        $this->set('nbDepMoreWomen',$nbDepMoreWomen);
-        
-        //Envoyer vers la vue spécifié
-        $this->render('/women_at_work/indexWomen');
-    }
-    
-
 }

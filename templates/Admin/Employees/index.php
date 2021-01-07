@@ -11,8 +11,8 @@
         'controller'=>'Employees',
         'action' => 'getAllByGender',
         'f'
-    ], ['class' => 'btn btn-primary mx-2 float-right']) ?>
-    <?= $this->Html->link(__('Men'), ['action' => 'getAllByGender','m'], ['class' => 'btn btn-primary mx-2 float-right']) ?>
+    ], ['class' => 'btn btn-secondary mx-2 float-right']) ?>
+    <?= $this->Html->link(__('Men'), ['action' => 'getAllByGender','m'], ['class' => 'btn btn-secondary mx-2 float-right']) ?>
     
         <!-- Inbox Cell à enlever sûrement car pas besoin, supprimer même toute la cell -->
     <?= $inbox = $this->cell('Inbox'); ?>
@@ -42,9 +42,23 @@
                     <td><?= h($employee->gender) ?></td>
                     <td><?= h($employee->hire_date) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $employee->emp_no]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $employee->emp_no]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $employee->emp_no], ['confirm' => __('Are you sure you want to delete # {0}?', $employee->emp_no)]) ?>
+                        <?= $this->Html->image("view.png", [
+                            "alt" => "view",
+                            'url' => ['action' => 'view', $employee->emp_no],
+                            'width' => 50                          
+                        ]);?>
+                        
+                        <?= $this->Html->image("edit.png", [
+                            "alt" => "view",
+                            'url' => ['action' => 'edit', $employee->emp_no],
+                            'width' => 50                           
+                        ]);?>
+                        
+                        <?= $this->Html->image("delete.png", [
+                            "alt" => "view",
+                            'url' => ['action' => 'delete', $employee->emp_no], ['confirm' => __('Are you sure you want to delete # {0}?', $employee->emp_no)],
+                            'width' => 50                           
+                        ]);?>
                     </td>
                 </tr>
                 <?php endforeach; ?>

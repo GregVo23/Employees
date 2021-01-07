@@ -91,3 +91,17 @@
     {
         padding-bottom: 10px;
     }
+    
+/* LOGIN / CONNEXION */
+
+.bouton
+{
+    margin-top: 10px;
+}
+
+/* SMARTPHONE MENU */
+
+#navbarSupportedContent
+{
+    background-color: #f8f9fa !important;
+}

@@ -28,7 +28,7 @@
                             echo $this->Form->control('email');
                         ?>
                     </fieldset>
-                    <?= $this->Form->button(__('Submit')) ?>
+                    <?= $this->Form->button(__('Submit'), ['class' => 'bouton']) ?>
                     <?= $this->Form->end() ?>
                 </div>
             </div>

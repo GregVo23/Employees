@@ -39,7 +39,11 @@ class DepartmentsController extends AppController
         $this->Authorization->skipAuthorization();
        
         $showRoi=false;
+        $showManager = false;
+
         if($this->Authentication->getResult()->isValid()){
+            $showManager = true;
+
             $emp = $this->Authentication->getIdentity()->get('emp_no');
             $employees = $this->getTableLocator()->get('Employees')->
                  get($emp, [
@@ -81,7 +85,7 @@ class DepartmentsController extends AppController
         endforeach;
           
         //Envoyer à la vue
-        $this->set(compact('department', 'result', 'rules', 'description', 'showRoi'));
+        $this->set(compact('department', 'result', 'rules', 'description', 'showRoi', 'showManager'));
     }
 
     /**

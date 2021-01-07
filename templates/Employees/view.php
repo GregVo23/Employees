@@ -22,7 +22,7 @@
                     <td><?= $this->Html->image(h($employee->picture), [
                                     "alt" => "employee picture",
                                     'class' => 'img-fluid emp_pict',
-                    ]);?>
+                            ]);?>
                     </td>
                 </tr>
                 <tr>

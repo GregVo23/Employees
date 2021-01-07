@@ -19,13 +19,15 @@
             <h3><?= h($department->dept_no) ?></h3>
             
             <table>
+            <?php if($showManager) { ?>
                 <tr>
-                    <td><?= $this->Html->image(h("/img".$department->manager), [
-                        "alt" => "manager picture",
-                        'class' => 'img-fluid emp_pict',
-                    ]);?>
+                    <td><?= $this->Html->image(h($department->manager), [
+                                    "alt" => "manager picture",
+                                    'class' => 'img-fluid emp_pict',
+                            ]);?>
                     </td>
                 </tr>
+            <?php } ?>
                 <tr>
                     <th><?= __('Dept No') ?></th>
                     <td><?= h($department->dept_no) ?></td>

@@ -13,14 +13,6 @@ use Cake\ORM\TableRegistry;
  */
 class DemandPolicy
 {
-    public function before($user, $resource, $action)
-    {
-        $user = TableRegistry::getTableLocator()->get('Employees')->get($user->get('emp_no'), ["contain" => ['titles']]);
-        if ($user->titles[0]->title==='Admin'){
-            return true;
-        }
-    }
-
     /**
      * Check if $user can edit Demand
      *
@@ -41,6 +33,9 @@ class DemandPolicy
          * Si c'est pour une demande d'affectation seuls les managers du département de l'employé 
          * ou du département de la réaffectation son autorisés à modifier la demande.
          */
+        if ($user->titles[0]->title==='Admin'){
+            return true;
+        }
         $authorizedRoles = ['Manager', 'Accountant'];
         if(!in_array( $user->titles[0]->title, $authorizedRoles)){
             return new Result(false, 'No permission to edit demands.');
@@ -95,21 +90,40 @@ class DemandPolicy
          * Si c'est pour une demande d'affectation seuls les managers du département de l'employé 
          * ou du département de la réaffectation son autorisés à modifier la demande.
          */
+        if ($user->titles[0]->title==='Admin'){
+            return true;
+        }
         if($demand->emp_no === $user->get('emp_no')){
             return new Result(true);
-        }elseif($user->titles[0]->title === 'Accountant' && $demand->type==="reassignment"){
-            return new Result(false, 'Doesn\'t concern accounting.');
-        }elseif($user->titles[0]->title === 'Accountant'){
-            return new Result(true);
-        }elseif($demand->type==="Reassignment" && $user->titles[0]->title === 'Manager'){
-            if ($user->departments[0]->dept_no === $demand->about || $user->departments[0]->dept_no === $employee->departments[0]->dept_no){
-                return new Result(true);
-            }else{
-                return new Result(false, 'This demand does not concern your department');
-            };
         }
-        return new Result(false, 'You do not have permission to cancel this demand');
-        
+        if($demand->type==="Raise"){
+            if($user->titles[0]->title === 'Accountant'){
+                return new Result(true);
+            } 
+            elseif($user->titles[0]->title === 'Manager'){
+                if ($user->departments[0]->dept_no === $employee->departments[0]->dept_no){
+                    return new Result(true);
+                }else{
+                    return new Result(false, 'This demand does not concern your department');
+                }; 
+            }else{
+                return new Result(false, 'You do not have permission to do this action.');
+            }
+        }
+        if($demand->type==="Reassignment"){
+            if($user->titles[0]->title === 'Accountant'){
+                return new Result(false, 'Does not concern accounting.');
+            } 
+            elseif($user->titles[0]->title === 'Manager'){
+                if ($user->departments[0]->dept_no === $employee->departments[0]->dept_no || $user->departments[0]->dept_no === $demand->about){
+                    return new Result(true);
+                }else{
+                    return new Result(false, 'This demand does not concern your department');
+                }; 
+            }else{
+                return new Result(false, 'You do not have permission to do this action.');
+            }
+        }
     }
 
     /**

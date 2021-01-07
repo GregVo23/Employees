@@ -45,19 +45,15 @@
                     <th><?= __('Type') ?></th>
                         <th><?= __('Pour') ?></th>
                         <th><?= __('Statut') ?></th>
-                        <th class="actions"><?= __('Actions') ?></th>
+                       
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($passed as $demand): ?>
                     <tr>
-                        <td><?= h($demand->type) ?></td>
+                        <td><?= h($demand->type==='Reassignment'?'Réaffectation':'Augmentation') ?></td>
                         <td><?= h($demand->about) ?></td>
                         <td><?= h($demand->status) ?></td>
-                        <td class="actions">
-                            <?= $this->Html->link(__('View'), ['action' => 'view', $demand->demand_no]) ?>
-                            <?= $this->Form->postLink(__('Cancel'), ['action' => 'cancel', $demand->demand_no], ['confirm' => __('Annuler la demande définitivement?')]) ?>
-                        </td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
