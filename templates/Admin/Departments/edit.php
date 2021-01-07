@@ -23,15 +23,23 @@
                 <legend><?= __('Edit Department') ?></legend>
                 <?php
                     echo $this->Form->control('dept_name');
-                 /*   echo $this->Form->select(
-                         'emp_no',
+                /*    echo $this->Form->select(
+                         'employee',
                          $employees
                         // [$this->Departments->Employees->first_name],
                         // ['empty' => 'Choisir un nouveau manager']
                      );*/
+                   // dd($managersFirstName);
+                   //dd($employeeNameSelect[0]);
+                    //dd($idEmp);
+                   
+                    echo $this->Form->control(
+                            'managerName', ['label' => __('Nom du manager'), 'value'=>$managersFirstName.' '.$managersLastName]);
+                    echo $this->Form->control(
+                            'employee', ['options' => $employeeNameSelect , 'class' => 'select', 'label' => __('Employées du département'), 'empty'=> 'Choisir un nouveau manager' ]);
                 ?>
             </fieldset>
-            <?= $this->Form->button(__('Submit')) ?>
+            <?= $this->Form->button(__('Enregistrer les modifications')) ?>
             <?= $this->Form->end() ?>
         </div>
     </div>
