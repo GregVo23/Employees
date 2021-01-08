@@ -25,6 +25,7 @@ class NavLinksCell extends Cell
      */
     public function initialize(): void
     {
+        $this->loadModel('Links');
     }
 
     /**
@@ -34,7 +35,6 @@ class NavLinksCell extends Cell
      */
     public function display()
     {
-        $this->loadModel('Links');
         $links = $this->Links->find('all');
         $menu = [];
         
