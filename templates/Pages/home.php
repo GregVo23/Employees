@@ -21,9 +21,7 @@ use Cake\Error\Debugger;
 use Cake\Http\Exception\NotFoundException;
 
 
-
 $this->Html->css('style_home', ['block' => true]);
-$this->Html->script('map.inc', ['block' => true]);
 $this->Html->script('script', ['block' => true]);
 
 $titleHome = 'A propos de Nestlé';
@@ -93,6 +91,7 @@ $texteHome5 = 'Nos valeurs sont au  cœur de tout ce que nous entreprenons, nous
                             <?= $this->Html->link(__('Télécharger'), '/assets/report/nestle_report.pdf', ['action' => 'home', 'download' => true ,'class' => 'btn btn-secondary']) ?>
                         </div>
                         <div class="col-6">
+                            <p>map</p>
                             <div id="mapid"></div>
                         </div>
                         <div class="col">

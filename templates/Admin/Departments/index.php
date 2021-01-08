@@ -5,7 +5,11 @@
  */
 ?>
 <div class="departments index content">
-    <?= $this->Html->link(__('New Department'), ['action' => 'add'], ['class' => 'button float-right']) ?>
+    <?php if(isset($_SESSION['status'])){
+            if($_SESSION['status'] === "Admin"){ ?>
+                <?= $this->Html->link(__('New Department'), ['action' => 'add'], ['class' => 'button float-right']) ?>
+            <?php }
+        } ?>
     <h3><?= __('Departments') ?></h3>
     <div class="table-responsive">
         <table>
@@ -27,18 +31,23 @@
                             'url' => ['action' => 'view', $department->dept_no],
                             'width' => 50                          
                         ]);?>
-                        
-                        <?= $this->Html->image("edit.png", [
-                            "alt" => "view",
-                            'url' => ['action' => 'edit', $department->dept_no],
-                            'width' => 50                           
-                        ]);?>
-                        
+                        <?php if(isset($_SESSION['status'])){
+                            if($_SESSION['status'] === "Admin"){ ?>
+                            
+                            <?= $this->Html->image("edit.png", [
+                                "alt" => "view",
+                                'url' => ['action' => 'edit', $department->dept_no],
+                                'width' => 50                           
+                            ]);?>
+
                         <?= $this->Html->image("delete.png", [
                             "alt" => "view",
                             'url' => ['action' => 'delete', $department->dept_no], ['confirm' => __('Are you sure you want to delete # {0}?', $department->dept_no)],
                             'width' => 50                           
                         ]);?>
+                        
+                        <?php }
+                        } ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>
