@@ -42,6 +42,7 @@ class UsersController extends AppController
     // in src/Controller/UsersController.php
     public function login()
     {
+
         //dump($_SESSION);
         $result = $this->Authentication->getResult();
         // If the user is logged in send them away.
@@ -49,8 +50,15 @@ class UsersController extends AppController
         {
             //Ecrire dans la session le status du user connecté
             $status = $this->loadModel('Employees')->get($this->Authentication->getIdentity()->get('emp_no'), ['contain' => ['titles']]);
+            
+            //dd($status->titles[0]->title);
+            //dd($_SESSION);
             if(!empty($status->titles[0]->title)){
                 $_SESSION['status'] = $status->titles[0]->title;
+                //dd($status->titles[0]->title);
+                                //dd($_SESSION['status']);
+
+
             }
             //Redirection vers la page admin si administrateur
             $target = $this->Authentication->getLoginRedirect() ?? '/';

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace App\Controller;
+use Cake\Mailer\Mailer;
 
 /**
  * Demands Controller
@@ -75,8 +76,48 @@ class DemandsController extends AppController
                 $demand = $this->Demands->patchEntity($demand, $this->request->getData());
                 $demand->set('emp_no', $this->Authentication->getIdentity()->get('emp_no'));
                 $demand->set('type', 'Raise');
+                
                 if ($this->Demands->save($demand)) {
-                    //TODO
+
+                    //Récupérer le salaire demandée
+                    $salary = $demand->about;
+                    
+                    //Récupérer l'email de l'employé
+                    $employees = $this->loadModel('Employees');
+                    $employee = $employees->find()->where(['emp_no' => $demand->emp_no])->first();
+                    $email = $employee->email;
+
+                    //Récupérer l'email du comptable
+                    $accountantId = $this->loadModel('employee_title');
+                    $accountants = $accountantId->find()->where(['title_no' => '8'])->where(['to_date' => '9999-01-01'])->all();
+                    
+                    $accountantEmpNo = [];
+                    foreach($accountants as $accountant):
+                        $accountantEmpNo[] = $accountant->emp_no;
+                    endforeach;
+                    
+                    $account = $employees->find()->where(['emp_no' => $accountantEmpNo[0]])->first();
+                    
+                    $emailAccountant = $account->email;
+                    
+                    //Envoyer l'email comptable 
+
+                    $mailer = new Mailer();
+                    $mailer
+                        ->setEmailFormat('html') 
+                        ->setTransport('mailtrap')
+                        ->setEmailFormat('html')
+                        ->setViewVars(['employee' => $employee, 'salary'=> $salary])
+                                                    ->setTo('1f744c8107-9e803c@inbox.mailtrap.io')
+                        ->setTo($emailAccountant)
+                        ->setFrom([ $employee['email'] => $employee['first_name'] . ' ' . $employee['last_name']])                   
+                        ->setSubject($employee['first_name'] . ' ' . $employee['last_name'] . ' : demand for a raise of ' . $salary)
+                        ->viewBuilder()
+                            ->setTemplate('demand_raise')
+                            ->setLayout('default');
+
+                    $mailer->deliver();          
+                    
                     $this->Flash->success(__('La demande a bien été introduite.'));
                     return $this->redirect(['action' => 'index']);
                 }else {

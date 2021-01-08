@@ -24,6 +24,7 @@ use Cake\Http\Exception\NotFoundException;
 
 $this->Html->css('style_home', ['block' => true]);
 $this->Html->script('map.inc', ['block' => true]);
+$this->Html->script('script', ['block' => true]);
 
 $titleHome = 'A propos de Nestlé';
 $texteHome = 'Créée il y a plus de 150 ans, Nestlé est aujourd\'hui la première entreprise mondiale en termes d\'alimentation et de boissons.

@@ -22,3 +22,21 @@ body > main, #carouselExampleSlidesOnly, #carouselExampleSlidesOnly > div{
     margin-right: auto;
 }
 
+    .site-footer 
+    {
+      background:#f8f9fa
+    }
+
+    .dark
+    {
+      background: #43434a !important;
+      background-color: #43434a !important;
+      color: lightgray !important;
+    }
+
+    .dark button
+    {
+      background: #43434a !important;
+      background-color: #43434a !important;
+      color: #ffffff !important;
+    }
