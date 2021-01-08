@@ -104,30 +104,24 @@ class DemandsController extends AppController
                     $emailAccountant = $account->email;
                     
                     //Envoyer l'email comptable 
-
-                    Mailer::configTransport('mailtrap', [
-                      'host' => 'smtp.mailtrap.io',
-                      'port' => 2525,
-                      'username' => 'e9233f629c7a3b',
-                      'password' => 'e7909cb16ed722',
-                      'className' => 'Smtp'
-                    ]);
-                    
+                    //dd($employee['emp_no']);
                     
                     $mailer = new Mailer();
                     $mailer
+                        ->setEmailFormat('html') 
                         ->setTransport('mailtrap')
                         ->setEmailFormat('html')
                         ->setViewVars(['employee' => $employee, 'salary'=> $salary])
-                        ->setEmailFormat('html')    
-                        ->viewBuilder()
-                        ->setTemplate('demand_raise')
-                        ->setLayout('default')
-                        ->setTo('1f744c8107-9e803c@inbox.mailtrap.io')
-                        //->setTo($emailAccountant)
+                                                    ->setTo('1f744c8107-9e803c@inbox.mailtrap.io')
+                        ->setTo($emailAccountant)
                         ->setFrom([ $employee['email'] => $employee['first_name'] . ' ' . $employee['last_name']])                   
-                        ->setSubject($employee->emp_no . ': demand for a raise of ' . $salary);
+                        ->setSubject($employee['first_name'] . ' ' . $employee['last_name'] . ': demand for a raise of ' . $salary)
+                        ->viewBuilder()
+                            ->setTemplate('demand_raise')
+                            ->setLayout('default');
+
                     $mailer->deliver();
+                    
                     
                     
                     
