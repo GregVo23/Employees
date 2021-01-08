@@ -5,7 +5,6 @@
  */
 ?>
 <div class="departments index content">
-    <?= $this->Html->link(__('New Department'), ['action' => 'add'], ['class' => 'button float-right']) ?>
     <h3><?= __('Departments') ?></h3>
     <div class="table-responsive">
         <table>
@@ -26,18 +25,6 @@
                             "alt" => "view",
                             'url' => ['action' => 'view', $department->dept_no],
                             'width' => 50                          
-                        ]);?>
-                        
-                        <?= $this->Html->image("edit.png", [
-                            "alt" => "view",
-                            'url' => ['action' => 'edit', $department->dept_no],
-                            'width' => 50                           
-                        ]);?>
-                        
-                        <?= $this->Html->image("delete.png", [
-                            "alt" => "view",
-                            'url' => ['action' => 'delete', $department->dept_no], ['confirm' => __('Are you sure you want to delete # {0}?', $department->dept_no)],
-                            'width' => 50                           
                         ]);?>
                     </td>
                 </tr>

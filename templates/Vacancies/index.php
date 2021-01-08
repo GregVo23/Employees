@@ -5,7 +5,6 @@
  */
 ?>
 <div class="vacancies index content">
-    <?= $this->Html->link(__('New Vacancy'), ['action' => 'add'], ['class' => 'button float-right']) ?>
     <h3><?= __('Vacancies') ?></h3>
     <div class="table-responsive">
         <table>
@@ -26,23 +25,7 @@
                     <td><?= h($vacancy->title->title) ?></td>
                     <td><?= $this->Number->format($vacancy->quantity) ?></td>
                     <td class="actions">
-                        <?= $this->Html->image("view.png", [
-                            "alt" => "view",
-                            'url' => ['controller'=>'candidates', 'action' => 'add', $vacancy->vac_no],
-                            'width' => 50                          
-                        ]);?>
-                        
-                        <?= $this->Html->image("edit.png", [
-                            "alt" => "view",
-                            'url' => ['action' => 'edit', $vacancy->vac_no],
-                            'width' => 50                           
-                        ]);?>
-                        
-                        <?= $this->Html->image("delete.png", [
-                            "alt" => "view",
-                            'url' => ['action' => 'delete', $vacancy->vac_no], ['confirm' => __('Are you sure you want to delete # {0}?', $vacancy->vacancy_no)],
-                            'width' => 50                           
-                        ]);?>
+                        <?= $this->Html->link(__('Postuler'), ['controller'=>'candidates', 'action' => 'add', $vacancy->vac_no], ['class' => 'btn btn-secondary float-right', 'style' => "color:white;"]) ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>

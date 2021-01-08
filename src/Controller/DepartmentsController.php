@@ -12,6 +12,12 @@ use \DateTime;
  */
 class DepartmentsController extends AppController
 {
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+
+        $this->Authentication->allowUnauthenticated(['index', 'view']);
+    }
     /**
      * Index method
      *
@@ -86,69 +92,5 @@ class DepartmentsController extends AppController
           
         //Envoyer à la vue
         $this->set(compact('department', 'result', 'rules', 'description', 'showRoi', 'showManager'));
-    }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $department = $this->Departments->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $department = $this->Departments->patchEntity($department, $this->request->getData());
-            if ($this->Departments->save($department)) {
-                $this->Flash->success(__('The department has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The department could not be saved. Please, try again.'));
-        }
-        $this->set(compact('department'));
-    }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id Department id.
-     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $department = $this->Departments->get($id, [
-            'contain' => [],
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $department = $this->Departments->patchEntity($department, $this->request->getData());
-            if ($this->Departments->save($department)) {
-                $this->Flash->success(__('The department has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The department could not be saved. Please, try again.'));
-        }
-        $this->set(compact('department'));
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Department id.
-     * @return \Cake\Http\Response|null|void Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $department = $this->Departments->get($id);
-        if ($this->Departments->delete($department)) {
-            $this->Flash->success(__('The department has been deleted.'));
-        } else {
-            $this->Flash->error(__('The department could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
     }
 }

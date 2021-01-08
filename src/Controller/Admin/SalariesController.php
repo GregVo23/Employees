@@ -18,8 +18,9 @@ class SalariesController extends AppController
      */
     public function index()
     {
-        $salaries = $this->paginate($this->Salaries);
-
+        $salaries = $this->Salaries->findByToDate('9999-01-01');
+        $salaries = $this->paginate($salaries);
+        
         $this->set(compact('salaries'));
     }
 

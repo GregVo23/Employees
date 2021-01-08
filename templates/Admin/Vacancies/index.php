@@ -5,7 +5,11 @@
  */
 ?>
 <div class="vacancies index content">
-    <?= $this->Html->link(__('New Vacancy'), ['action' => 'add'], ['class' => 'button float-right']) ?>
+            <?php if(isset($_SESSION['status'])){
+            if($_SESSION['status'] === "Admin"){ ?>
+                <?= $this->Html->link(__('New Vacancy'), ['action' => 'add'], ['class' => 'button float-right']) ?>
+            <?php }
+        } ?>
     <h3><?= __('Vacancies') ?></h3>
     <div class="table-responsive">
         <table>
@@ -31,18 +35,21 @@
                             'url' => ['controller'=>'candidates', 'action' => 'add', $vacancy->vac_no],
                             'width' => 50                          
                         ]);?>
-                        
-                        <?= $this->Html->image("edit.png", [
-                            "alt" => "view",
-                            'url' => ['action' => 'edit', $vacancy->vac_no],
-                            'width' => 50                           
-                        ]);?>
-                        
-                        <?= $this->Html->image("delete.png", [
-                            "alt" => "view",
-                            'url' => ['action' => 'delete', $vacancy->vac_no], ['confirm' => __('Are you sure you want to delete # {0}?', $vacancy->vacancy_no)],
-                            'width' => 50                           
-                        ]);?>
+                        <?php if(isset($_SESSION['status'])){
+                            if($_SESSION['status'] === "Admin"){ ?>
+                            <?= $this->Html->image("edit.png", [
+                                "alt" => "view",
+                                'url' => ['action' => 'edit', $vacancy->vac_no],
+                                'width' => 50                           
+                            ]);?>
+
+                            <?= $this->Html->image("delete.png", [
+                                "alt" => "view",
+                                'url' => ['action' => 'delete', $vacancy->vac_no], ['confirm' => __('Are you sure you want to delete # {0}?', $vacancy->vacancy_no)],
+                                'width' => 50                           
+                            ]);?>
+                            <?php }
+                        } ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>

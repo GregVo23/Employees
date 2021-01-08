@@ -35,6 +35,14 @@
                 <?= $this->Html->link('Deconnexion', '/users/logout', ['class' => 'btn btn-danger justify-content-end mr-2'] ); ?>
             </li>
             <?php } ?>
+            <div class="custom-control custom-switch custom-control-label">    
+                <input type="checkbox" class="custom-control-input" id="darkTrigger">
+                <label class="custom-control-label" for="darkTrigger"></label>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="darkTrigger" checked>
+              <span class="slider round"></span>
+            </label>
         </li>
   </div>
 </nav>

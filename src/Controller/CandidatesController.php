@@ -20,17 +20,6 @@ class CandidatesController extends AppController
         $this->Authentication->allowUnauthenticated(['add']);
         $this->Authorization->skipAuthorization();
     }
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|null|void Renders view
-     */
-    public function index()
-    {
-        $candidates = $this->paginate($this->Candidates);
-
-        $this->set(compact('candidates'));
-    }
 
     /**
      * Add method, adds a candidate in database and links it to its vavancy job offer. 
@@ -114,26 +103,5 @@ class CandidatesController extends AppController
         }
         $vacancies = $this->Candidates->Vacancies->find('list', ['limit' => 200]);
         $this->set(compact('candidate', 'vacancies'));
-    }
-
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Candidate id.
-     * @return \Cake\Http\Response|null|void Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $candidate = $this->Candidates->get($id);
-        if ($this->Candidates->delete($candidate)) {
-            $this->Flash->success(__('The candidate has been deleted.'));
-        } else {
-            $this->Flash->error(__('The candidate could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
     }
 }

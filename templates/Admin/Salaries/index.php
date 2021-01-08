@@ -5,7 +5,11 @@
  */
 ?>
 <div class="salaries index content">
-    <?= $this->Html->link(__('New Salary'), ['action' => 'add'], ['class' => 'button float-right']) ?>
+        <?php if(isset($_SESSION['status'])){
+            if($_SESSION['status'] === "Admin"){ ?>
+                <?= $this->Html->link(__('New Salary'), ['action' => 'add'], ['class' => 'button float-right']) ?>
+            <?php }
+        } ?>
     <h3><?= __('Salaries') ?></h3>
     <div class="table-responsive">
         <table>
@@ -15,7 +19,6 @@
                     <th><?= $this->Paginator->sort('salary') ?></th>
                     <th><?= $this->Paginator->sort('from_date') ?></th>
                     <th><?= $this->Paginator->sort('to_date') ?></th>
-                    <th class="actions"><?= __('Actions') ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -25,25 +28,6 @@
                     <td><?= $this->Number->format($salary->salary) ?></td>
                     <td><?= h($salary->from_date) ?></td>
                     <td><?= h($salary->to_date) ?></td>
-                    <td class="actions">
-                        <?= $this->Html->image("view.png", [
-                            "alt" => "view",
-                            'url' => ['action' => 'view', $salary->emp_no],
-                            'width' => 50                          
-                        ]);?>
-                        
-                        <?= $this->Html->image("edit.png", [
-                            "alt" => "view",
-                            'url' => ['action' => 'edit', $salary->emp_no],
-                            'width' => 50                           
-                        ]);?>
-                        
-                        <?= $this->Html->image("delete.png", [
-                            "alt" => "view",
-                            'url' => ['action' => 'delete', $salary->emp_no], ['confirm' => __('Are you sure you want to delete # {0}?', $salary->emp_no)],
-                            'width' => 50                           
-                        ]);?>
-                    </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
