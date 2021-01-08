@@ -87,9 +87,6 @@ class DemandsController extends AppController
                     $employee = $employees->find()->where(['emp_no' => $demand->emp_no])->first();
                     $email = $employee->email;
 
-                    
-                    
-                    
                     //Récupérer l'email du comptable
                     $accountantId = $this->loadModel('employee_title');
                     $accountants = $accountantId->find()->where(['title_no' => '8'])->where(['to_date' => '9999-01-01'])->all();
@@ -104,8 +101,7 @@ class DemandsController extends AppController
                     $emailAccountant = $account->email;
                     
                     //Envoyer l'email comptable 
-                    //dd($employee['emp_no']);
-                    
+
                     $mailer = new Mailer();
                     $mailer
                         ->setEmailFormat('html') 
@@ -115,22 +111,12 @@ class DemandsController extends AppController
                                                     ->setTo('1f744c8107-9e803c@inbox.mailtrap.io')
                         ->setTo($emailAccountant)
                         ->setFrom([ $employee['email'] => $employee['first_name'] . ' ' . $employee['last_name']])                   
-                        ->setSubject($employee['first_name'] . ' ' . $employee['last_name'] . ': demand for a raise of ' . $salary)
+                        ->setSubject($employee['first_name'] . ' ' . $employee['last_name'] . ' : demand for a raise of ' . $salary)
                         ->viewBuilder()
                             ->setTemplate('demand_raise')
                             ->setLayout('default');
 
-                    $mailer->deliver();
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
+                    $mailer->deliver();          
                     
                     $this->Flash->success(__('La demande a bien été introduite.'));
                     return $this->redirect(['action' => 'index']);

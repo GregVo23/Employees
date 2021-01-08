@@ -10,6 +10,7 @@
             <table>
                 <thead>
                     <tr>
+                        <th><?= __('Numéro') ?></th>
                         <th><?= __('Employé') ?></th>
                         <th><?= __('Département') ?></th>
                         <th><?= __('Titre') ?></th>
@@ -21,6 +22,7 @@
                 <tbody>
                     <?php foreach ($raises as $raise): ?>
                     <tr>
+                        <td><?= h($raise->demand_no) ?></td>
                         <td><?= h($raise->employee) ?></td>
                         <td><?= h($raise->employeeDepartment) ?></td>
                         <td><?= h($raise->employeeTitle) ?></td>

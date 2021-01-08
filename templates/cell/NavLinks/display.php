@@ -31,6 +31,8 @@
                 <?= $this->Html->link('Deconnexion', '/users/logout', ['class' => 'btn btn-danger justify-content-end mr-2'] ); ?>
             </li>
             <?php } ?>
+            
+            <button class="btn" id="darkTrigger">Activer le <br>thème sombre</button>
         </li>
   </div>
 </nav>

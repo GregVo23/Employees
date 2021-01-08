@@ -16,7 +16,7 @@
 
 echo 'Hello accountant, <br/> <br/>' . 
 'This email has been sent to you because an employee has a demand for a new salary (a raise):<br/>' . 
-'This is' . $employee['first_name'] . ' ' . $employee['last_name'] . ' who wants an amount of '. $salary . '.<br/> <br/>' . 
+'This is ' . $employee['first_name'] . ' ' . $employee['last_name'] . ' who wants an amount of '. $this->Number->currency($salary, 'EUR') . '.<br/> <br/>' . 
 '<hr><p style="font-size:0.8em;">this email has been sent to you automatically, please do not reply.</p></body>';
 
 echo '<hr />';

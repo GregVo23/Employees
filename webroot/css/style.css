@@ -25,13 +25,21 @@
     }
     footer a
     {
-        color:red !important;
+        color:black !important;
     }
     footer a:hover
     {
         color:red !important;
     }
+    #navbarSupportedContent > ul > li > a:link
+    {
+        color:black !important;
+    }
     #navbarSupportedContent > ul > li > a:hover
+    {
+        color:red !important;
+    }
+    #navbarSupportedContent > ul > li > a:focus
     {
         color:red !important;
     }
@@ -83,10 +91,10 @@
     {
       height: 300px; 
     }
-    .site-footer 
+    /*.site-footer 
     {
-      background: orange;
-    }
+      background:#f8f9fa
+    }*/
     body > footer > div > div > div > div > h3
     {
         padding-bottom: 10px;
@@ -101,7 +109,18 @@
 
 /* SMARTPHONE MENU */
 
-#navbarSupportedContent
-{
-    background-color: #f8f9fa !important;
-}
+
+
+    .dark
+    {
+      background: #43434a !important;
+      background-color: #43434a !important;
+      color: lightgray !important;
+    }
+
+    .dark button
+    {
+      background: #43434a !important;
+      background-color: #43434a !important;
+      color: #ffffff !important;
+    }
