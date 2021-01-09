@@ -6,7 +6,7 @@
 ?>
 <div class="vacancies index content">
             <?php if(isset($_SESSION['status'])){
-            if($_SESSION['status'] === "Admin"){ ?>
+            if($_SESSION['status'] === "Admin" || $managerDept){ ?>
                 <?= $this->Html->link(__('New Vacancy'), ['action' => 'add'], ['class' => 'button float-right']) ?>
             <?php }
         } ?>
@@ -30,13 +30,9 @@
                     <td><?= h($vacancy->title->title) ?></td>
                     <td><?= $this->Number->format($vacancy->quantity) ?></td>
                     <td class="actions">
-                        <?= $this->Html->image("view.png", [
-                            "alt" => "view",
-                            'url' => ['controller'=>'candidates', 'action' => 'add', $vacancy->vac_no],
-                            'width' => 50                          
-                        ]);?>
+                        
                         <?php if(isset($_SESSION['status'])){
-                            if($_SESSION['status'] === "Admin"){ ?>
+                            if($_SESSION['status'] === "Admin" || $vacancy->dept_no === $managerDept){ ?>
                             <?= $this->Html->image("edit.png", [
                                 "alt" => "view",
                                 'url' => ['action' => 'edit', $vacancy->vac_no],

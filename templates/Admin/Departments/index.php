@@ -31,8 +31,9 @@
                             'url' => ['action' => 'view', $department->dept_no],
                             'width' => 50                          
                         ]);?>
+
                         <?php if(isset($_SESSION['status'])){
-                            if($_SESSION['status'] === "Admin"){ ?>
+                            if($_SESSION['status'] === "Admin" || $department->dept_no === $managerDept){ ?>
                             
                             <?= $this->Html->image("edit.png", [
                                 "alt" => "view",

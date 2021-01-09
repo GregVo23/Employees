@@ -34,7 +34,7 @@
                     //dd($idEmp);
                    
                     echo $this->Form->control(
-                            'managerName', ['label' => __('Nom du manager'), 'value'=>$managersFirstName.' '.$managersLastName]);
+                            'managerName', ['label' => __('Nom du manager'), 'value'=>$managersFirstName.' '.$managersLastName, 'readonly' => true]);
                     echo $this->Form->control(
                             'employee', ['options' => $employeeNameSelect , 'class' => 'select', 'label' => __('Employées du département'), 'empty'=> 'Choisir un nouveau manager' ]);
                 ?>

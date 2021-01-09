@@ -23,7 +23,20 @@ class VacanciesController extends AppController
             'contain' => ['Titles', 'Departments'],
         ]);
 
-        $this->set(compact('vacancies'));
+        $managerDept=false;
+
+        if($this->Authentication->getResult()->isValid()){
+            if($_SESSION['status']==='Manager'){
+                $this->loadModel('Employees');
+                $empNo = $this->Authentication->getIdentity()->get('emp_no');
+                $employee = $this->Employees->get($empNo,[
+                    'contain'=>['departments']
+                ]);
+                $managerDept = $employee->departments[0]->dept_no;
+            }
+        }
+
+        $this->set(compact('vacancies', 'managerDept'));
     }
 
     /**

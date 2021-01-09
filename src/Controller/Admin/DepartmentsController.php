@@ -26,7 +26,20 @@ class DepartmentsController extends AppController
 
         $departments = $this->paginate($this->Departments);
 
-        $this->set(compact('departments'));
+        $managerDept=false;
+
+        if($this->Authentication->getResult()->isValid()){
+            if($_SESSION['status']==='Manager'){
+                $this->loadModel('Employees');
+                $empNo = $this->Authentication->getIdentity()->get('emp_no');
+                $employee = $this->Employees->get($empNo,[
+                    'contain'=>['departments']
+                ]);
+                $managerDept = $employee->departments[0]->dept_no;
+            }
+        }
+
+        $this->set(compact('departments', 'managerDept'));
     }
 
     /**
@@ -278,13 +291,6 @@ class DepartmentsController extends AppController
                           ->first();
 
            $managerSalary->set('to_date', $today);
-           
-
-
-           
-           
-           
-           
            
         }
           
