@@ -169,7 +169,7 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-.dark
+body, main, .content
 {
   background: #43434a !important;
   background-color: #43434a !important;
@@ -181,4 +181,10 @@ input:checked + .slider:before {
   background: #43434a !important;
   background-color: #43434a !important;
   color: #ffffff !important;
+}
+
+
+#navbarSupportedContent > ul > li > a
+{
+    color: white;
 }

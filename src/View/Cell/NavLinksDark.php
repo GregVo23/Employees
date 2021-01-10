@@ -8,7 +8,7 @@ use Cake\View\Cell;
 /**
  * NavLinks cell
  */
-class NavLinksCell extends Cell
+class NavLinksDarkCell extends Cell
 {
     /**
      * List of valid options that can be passed into this

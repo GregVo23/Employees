@@ -45,6 +45,17 @@ class AppController extends Controller
         $this->loadComponent('Flash');
         $this->loadComponent('Authentication.Authentication');
         $this->loadComponent('Authorization.Authorization');
+        /*
+        if(isset($_COOKIE['theme']))
+        {
+            if($_COOKIE['theme']=== 'dark')
+            {
+                $this->viewBuilder()->setLayout('dark');
+            }elseif ($_COOKIE['theme']=== 'light') {
+                $this->viewBuilder()->setLayout('default');
+            }
+        };         
+        */
 
         
         // in a controller beforeFilter or initialize

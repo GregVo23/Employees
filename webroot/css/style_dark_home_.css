@@ -105,3 +105,23 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+body, main, .content
+{
+  background: #43434a !important;
+  background-color: #43434a !important;
+  color: lightgray !important;
+}
+
+.dark button
+{
+  background: #43434a !important;
+  background-color: #43434a !important;
+  color: #ffffff !important;
+}
+
+
+#navbarSupportedContent > ul > li > a
+{
+    color: white;
+}
