@@ -33,7 +33,7 @@
     }
     #navbarSupportedContent > ul > li > a:link
     {
-        color:black !important;
+        color:lightgray !important;
     }
     #navbarSupportedContent > ul > li > a:hover
     {
@@ -169,7 +169,7 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-body, main, .content
+.dark
 {
   background: #43434a !important;
   background-color: #43434a !important;

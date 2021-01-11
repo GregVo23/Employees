@@ -22,6 +22,7 @@ window.onload = function(){
         $('h1, h2, h3, h4, h5').css('color', 'white');
         $("container").removeClass("bg-light");
         $("container").addClass("bg-secondary");
+        document.cookie = "theme=light; expires=Thu, 01 Jan 1970 00:00:00 UTC";
         document.cookie = "theme=dark";
     }
 
@@ -45,17 +46,16 @@ window.onload = function(){
         $('h1, h2, h3, h4, h5').css('color', 'black');
         $("container").removeClass("bg-secondary");
         $("container").addClass("bg-light");
+        document.cookie = "theme=dark; expires=Thu, 01 Jan 1970 00:00:00 UTC";
         document.cookie = "theme=light";
     }
     
 
         $("#darkTrigger").click(function(){
         if($("body").hasClass("dark")){
-            document.cookie = "theme=light";
             light();
             }
         else{
-            document.cookie = "theme=dark";
             dark();
             }
         });
@@ -64,31 +64,17 @@ window.onload = function(){
          let d = new Date();
          let n = d.getHours();
 
-                if(n > 17 || n < 8){
-                    
-                    $("body").removeClass("light");
-                    $("body").addClass("dark");
-                    $("main").removeClass("light");
-                    $("main").addClass("dark");
-                    $(".employees").removeClass("light");
-                    $(".employees").addClass("dark");
-                    $(".content").removeClass("light");
-                    $(".content").addClass("dark");
-                    $(".navbar").removeClass("bg-light");
-                    $(".navbar").removeClass("navbar-light");
-                    $(".navbar").addClass("bg-secondary");
-                    $(".navbar").addClass("navbar-secondary");
-                    $("footer").removeClass("bg-light");
-                    $("footer").addClass("bg-secondary");
-                    $('#navbarSupportedContent > ul > li > a').css('color', 'white');
-                    $('h1, h2, h3, h4, h5').css('color', 'white');
-                    $("container").removeClass("bg-light");
-                    $("container").addClass("bg-secondary");
-                    document.cookie = "theme=dark";
+                if(document.cookie === "theme=light"){
+                    return;
+                }else if(document.cookie === "theme=light"){
+                    return;
                 }else{
-
-                    document.cookie = "theme=light";
+                if(n > 17 || n < 8){
+                    dark();
+                }else{
+                    light();
                 }            
+            }
         });  
         
         

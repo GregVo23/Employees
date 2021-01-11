@@ -14,7 +14,6 @@
  * @var \App\View\AppView $this
  */
 $navLinks = $this->cell('NavLinks');
-//$theme = $this->cell('Dark');
 $cakeDescription = 'Nestlé';
 ?>
 <!DOCTYPE html>
@@ -36,13 +35,20 @@ $cakeDescription = 'Nestlé';
 
     <?= $this->Html->css(['normalize.min', 'milligram.min', 'cake', 'bootstrap.min']) ?>
     
-    <?php if(isset($_COOKIE['theme'])){
+    <?php 
+    $dark = false;
+    $hour = Date('h');
+    if(isset($_COOKIE['theme'])){
         if($_COOKIE['theme']==='dark'){ ?>
             <?= $this->Html->css(['style_dark']) ?>
         <?php }elseif($_COOKIE['theme']==='light'){ ?>
             <?= $this->Html->css(['style']) ?>
-        <?php }
-    } ?>
+        <?php } 
+    }elseif($hour>18||$hour<8) { ?>
+        <?= $this->Html->css(['style']) ?>
+        <?php }else{ ?>
+        <?= $this->Html->css(['style_dark']) ?>
+    <?php } ?>
     
     <?= $this->Html->script(['jquery.min', 'bootstrap.min', 'script']) ?>
     <?= $this->fetch('meta') ?>
