@@ -1,94 +1,87 @@
 console.log("script");
 
-
-
-
-
-
 window.onload = function(){
     
-    
     // Dark / Light theme
+    let autoTheme = true;
+    
     function dark(){
+        $("body").removeClass("light");
         $("body").addClass("dark");
+        $("main").removeClass("light");
         $("main").addClass("dark");
+        $(".employees").removeClass("light");
         $(".employees").addClass("dark");
+        $(".content").removeClass("light");
         $(".content").addClass("dark");
         $(".navbar").removeClass("bg-light");
         $(".navbar").removeClass("navbar-light");
         $(".navbar").addClass("bg-secondary");
         $(".navbar").addClass("navbar-secondary");
         $("footer").removeClass("bg-light");
-        $("body > footer").removeClass("bg-light");
         $("footer").addClass("bg-secondary");
-        $("body > footer").addClass("bg-secondary");
         $('#navbarSupportedContent > ul > li > a').css('color', 'white');
+        $('h1, h2, h3, h4, h5').css('color', 'white');
+        $("container").removeClass("bg-light");
+        $("container").addClass("bg-secondary");
+        document.cookie = "theme=light; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+        document.cookie = "theme=dark";
     }
 
     function light(){
+
         $("body").removeClass("dark");
+        $("body").addClass("light");
         $("main").removeClass("dark");
+        $("main").addClass("light");
         $(".employees").removeClass("dark");
+        $(".employees").addClass("light");
         $(".content").removeClass("dark");
-        $(".navbar").addClass("bg-light");
-        $(".navbar").addClass("navbar-light");
+        $(".content").addClass("light");
         $(".navbar").removeClass("bg-secondary");
         $(".navbar").removeClass("navbar-secondary");
-        $("footer").addClass("bg-light");
-        $("body > footer").addClass("bg-light");
+        $(".navbar").addClass("bg-light");
+        $(".navbar").addClass("navbar-light");
         $("footer").removeClass("bg-secondary");
-        $("body > footer").removeClass("bg-secondary");
+        $("footer").addClass("bg-light");
         $('#navbarSupportedContent > ul > li > a').css('color', 'black');
+        $('h1, h2, h3, h4, h5').css('color', 'black');
+        $("container").removeClass("bg-secondary");
+        $("container").addClass("bg-light");
+        document.cookie = "theme=dark; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+        document.cookie = "theme=light";
     }
     
-    
-    if(localStorage.getItem('theme')==="dark"){
-        dark();
-    }else if(localStorage.getItem('theme')==="light"){
-        light();
-    }
-    
+
         $("#darkTrigger").click(function(){
-        if($("body").hasClass("dark")){
-            localStorage.clear()
-            localStorage.setItem('theme', 'light');
-            console.log(localStorage);
-            light();
-            }
-        else{
-            localStorage.clear()
-            localStorage.setItem('theme', 'dark');
-            console.log(localStorage);
-            dark();
-            }
+            if($("body").hasClass("dark")){
+                light();
+                }
+            else{
+                dark();
+                }
         });
     
         $(document).ready(function () {
          let d = new Date();
          let n = d.getHours();
 
-            if(localStorage.getItem('theme')!== 'undefinded'){
-                if(n > 17 || n < 8){
-                    localStorage.setItem('theme', 'dark');
-                    $("body").addClass("dark");
-                    $("main").addClass("dark");
-                    $(".employees").addClass("dark");
-                    $(".content").addClass("dark");
-                    $(".navbar").addClass("bg-secondary");
-                    $(".navbar").addClass("navbar-secondary");
-                    $("footer").addClass("bg-secondary");
-                    $("body > footer").addClass("bg-secondary");
-                    $('#navbarSupportedContent > ul > li > a').css('color', 'white');
+                if(document.cookie === "theme=light"){
+                    return;
+                }else if(document.cookie === "theme=light"){
+                    return;
                 }else{
-                    localStorage.setItem('theme', 'light');
+                    if(autoTheme){
+                        if(n > 17 || n < 8){
+                            autoTheme = false;
+                            dark();
+                        }else{
+                            autoTheme = false;
+                            light();
+                        }     
+                    }
                 }
-            }else if(localStorage.getItem('theme')=== 'light')
-            {
-                light();
-            }else if(localStorage.getItem('theme')=== 'dark'){
-                dark();
-            }
-        });  
+            });  
         
         
     //map Home Page
@@ -106,9 +99,6 @@ window.onload = function(){
 
         let marker = L.marker([50.8369069, 4.378142]).addTo(mymap);            
         marker.bindPopup("<b>Siège central de Nestlé</b><br>Rue du chocolat n°23<br>1000 Bruxelles<br>tel:02/687.70.70<br>email:info@nestle.be").openPopup();
-
-        
-    
 
 };
 
