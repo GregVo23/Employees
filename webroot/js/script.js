@@ -3,6 +3,8 @@ console.log("script");
 window.onload = function(){
     
     // Dark / Light theme
+    let autoTheme = true;
+    
     function dark(){
         $("body").removeClass("light");
         $("body").addClass("dark");
@@ -52,12 +54,12 @@ window.onload = function(){
     
 
         $("#darkTrigger").click(function(){
-        if($("body").hasClass("dark")){
-            light();
-            }
-        else{
-            dark();
-            }
+            if($("body").hasClass("dark")){
+                light();
+                }
+            else{
+                dark();
+                }
         });
     
         $(document).ready(function () {
@@ -69,13 +71,17 @@ window.onload = function(){
                 }else if(document.cookie === "theme=light"){
                     return;
                 }else{
-                if(n > 17 || n < 8){
-                    dark();
-                }else{
-                    light();
-                }            
-            }
-        });  
+                    if(autoTheme){
+                        if(n > 17 || n < 8){
+                            autoTheme = false;
+                            dark();
+                        }else{
+                            autoTheme = false;
+                            light();
+                        }     
+                    }
+                }
+            });  
         
         
     //map Home Page

@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Cake\Event\EventInterface;
 
 /**
  * Application Controller
@@ -45,17 +46,6 @@ class AppController extends Controller
         $this->loadComponent('Flash');
         $this->loadComponent('Authentication.Authentication');
         $this->loadComponent('Authorization.Authorization');
-        /*
-        if(isset($_COOKIE['theme']))
-        {
-            if($_COOKIE['theme']=== 'dark')
-            {
-                $this->viewBuilder()->setLayout('dark');
-            }elseif ($_COOKIE['theme']=== 'light') {
-                $this->viewBuilder()->setLayout('default');
-            }
-        };         
-        */
 
         
         // in a controller beforeFilter or initialize
@@ -66,5 +56,16 @@ class AppController extends Controller
          * Enable the following component for recommended CakePHP form protection settings.
          * see https://book.cakephp.org/4/en/controllers/components/form-protection.html
          */        
+    }
+        //Dark mode template if cookie
+        public function beforeRender(EventInterface $event)
+    {
+        if(isset($_cookie['theme'])){
+            if($_cookie['theme']==="theme=dark"){
+                $this->viewBuilder()->setLayout('dark');
+            }elseif($_cookie['theme']==="theme=light"){
+                $this->viewBuilder()->setLayout('light');
+            }
+        }
     }
 }
