@@ -54,12 +54,18 @@ window.onload = function(){
     
 
         $("#darkTrigger").click(function(){
+
             if($("body").hasClass("dark")){
                 light();
-                }
-            else{
+            }else if($("body").hasClass("light")){
                 dark();
-                }
+            }else if(autoTheme){
+                if(n > 17 || n < 8){
+                    light();
+                }else{
+                    dark();
+                }     
+            }           
         });
     
         $(document).ready(function () {
@@ -67,22 +73,23 @@ window.onload = function(){
          let n = d.getHours();
 
                 if(document.cookie === "theme=light"){
-                    return;
-                }else if(document.cookie === "theme=light"){
-                    return;
+                    light(); 
+                }else if(document.cookie === "theme=dark"){
+                    dark();
                 }else{
                     if(autoTheme){
                         if(n > 17 || n < 8){
-                            autoTheme = false;
                             dark();
                         }else{
-                            autoTheme = false;
                             light();
                         }     
                     }
                 }
             });  
-        
+            if($("body").hasClass("dark") || $("body").hasClass("light")){
+                autoTheme = false;
+            };
+
         
     //map Home Page
     let mymap = L.map('mapid').setView([50.8369069, 4.378142], 4460); 
