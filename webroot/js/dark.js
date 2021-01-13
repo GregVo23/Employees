@@ -29,6 +29,7 @@ window.onload = function(){
         $('h1, h2, h3, h4, h5').css('color', 'white');
         $("container").removeClass("bg-light");
         $("container").addClass("bg-secondary");
+        document.cookie = "theme=dark; expires=Thu, 01 Jan 1970 00:00:00 UTC";
         document.cookie = "theme=light; expires=Thu, 01 Jan 1970 00:00:00 UTC";
         document.cookie = "theme=dark";
     }
@@ -58,6 +59,7 @@ window.onload = function(){
         $('h1, h2, h3, h4, h5').css('color', 'black');
         $("container").removeClass("bg-secondary");
         $("container").addClass("bg-light");
+        document.cookie = "theme=light; expires=Thu, 01 Jan 1970 00:00:00 UTC";
         document.cookie = "theme=dark; expires=Thu, 01 Jan 1970 00:00:00 UTC";
         document.cookie = "theme=light";
     }

@@ -29,8 +29,9 @@ window.onload = function(){
         $('h1, h2, h3, h4, h5').css('color', 'white');
         $("container").removeClass("bg-light");
         $("container").addClass("bg-secondary");
-        document.cookie = "theme=light; expires=Thu, 01 Jan 1970 00:00:00 UTC";
-        document.cookie = "theme=dark";
+        document.cookie = "theme=dark; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "theme=light; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "theme=dark; path=/;";
     }
     /**
      * Function dark to switch screen to dark mode
@@ -58,8 +59,9 @@ window.onload = function(){
         $('h1, h2, h3, h4, h5').css('color', 'black');
         $("container").removeClass("bg-secondary");
         $("container").addClass("bg-light");
-        document.cookie = "theme=dark; expires=Thu, 01 Jan 1970 00:00:00 UTC";
-        document.cookie = "theme=light";
+        document.cookie = "theme=dark; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "theme=light; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "theme=light; path=/;";
     }
     
         //Button to switch to darkmode - lightmode
@@ -75,7 +77,8 @@ window.onload = function(){
                 }else{
                     dark();
                 }     
-            }           
+            }   
+            autoTheme = false;
         });
         //if not cookie switch on time to darkmode - lightmode    
         $(document).ready(function () {
