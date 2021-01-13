@@ -49,7 +49,7 @@
                              <?= $department->vacancie; ?>
                             </td>
                             
-                            <td><?= $this->Html->link(__('Postuler'),['controller'=>'Vacancies','action' => 'view'], ['class' => 'btn btn-secondary']) ?></td>
+                            <td><?= $this->Html->link(__('Postuler'),['controller'=>'Vacancies','action' => 'index'], ['class' => 'btn btn-secondary']) ?></td>
                      <?php } else { ?>
                             <td><?= "No vacancies at the moment" ?></td>
                      <?php } ?>
