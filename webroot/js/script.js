@@ -2,10 +2,15 @@ console.log("script");
 
 window.onload = function(){
     
-    // Dark / Light theme
+    /**
+     * Function dark to switch screen to dark mode
+     * @var autoTheme Boolean to switch on the time
+     */
     let autoTheme = true;
-    
     function dark(){
+        $("td.actions > a > img").addClass("filterLight");
+        $(".logo").addClass("filterLight");
+        $(".logoHome").addClass("filterLight");
         $("body").removeClass("light");
         $("body").addClass("dark");
         $("main").removeClass("light");
@@ -27,9 +32,14 @@ window.onload = function(){
         document.cookie = "theme=light; expires=Thu, 01 Jan 1970 00:00:00 UTC";
         document.cookie = "theme=dark";
     }
-
+    /**
+     * Function dark to switch screen to dark mode
+     * @var autoTheme Boolean to switch on the time
+     */
     function light(){
-
+        $("td.actions > a > img").removeClass("filterLight");
+        $(".logo").removeClass("filterLight");
+        $(".logoHome").removeClass("filterLight");
         $("body").removeClass("dark");
         $("body").addClass("light");
         $("main").removeClass("dark");
@@ -52,7 +62,7 @@ window.onload = function(){
         document.cookie = "theme=light";
     }
     
-
+        //Button to switch to darkmode - lightmode
         $("#darkTrigger").click(function(){
 
             if($("body").hasClass("dark")){
@@ -67,7 +77,7 @@ window.onload = function(){
                 }     
             }           
         });
-    
+        //if not cookie switch on time to darkmode - lightmode    
         $(document).ready(function () {
          let d = new Date();
          let n = d.getHours();
@@ -91,7 +101,9 @@ window.onload = function(){
             };
 
         
-    //map Home Page
+    /**
+     * Script to show map on homepage with Leaflet JS
+     */
     let mymap = L.map('mapid').setView([50.8369069, 4.378142], 4460); 
 
     let map = L.tileLayer('https://tile.thunderforest.com/mobile-atlas/{z}/{x}/{y}.png?apikey=a0a047fedf024fa4925dfc14dc8fbd53', {
@@ -104,7 +116,7 @@ window.onload = function(){
         });
         map.addTo(mymap);
 
-        let marker = L.marker([50.8369069, 4.378142]).addTo(mymap);            
+    let marker = L.marker([50.8369069, 4.378142]).addTo(mymap);            
         marker.bindPopup("<b>Siège central de Nestlé</b><br>Rue du chocolat n°23<br>1000 Bruxelles<br>tel:02/687.70.70<br>email:info@nestle.be").openPopup();
 
 };

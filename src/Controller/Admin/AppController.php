@@ -42,7 +42,6 @@ class AppController extends BaseController
     {
         parent::initialize();
         $this->Authorization->skipAuthorization();
-
     }
 
     public function beforeFilter(\Cake\Event\EventInterface $event)
