@@ -24,10 +24,10 @@ use Cake\Datasource\ConnectionManager;
 use Cake\Error\Debugger;
 use Cake\Http\Exception\NotFoundException;
 
-$this->Html->script('script', ['block' => true]);
+$this->Html->css('Chart.min', ['block' => true]);
 $this->Html->script('moment.min', ['block' => true]);
 $this->Html->script('Chart.min', ['block' => true]);
-$this->Html->css('Chart.min', ['block' => true]);
+
 ?>
 <script>
     let nbWomen = <?= h($nbWomen); ?>;

@@ -13,12 +13,17 @@
         font-style: normal;
     }
     
-    body > main > div > div > div.paginator > ul > li > a
+    body > main > div > div > div.paginator > ul > li > a, body > main > div.container > main > section > div > div > div:nth-child(4) > div:nth-child(1) > ul > li:nth-child(1) > a
+    {
+        color: white !important;
+    }
+    
+    th > a:hover
     {
         color: #d33c43 !important;
     }
     
-    th > a:hover
+    body > main > div.container > main > section > div > div > div:nth-child(4) > div:nth-child(1) > ul > li:nth-child(1) > a:hover
     {
         color: #d33c43 !important;
     }
