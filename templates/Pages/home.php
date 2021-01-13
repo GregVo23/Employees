@@ -53,7 +53,6 @@ $texteHome5 = 'Nos valeurs sont au  cœur de tout ce que nous entreprenons, nous
                         <div class="col">
                             <?= $this->Html->image("logo.png", [
                                     "alt" => "logo de Nestlé sur un mur",
-                                    'url' => ['action' => $this->Url->build('/')],
                                     'class' => 'logoHome img-fluid',
                             ]);?>
                         </div>

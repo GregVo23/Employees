@@ -10,48 +10,73 @@
     {
         font-size: 1.3em !important;
     }
+    
+    body > main > div > div > div.paginator > ul > li > a
+    {
+        color: #d33c43 !important;
+    }
+    
+    th > a:hover
+    {
+        color: #d33c43 !important;
+    }
+    
     .logo
     {
         width: 180px;
     }
+    
     .fas, .fab
     {
         font-size: 1.2em;
         padding-right: 10px;
         margin-bottom: 20px;
     }
+    
     body > header > nav
     {
         height:120px !important;
     }
+    
     footer a
     {
         color:black !important;
     }
+    
     footer a:hover
     {
         color:red !important;
     }
+    
     #navbarSupportedContent > ul > li > a:link
     {
         color:lightgray !important;
     }
+    
     #navbarSupportedContent > ul > li > a:hover
     {
         color:red !important;
     }
+    
     #navbarSupportedContent > ul > li > a:focus
     {
         color:red !important;
     }
+    
     #navbarSupportedContent > ul > li > a
     {
         padding: 0 20px !important;
     }
+    
     .btn
     {
         font-size: 1.3em !important;
         border-radius: 6px !important;
+    }
+    
+    a
+    {
+        color: red;
     }
 
 /* PAHE HOME */

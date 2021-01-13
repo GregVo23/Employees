@@ -11,6 +11,16 @@
         font-size: 1.3em !important;
     }
     
+    body > main > div > div > div.paginator > ul > li > a
+    {
+        color: #d33c43 !important;
+    }
+    
+    th > a:hover
+    {
+        color: #d33c43 !important;
+    }
+    
     .logo
     {
         width: 180px;

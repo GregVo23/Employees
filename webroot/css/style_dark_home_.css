@@ -7,10 +7,22 @@
         margin: 0;
         width: 100%;    
     }
+    
+    body > main > div > div > div.paginator > ul > li > a
+    {
+        color: #d33c43 !important;
+    }
+    
+    th > a:hover
+    {
+        color: #d33c43 !important;
+    }
+    
     body > main, #carouselExampleSlidesOnly, #carouselExampleSlidesOnly > div{
         margin: 0;
         width: 100%;
     }
+    
     #mapid 
     {
         margin-bottom: 30px;
