@@ -1,6 +1,6 @@
-<h1>Bienvenue dans le back office de Nestlé</h1>
+<h1>Bienvenue <strong><?= $first_name." ".$last_name." " ?></strong>!</h1>
 
-<a href='#'>Users</a>
+<p>Vous êtes dans le back-office de Nestlé !</p>
 
-<h2>La recette d'un bon cake, c'est chez Nestlé !</h2>
+<h2>Votre status est : <strong><?= $_SESSION['status'] ?></strong></h2>
 
