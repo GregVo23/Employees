@@ -58,9 +58,9 @@ class AppController extends Controller
          */        
     }
         //Dark mode template if cookie
-        public function beforeRender(EventInterface $event)
+        public function beforeFilter(EventInterface $event)
     {
-        if(isset($_cookie['theme'])){
+            if(isset($_cookie['theme'])){
             if($_cookie['theme']==="theme=dark"){
                 $this->viewBuilder()->setLayout('dark');
             }elseif($_cookie['theme']==="theme=light"){

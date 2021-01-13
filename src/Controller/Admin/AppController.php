@@ -42,7 +42,6 @@ class AppController extends BaseController
     {
         parent::initialize();
         $this->Authorization->skipAuthorization();
-
     }
 
     public function beforeFilter(\Cake\Event\EventInterface $event)
@@ -53,13 +52,5 @@ class AppController extends BaseController
     public function beforeRender(\Cake\Event\EventInterface $event)
     {
         parent::beforeRender($event);
-                //Dark mode template if cookie
-        if(isset($_cookie['theme'])){
-            if($_cookie['theme']==="theme=dark"){
-                $this->viewBuilder()->setLayout('dark');
-            }elseif($_cookie['theme']==="theme=light"){
-                $this->viewBuilder()->setLayout('default');
-            }
-        }
     }
-}
+};
