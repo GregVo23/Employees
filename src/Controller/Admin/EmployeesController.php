@@ -59,7 +59,6 @@ class EmployeesController extends AppController
                 break;
             }
         }
-       
         $this->set(compact('employee'));
     }
 
@@ -132,9 +131,7 @@ class EmployeesController extends AppController
             //$title = $this->request->getData('title');
           
             $employee = $this->Employees->patchEntity($employee, $this->request->getData());
-            
-     
-        
+
             if ($this->Employees->save($employee)) {
                 $this->Flash->success(__('The employee has been saved.'));
 
@@ -184,4 +181,5 @@ class EmployeesController extends AppController
         $this->set('employees',$employees);
         $this->render('index'); //Définit un template spécifique
     }
+    
 }

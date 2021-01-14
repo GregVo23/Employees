@@ -31,11 +31,13 @@ use Cake\View\Exception\MissingTemplateException;
  */
 class PagesController extends AppController
 {
+    /**
+     * Index method
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
     public function index() {
-                    $you = $this->loadModel('Employees')->get($_SESSION['Auth']->emp_no);
-                    $firstName = $you->first_name;
-                    $name = $you->last_name;
-                    $this->set('last_name',$name);
-                    $this->set('first_name',$firstName);
+        $you = $this->loadModel('Employees')->get($_SESSION['Auth']->emp_no);
+        $this->set('you',$you);
     }
 }

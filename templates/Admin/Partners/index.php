@@ -42,11 +42,14 @@
                                 'width' => 50                           
                             ]);?>
 
-                            <?= $this->Html->image("delete.png", [
+                            <?= $this->Form->postLink(
+                                $this->Html->image("delete.png", [
                                 "alt" => "view",
-                                'url' => ['action' => 'delete', $partner->partner_no], ['confirm' => __('Are you sure you want to delete # {0}?', $partner->partner_no)],
-                                'width' => 50                           
-                            ]);?>
+                                'width' => 50,
+                                ]),
+                                ['action' => 'delete', $partner->partner_no], ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $partner->partner_no)],
+
+                            );?>     
                             <?php }
                         } ?>
                     </td>

@@ -63,7 +63,10 @@ class DemandsController extends AppController
     /**
      * AddRaise method
      *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
+     * Demands Controller
+     *
+     * @property \App\Model\Table\DemandsTable $Candidates
+     * @method \App\Model\Entity\Demands[]|\Cake\Datasource\ResultSetInterface
      */
     public function addRaise()
     {

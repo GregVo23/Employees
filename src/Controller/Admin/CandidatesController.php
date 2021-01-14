@@ -118,7 +118,7 @@ class CandidatesController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
+        $this->request->is(['post', 'delete']);
         $candidate = $this->Candidates->get($id);
         if ($this->Candidates->delete($candidate)) {
             $this->Flash->success(__('The candidate has been deleted.'));

@@ -36,7 +36,7 @@ class DepartmentsController extends AppController
     /**
      * View method
      *
-     * @param string|null $id Department id.
+     * @param int|null $id Department id.
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
@@ -69,7 +69,7 @@ class DepartmentsController extends AppController
         
         $result = $this->Departments->find('count', ['id' => $id])->first()->count;
         
-        //Récupérer les RULES de la BDD              ----------------------------->pourquoi pas de foreach ????? pourquoi cela récupère direct le bon fichier ?
+        //Récupérer les RULES de la BDD
         $rules = $department->rules;
         
         //Récupérer la description de la BDD
@@ -83,7 +83,6 @@ class DepartmentsController extends AppController
                 ->where(['dept_no' => $department->dept_no])
                 ->group('dept_no');
         
-     
         $nbVacancies = $query->all();
 
         foreach($nbVacancies as $nbVacancie):

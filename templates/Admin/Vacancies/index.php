@@ -15,12 +15,15 @@
         <table>
             <thead>
                 <tr>
-
                     <th><?= $this->Paginator->sort('department') ?></th>
                     <th><?= $this->Paginator->sort('title') ?></th>
 
                     <th><?= $this->Paginator->sort('quantity') ?></th>
-                    <th class="actions"><?= __('Actions') ?></th>
+                    <?php if(isset($_SESSION['status'])){
+                         if($_SESSION['status'] === "Admin"){ ?>
+                            <th class="actions"><?= __('Actions') ?></th>                             
+                    <?php }
+                    } ?>
                 </tr>
             </thead>
             <tbody>
@@ -38,12 +41,14 @@
                                 'url' => ['action' => 'edit', $vacancy->vac_no],
                                 'width' => 50                           
                             ]);?>
-
-                            <?= $this->Html->image("delete.png", [
+                        
+                            <?= $this->Form->postLink(
+                                $this->Html->image("delete.png", [
                                 "alt" => "view",
-                                'url' => ['action' => 'delete', $vacancy->vac_no], ['confirm' => __('Are you sure you want to delete # {0}?', $vacancy->vacancy_no)],
-                                'width' => 50                           
-                            ]);?>
+                                'width' => 50,
+                                ]),
+                                ['action' => 'delete', $vacancy->vac_no], ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $vacancy->vac_no)],
+                            );?>   
                             <?php }
                         } ?>
                     </td>

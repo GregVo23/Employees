@@ -54,11 +54,14 @@
                             'width' => 50                           
                         ]);?>
                         
-                        <?= $this->Html->image("delete.png", [
+                        <?= $this->Form->postLink(
+                            $this->Html->image("delete.png", [
                             "alt" => "view",
-                            'url' => ['action' => 'delete', $employee->emp_no], ['confirm' => __('Are you sure you want to delete # {0}?', $employee->emp_no)],
-                            'width' => 50                           
-                        ]);?>
+                            'width' => 50,
+                            ]),
+                            ['action' => 'delete', $employee->emp_no], ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $employee->emp_no)],
+                                                       
+                        );?>     
                     </td>
                 </tr>
                 <?php endforeach; ?>

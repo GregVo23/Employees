@@ -5,11 +5,6 @@
  */
 ?>
 <div class="salaries index content">
-        <?php if(isset($_SESSION['status'])){
-            if($_SESSION['status'] === "Admin"){ ?>
-                <?= $this->Html->link(__('New Salary'), ['action' => 'add'], ['class' => 'button float-right']) ?>
-            <?php }
-        } ?>
     <h3><?= __('Salaries') ?></h3>
     <div class="table-responsive">
         <table>

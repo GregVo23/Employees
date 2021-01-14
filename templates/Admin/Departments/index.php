@@ -41,11 +41,14 @@
                                 'width' => 50                           
                             ]);?>
 
-                        <?= $this->Html->image("delete.png", [
-                            "alt" => "view",
-                            'url' => ['action' => 'delete', $department->dept_no], ['confirm' => __('Are you sure you want to delete # {0}?', $department->dept_no)],
-                            'width' => 50                           
-                        ]);?>
+                            <?= $this->Form->postLink(
+                                $this->Html->image("delete.png", [
+                                "alt" => "view",
+                                'width' => 50,
+                                ]),
+                                ['action' => 'delete', $department->dept_no], ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $department->dept_no)],
+
+                            );?>     
                         
                         <?php }
                         } ?>

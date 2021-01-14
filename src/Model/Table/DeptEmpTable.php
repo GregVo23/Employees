@@ -40,7 +40,7 @@ class DeptEmpTable extends Table
         $this->setTable('dept_emp');
         $this->setDisplayField('emp_no');
         $this->setPrimaryKey(['emp_no', 'dept_no']);
-
+                
     }
 
     /**

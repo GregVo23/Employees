@@ -158,18 +158,6 @@ class DemandsController extends AppController
         
             return $this->redirect(['action' => 'index']);
 
-       
-        // $demand = $this->Demands->newEmptyEntity();
-        // if ($this->request->is('post')) {
-        //     $demand = $this->Demands->patchEntity($demand, $this->request->getData());
-        //     if ($this->Demands->save($demand)) {
-        //         $this->Flash->success(__('The demand has been saved.'));
-
-        //         return $this->redirect(['action' => 'index']);
-        //     }
-        //     $this->Flash->error(__('The demand could not be saved. Please, try again.'));
-        // }
-        // $this->set(compact('demand'));
     }
 
     /**

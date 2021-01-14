@@ -11,6 +11,19 @@ namespace App\Controller;
  */
 class UsersController extends AppController
 {
+    
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+
+        $this->Authentication->allowUnauthenticated(['register','login','indexWomen']);
+        $this->Authorization->skipAuthorization();
+    }
+    
+     /**
+     * register method
+     * 
+     */ 
     public function register()
     {
         $user = $this->Users->newEmptyEntity();
@@ -39,39 +52,34 @@ class UsersController extends AppController
         $this->set(compact('user'));
     }
     
-    // in src/Controller/UsersController.php
+    /**
+     * login method
+     * 
+     */ 
     public function login()
     {
 
-        //dump($_SESSION);
         $result = $this->Authentication->getResult();
         // If the user is logged in send them away.
         if ($result->isValid())
         {
             //Ecrire dans la session le status du user connecté
             $status = $this->loadModel('Employees')->get($this->Authentication->getIdentity()->get('emp_no'), ['contain' => ['titles']]);
-            
-            //dd($status->titles[0]->title);
-            //dd($_SESSION);
+
             if(!empty($status->titles[0]->title)){
                 $_SESSION['status'] = $status->titles[0]->title;
-                //dd($status->titles[0]->title);
-                                //dd($_SESSION['status']);
-
-
             }
             //Redirection vers la page admin si administrateur
             $target = $this->Authentication->getLoginRedirect() ?? '/';
             $target_admin = $this->Authentication->getLoginRedirect() ?? '/admin';
             
             if(!empty($_SESSION['status'])){
-                if($_SESSION['status']==='Admin'||$_SESSION['status']==='Accountant'){
+                if($_SESSION['status']==='Admin'||$_SESSION['status']==='Accountant'||$_SESSION['status']==='Manager'){
                     return $this->redirect($target_admin);
                 }else{
                     return $this->redirect($target);
                 }
-            }
-                   
+            }    
         }
         if ($this->request->is('post') && !$result->isValid())
         {
@@ -79,16 +87,12 @@ class UsersController extends AppController
         }
     }
     
-    // in src/Controller/UsersController.php
-    public function beforeFilter(\Cake\Event\EventInterface $event)
-    {
-        parent::beforeFilter($event);
-
-        $this->Authentication->allowUnauthenticated(['register','login','indexWomen']);
-        $this->Authorization->skipAuthorization();
-    }
         
-    // in src/Controller/UsersController.php
+    /**
+     * logout method
+     * 
+     * @return \Cake\Http\Response|null|void Renders view
+     */ 
     public function logout()
     {
         $this->Authentication->logout();

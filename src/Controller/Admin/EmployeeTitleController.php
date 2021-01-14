@@ -114,8 +114,8 @@ class EmployeeTitleController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function newMannager($id = null) {
-        //TODO retirer cet authorisation
-        $this->Authorization->skipAuthorization();
+
+        //$this->Authorization->skipAuthorization();
         
         //Récupérer l'id et l'incrémenter
         $query = $this->EmployeeTitle->find('all', ['order' => ['emp_title_no' => 'DESC']])->limit(1)->first();
@@ -201,13 +201,19 @@ class EmployeeTitleController extends AppController
                 $department = $this->EmployeeTitle->employees->departments->get($deptNoMan);
                 
                 $department->_joinData = ['to_date' => '9999-01-01', 'from_date' => $today];
-                    //$employee->_joinData->to_date = '9999-01-01';
-                    //$employee->_joinData->from_date = $today;
                 $this->EmployeeTitle->employees->departments->link($employee,[$department]);
                 $this->Flash->success(__('L\'ancien manager a stoppé sa fonction actuelle.'));
         } else {
             $this->Flash->error(__('Une erreur est survenue.'));
         }
+
+        //FIn de l'association departement et de l'ancien manager
+        $dept_emp = $this->loadModel('dept_emp');
+        $deptEmp = $dept_emp->find()
+        ->where(['emp_no' => $manNow->emp_no])
+        ->where(['to_date' => '9999-01-01'])
+        ->first();
+        $deptEmp->set('to_date', $today);
         
         //Fin de versement de salaire ancien mannager.
         $manSalaries = $this->loadModel('salaries');
@@ -233,6 +239,12 @@ class EmployeeTitleController extends AppController
         } else {
             $this->Flash->error(__('l\'ancien manager recoit toujours son salaire.'));
         }        
+        
+        if ($dept_emp->save($deptEmp)) {
+                $this->Flash->success(__('Fin d\'association entre l\'ancien manager et son département.'));
+        } else {
+            $this->Flash->error(__('l\'ancien manager est toujours associé à son département.'));
+        }    
         
         return $this->redirect(['controller' => 'employees', 'action' => 'index']);
     }

@@ -57,12 +57,10 @@ class DepartmentsController extends AppController
         
         //Partie manager(picture + name + hire date):
         $managers =$department->managers;
-       // dd($managers);
         $department->manager = $managers[0]->picture;
         $department->first_n = $managers[0]->first_name;
         $department->last_n = $managers[0]->last_name;
         $department->hire = $managers[0]->hire_date;
-        
         
         //Nombre d'employees par département:
         $result = $this->Departments->find('count', ['id' => $id])->first()->count;
@@ -75,23 +73,12 @@ class DepartmentsController extends AppController
         
         //Nombre de postes vacants pour chaque département
        $vacancies = $this->getTableLocator()->get('Vacancies');
-     
-        //dd($vacancies);
    
         $query = $vacancies->find();
         $query->select(['quantity' => $query -> func()->sum('quantity'), 'deptNo' => 'dept_no'])
                 ->where(['dept_no' => $department->dept_no]);
-               // ->group('dept_no');
      
-       //$nbVacancies = $query->all();
        $department->vacancie = $query->first()->quantity;
-       //dd($nbVacancies);
-     /*   
-        foreach($nbVacancies as $nbVacancie):
-          $department->vacancie = $nbVacancie->quantity;
-            
-        endforeach;
-     */
       
         //Moyenne des salaires par départments
         $managerQuery = $this->getTableLocator()->get('dept_manager')->find()
@@ -111,11 +98,7 @@ class DepartmentsController extends AppController
             ->where(['dept_emp.emp_no NOT IN' => $managerQuery]);
         
         $avgSalary = $query->first()->avg;
-       // dd($avgSalary);
-          //Autorisations : 
         $this->Authorization->authorize($department);
-        
-        //$this->set(compact('department'));
         $this->set(compact('department', 'result', 'rules', 'description', 'avgSalary'));
  
     }
@@ -159,16 +142,15 @@ class DepartmentsController extends AppController
         $department = $this->Departments->get($id, [
             'contain' => ['Employees', 'Managers'],
         ]);
-       //dd($department->managers);
-     
+        
         //Partie manager(name + hire date):
-          $managersFirstName = $department->managers[0]->first_name;
-          $managersLastName = $department->managers[0]->last_name;
-          $managerId = $department->managers[0]->emp_no;
-        // dd($managersId);
-               //Trouver les employees du département
+        $managersFirstName = $department->managers[0]->first_name;
+        $managersLastName = $department->managers[0]->last_name;
+        $managerId = $department->managers[0]->emp_no;
+
+        //Trouver les employees du département
          $query = $this->getTableLocator()->get('employees')->find();  
-         $query->select(['empNo' => 'employees.emp_no' ,'last_name'])  //Le emp_no n'est pas vraiment nécessaire ici mais bon...
+         $query->select(['empNo' => 'employees.emp_no' ,'last_name','dept_emp.to_date'])  //Le emp_no n'est pas vraiment nécessaire ici mais bon...
             ->join([
             'dept_emp' => [
                 'table' => 'dept_emp',
@@ -179,17 +161,13 @@ class DepartmentsController extends AppController
             ->where(['dept_emp.to_date =' => '9999-01-01']);
               
         $employees = $query->all();
-       //dd($employees);
        
         $employeeNameSelect = [];
-        //$idEmp = [];
          foreach($employees as $employeeName):
-              $employeeNameSelect[] = $employeeName->last_name;
-           //$idEmp[] = $employeeName->empNo;       
+              $employeeNameSelect[] = $employeeName->last_name;    
          endforeach;       
          $departmentCurrentName =  $department->dept_name;
          $departmentDeptNo =  $department->dept_no;
-         
          
         if ($this->request->is(['patch', 'post', 'put'])) {
             $departmentInfo = $this->Departments->patchEntity($department, $this->request->getData());
@@ -198,16 +176,14 @@ class DepartmentsController extends AppController
            //Récupérer les infos du formulaire (input de type select), ici on récupère le last_name de l'employée selectionné
           if($_POST['employee'] !== ''){
             $nameEmp = $employeeNameSelect[$this->request->getData('employee')];
-           //dd($nameEmp);
           
            //Trouver les emp_no des employées du département (de l'employée sélectionné)
            $queryEmp = $this->getTableLocator()->get('employees')->find();  
-           $queryEmp->select(['empNo' => 'employees.emp_no'])
-            
-                 ->where(['last_name like' => '%'.$nameEmp.'%'])->limit(1);
+           $queryEmp->select(['empNo' => 'employees.emp_no'])  
+                ->where(['last_name like' => '%'.$nameEmp.'%'])    
+                ->limit(1);
   
            $emp_no = $queryEmp->first()->empNo;
-           //dd($emp_no);   
            
            //Assigner le titre de manager à l'employée sélectionné
                 //Récupérer emp_title_no de l'employée sélectionné pour pouvoir changer sa to_date à aujourd'hui (mettre fin à sa fonction actuelle)
@@ -221,12 +197,10 @@ class DepartmentsController extends AppController
             ])
             ->where(['employee_title.emp_no' => $emp_no]);
            $employeeTitleNow = $queryTitle->first()->titleEmp;
-           //dd($employeeTitleNow);
            
            $employeeTitleInfo = $this->Departments->Employees->employee_title->get($employeeTitleNow, [
                     'contain' => []
                     ]);
-           //dd($employeeTitleInfo);
            $employeeTitleInfo->to_date = new FrozenTime();
            
                //Créer une nouvelle entitée(une nouvelle ligne dans la table employee_title)
@@ -243,9 +217,7 @@ class DepartmentsController extends AppController
             ->limit(1);
                
             $queryEmpTitle = $query->first();
-            //dd($queryEmpTitle->titleEmp);
             $last_emp_title_no = $queryEmpTitle->titleEmp +1;
-           //dd($last_emp_title_no);
             $today = new FrozenTime();
             $to_date = new FrozenTime('9999-01-01');
            
@@ -257,8 +229,6 @@ class DepartmentsController extends AppController
             $employeeNewFunction->set('emp_title_no', $last_emp_title_no);
             $employeeNewFunction->set('title_no', '3');
             
-            
-            
            $manDeptModel = $this->LoadModel('dept_manager');
 
            $managerRevok = $manDeptModel 
@@ -269,7 +239,6 @@ class DepartmentsController extends AppController
 
            $managerRevok->set('to_date', $today);
            
-           
            //Création de la nouvelle entité dans dept_manager pour le nouveau manager (sélectionné parmi les employées du department)
            $managerModel = $this->LoadModel('dept_manager');
            $newManager = $managerModel->newEmptyEntity();
@@ -278,6 +247,13 @@ class DepartmentsController extends AppController
            $newManager->set('from_date',$today);
            $newManager->set('to_date',$to_date);
 
+           $dept_emp = $this->Departments->Employees->dept_emp;
+           $deptEmpEnd = $dept_emp->find()
+                          ->where(['emp_no' => $managerId])
+                          ->where(['to_date' => '9999-01-01'])
+                          ->first();
+           
+           $deptEmpEnd->set('to_date', $today);
            
            //Mettre fin au salaire du manager actuel lorsque l'on en désigne un nouveau 
             //Modifier la date to_date du manager qui sera remplacé
@@ -289,27 +265,20 @@ class DepartmentsController extends AppController
                           ->where(['emp_no' => $managerId])
                           ->where(['to_date' => '9999-01-01'])
                           ->first();
-
            $managerSalary->set('to_date', $today);
            
         }
-          
           if($departmentCurrentName != $_POST['dept_name']){
                 if ($this->Departments->save($departmentInfo)) {
                     $this->Flash->success(__('Le nom du départment a été sauvé.'));
-                    //dd($departmentInfo);
-
                     //$employeeTitleInfo->to_date = new FrozenTime();
-                    //dd($employeeTitleInfo->to_date);
 
                     $employee = $this->Departments->Employees->get($emp_no, [
                         'contain' => []
                     ]);
-                    //dd($employee);
 
                    //Lier les employées à leur départment
                    $this->Departments->Employees->link($department,[$employee]);
-
                     //return $this->redirect(['action' => 'index']);
                 } else {
                   $this->Flash->error(__('Le nom du départment n\'a pas pu être sauvé. Veuillez réessayer svp !'));
@@ -317,29 +286,36 @@ class DepartmentsController extends AppController
            }
            
            if($_POST['employee'] !== ''){
+                //cloture la fonction actuelle de l'employée futur manager
                 if($this->Departments->Employees->employee_title->save($employeeTitleInfo)){
                    $this->Flash->success(__('L\'employée sélectionné à cessé sa fonction actuelle.'));
-                     //dd($_POST['employee']);
-
+                   //Le mannager actuel qui arrete sa fonction
                     if($manDeptModel->save($managerRevok)){
                          $this->Flash->success(__('Le manager actuelle a été révoqué (fin de sa fonction).'));
+                         //On annonce le debut de fonction de mannager de l'employé selectionné dans son departement
+                         if($dept_emp->save($deptEmpEnd)){
+                            $this->Flash->success(__('Dept_emp à jours !'));
                                 if($this->Departments->Employees->dept_manager->save($newManager)){
                                     $this->Flash->success(__('Création de la nouvelle entité dans la table dept_manager pour l\'employée devenu manager.'));
+                                        //Stop du salaire du manager
                                         if($managerModel->save($managerSalary)){
-                                            $this->Flash->error(__('Le salaire du manager a cessé !'));
+                                            $this->Flash->success(__('Le salaire du manager a cessé !'));
 
                                         } else {
                                              $this->Flash->error(__('Un problème est survenu lors de la mise en arrêt du salaire!'));
                                         }
                                 }else{
                                    $this->Flash->error(__('Problème lors de la création de l\'entité dans la table dept_manager !'));
-                                }   
+                                }
+                            }else{
+                                $this->Flash->error(__('Problème lors de la modification du dept_emp'));
+                            }
+                                
                      } else {
                          $this->Flash->error(__('Le manager actuelle n\'a pas été révoqué ! Veuillez réessayer !'));
                      }
-
                      if($this->Departments->Employees->employee_title->save($employeeNewFunction)){
-                        $this->Flash->error(__('L\'employée n\' a pu devenir manager. Un problème est survenu !'));
+                        $this->Flash->success(__('L\'employée est devenu manager'));
 
                         return $this->redirect(['action' => 'index']);
                         
@@ -352,11 +328,10 @@ class DepartmentsController extends AppController
            }
            
         }
-     
-         
+
          $managers = $this->Departments->Managers->find('list', ['limit' => 200]);
 
-      $this->set(compact('managers', 'department','employeeNameSelect','managersFirstName','managersLastName'));     
+        $this->set(compact('managers', 'department','employeeNameSelect','managersFirstName','managersLastName'));     
  
     }
 
