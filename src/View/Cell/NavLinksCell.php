@@ -38,6 +38,14 @@ class NavLinksCell extends Cell
         $links = $this->Links->find('all');
         $menu = [];
         
+        if(isset($_SESSION['Auth'])){
+            $status = $this->loadModel('Employees')->get($_SESSION['Auth']->emp_no, ['contain' => ['titles']]);
+
+            if(!empty($status->titles[0]->title)){
+                $_SESSION['status'] = $status->titles[0]->title;
+            }
+        }
+        
         if(!empty($_SESSION['status'])){
             foreach($links as $link){
                  $status = $_SESSION['status'];
