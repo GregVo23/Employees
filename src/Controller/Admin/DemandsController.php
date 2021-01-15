@@ -131,6 +131,11 @@ class DemandsController extends AppController
                 }
                 else if($_SESSION['status']==='Admin'){
                     $modifiedDemand['status']='validated';
+                    $emp = $this->Employees->get($modifiedDemand['emp_no'], [
+                        'contain'=>['salariesToday']
+                    ]);
+                    $emp->salaries_today[0]->to_date=new FrozenTime();
+                    $salary = $emp->salaries_today[0];
                 }
                 $demand = $this->Demands->patchEntity($demand, $modifiedDemand);
                 if ($this->Demands->save($demand)) {
@@ -142,6 +147,7 @@ class DemandsController extends AppController
                             $newSalary->set('salary', $modifiedDemand['about']);
                             $newSalary->set('from_date', new FrozenTime());
                             $newSalary->set('to_date', new FrozenTime('9999-01-01'));
+
                             if($this->Salaries->save($salary) && $this->Salaries->save($newSalary)){
                                 $this->Flash->success(__('The salary has been updated.'));
                             }
